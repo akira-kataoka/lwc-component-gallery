@@ -5973,3 +5973,137 @@
 .ui-fchips__clear:hover {
     color: #ba0517;
 }
+
+
+/* ===== uiNumberFormat ===== */
+.ui-numfmt {
+    font-variant-numeric: tabular-nums;
+    color: #181818;
+}
+
+
+/* ===== uiCollapsibleSection ===== */
+.ui-collapse {
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.ui-collapse__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 14px;
+    border: none;
+    background: #fafaf9;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #181818;
+    font-family: inherit;
+}
+.ui-collapse__header:hover {
+    background: #f0f0f0;
+}
+
+.ui-collapse__caret {
+    color: #706e6b;
+    font-size: 0.75rem;
+    width: 14px;
+    flex-shrink: 0;
+}
+
+.ui-collapse__title {
+    flex: 1;
+}
+
+.ui-collapse__body {
+    padding: 14px;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #444444;
+    border-top: 1px solid #ececec;
+}
+
+
+/* ===== uiDateRangePicker ===== */
+.ui-daterange {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ui-daterange__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-daterange__row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ui-daterange__input {
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #181818;
+    background: #ffffff;
+    font-family: inherit;
+}
+.ui-daterange__input:focus {
+    outline: none;
+    border-color: #0176d3;
+    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);
+}
+
+.ui-daterange__sep {
+    color: #706e6b;
+    font-size: 0.85rem;
+}
+
+
+/* ===== uiMarquee ===== */
+.ui-marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    background: #eef4ff;
+    border-radius: 6px;
+    padding: 8px 0;
+}
+
+.ui-marquee__track {
+    display: inline-flex;
+    width: max-content;
+    animation-name: ui-marquee-scroll;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.ui-marquee_pause:hover .ui-marquee__track {
+    animation-play-state: paused;
+}
+
+.ui-marquee__item {
+    padding-right: 48px;
+    font-size: 0.85rem;
+    color: #0b5cab;
+    font-weight: 600;
+}
+
+@keyframes ui-marquee-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}

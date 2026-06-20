@@ -2512,6 +2512,82 @@ const COMPONENTS = [
             { name: 'clear', desc: '全消去で発火' }
         ],
         usage: `<c-ui-filter-chips filters={active} onremove={handleRemove} onclear={handleClear}></c-ui-filter-chips>`
+    },
+    {
+        id: 'uiNumberFormat',
+        title: 'UI Number Format',
+        icon: '🔢',
+        category: '表示',
+        demo: 'numberformat',
+        description:
+            'value を decimal / currency / percent / compact に従って整形表示する。prefix / suffix 対応。',
+        props: [
+            { name: 'value', type: 'Number', def: '0', desc: '値' },
+            {
+                name: 'format',
+                type: 'String',
+                def: "'decimal'",
+                desc: 'decimal | currency | percent | compact'
+            },
+            { name: 'currency', type: 'String', def: "'JPY'", desc: '通貨コード（currency 時）' },
+            { name: 'prefix', type: 'String', def: "''", desc: '接頭辞' },
+            { name: 'suffix', type: 'String', def: "''", desc: '接尾辞' }
+        ],
+        events: [],
+        usage: `<c-ui-number-format value="1250000" format="currency"></c-ui-number-format>`
+    },
+    {
+        id: 'uiCollapsibleSection',
+        title: 'UI Collapsible Section',
+        icon: '🔽',
+        category: 'レイアウト',
+        demo: 'collapsiblesection',
+        description:
+            'タイトル行クリックで本文 (default スロット) を開閉する単一の折りたたみセクション。toggle イベントを発火。',
+        props: [
+            { name: 'title', type: 'String', def: '—', desc: 'タイトル' },
+            { name: 'open', type: 'Boolean', def: 'false', desc: '初期表示で開く' }
+        ],
+        slots: [{ name: '(default)', desc: '本文' }],
+        events: [{ name: 'toggle', desc: '開閉時に発火（detail.open）' }],
+        usage: `<c-ui-collapsible-section title="詳細設定" open>\n    本文をここに記述\n</c-ui-collapsible-section>`
+    },
+    {
+        id: 'uiDateRangePicker',
+        title: 'UI Date Range Picker',
+        icon: '📆',
+        category: 'フォーム',
+        demo: 'daterange',
+        description:
+            '開始日と終了日の 2 つの日付入力を「〜」で並べる。変更時に change イベント (detail.{start,end}) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'start', type: 'String', def: "''", desc: '開始日（YYYY-MM-DD）' },
+            { name: 'end', type: 'String', def: "''", desc: '終了日（YYYY-MM-DD）' }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.{start,end}）' }],
+        usage: `<c-ui-date-range-picker label="期間" onchange={handleChange}></c-ui-date-range-picker>`
+    },
+    {
+        id: 'uiMarquee',
+        title: 'UI Marquee',
+        icon: '📜',
+        category: '表示',
+        demo: 'marquee',
+        description:
+            'text を横方向にスクロール表示するマーキー。お知らせやティッカーに。pause-on-hover で停止可能。',
+        props: [
+            { name: 'text', type: 'String', def: '—', desc: '表示テキスト' },
+            { name: 'speed', type: 'Number', def: '14', desc: '1 周の秒数' },
+            {
+                name: 'pause-on-hover',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true でホバー時に一時停止'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-marquee text="本日10時よりメンテナンスを実施します。" pause-on-hover></c-ui-marquee>`
     }
 ];
 
@@ -2633,7 +2709,11 @@ const JA_NAMES = {
     uiHeatmap: 'ヒートマップ',
     uiBulletChart: 'ブレットチャート',
     uiLeaderboard: 'ランキング',
-    uiFilterChips: 'フィルターチップ'
+    uiFilterChips: 'フィルターチップ',
+    uiNumberFormat: '数値フォーマット',
+    uiCollapsibleSection: '折りたたみセクション',
+    uiDateRangePicker: '日付範囲',
+    uiMarquee: 'マーキー'
 };
 
 const FILE_KEYS = [

@@ -1,0 +1,36 @@
+.ui-marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    background: #eef4ff;
+    border-radius: 6px;
+    padding: 8px 0;
+}
+
+.ui-marquee__track {
+    display: inline-flex;
+    width: max-content;
+    animation-name: ui-marquee-scroll;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.ui-marquee_pause:hover .ui-marquee__track {
+    animation-play-state: paused;
+}
+
+.ui-marquee__item {
+    padding-right: 48px;
+    font-size: 0.85rem;
+    color: #0b5cab;
+    font-weight: 600;
+}
+
+@keyframes ui-marquee-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}

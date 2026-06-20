@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T09:46:50.977Z",
+  "generatedAt": "2026-06-20T10:06:35.295Z",
   "components": [
     {
       "id": "uiBadge",
@@ -4538,6 +4538,176 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiFilterChips — 汎用フィルターチップ。\n * 適用中のフィルタ ([{ label, value }]) を×付きチップで並べ、「すべてクリア」を備える。\n * 個別削除で remove イベント (detail.value)、全消去で clear イベントを発火する。\n */\nexport default class UiFilterChips extends LightningElement {\n    _filters = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get filters() {\n        return this._filters;\n    }\n    set filters(value) {\n        this._filters = Array.isArray(value) ? value : [];\n    }\n\n    get hasFilters() {\n        return this._filters.length > 0;\n    }\n\n    get chips() {\n        return this._filters.map((f, i) => ({\n            key: i,\n            label: f.label,\n            value: f.value\n        }));\n    }\n\n    handleRemove(event) {\n        this.dispatchEvent(\n            new CustomEvent('remove', {\n                detail: { value: event.currentTarget.dataset.value }\n            })\n        );\n    }\n\n    handleClear() {\n        this.dispatchEvent(new CustomEvent('clear'));\n    }\n}\n",
         "css": ".ui-fchips {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 8px;\n}\n\n.ui-fchips__label {\n    font-size: 0.78rem;\n    color: #706e6b;\n    font-weight: 600;\n}\n\n.ui-fchips__chip {\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n    padding: 3px 4px 3px 10px;\n    background: #eef4ff;\n    color: #0b5cab;\n    border-radius: 14px;\n    font-size: 0.78rem;\n    font-weight: 600;\n}\n\n.ui-fchips__remove {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 16px;\n    height: 16px;\n    border: none;\n    border-radius: 50%;\n    background: transparent;\n    color: #0b5cab;\n    font-size: 0.95rem;\n    line-height: 1;\n    cursor: pointer;\n}\n.ui-fchips__remove:hover {\n    background: rgba(1, 92, 171, 0.15);\n}\n\n.ui-fchips__clear {\n    border: none;\n    background: transparent;\n    color: #706e6b;\n    font-size: 0.76rem;\n    font-weight: 600;\n    cursor: pointer;\n    text-decoration: underline;\n    font-family: inherit;\n}\n.ui-fchips__clear:hover {\n    color: #ba0517;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Filter Chips</masterLabel>\n    <description>汎用フィルターチップ。適用中フィルタを×付きで表示し remove/clear を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiNumberFormat",
+      "title": "UI Number Format",
+      "icon": "🔢",
+      "category": "表示",
+      "demo": "numberformat",
+      "description": "value を decimal / currency / percent / compact に従って整形表示する。prefix / suffix 対応。",
+      "props": [
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "0",
+          "desc": "値"
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "def": "'decimal'",
+          "desc": "decimal | currency | percent | compact"
+        },
+        {
+          "name": "currency",
+          "type": "String",
+          "def": "'JPY'",
+          "desc": "通貨コード（currency 時）"
+        },
+        {
+          "name": "prefix",
+          "type": "String",
+          "def": "''",
+          "desc": "接頭辞"
+        },
+        {
+          "name": "suffix",
+          "type": "String",
+          "def": "''",
+          "desc": "接尾辞"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-number-format value=\"1250000\" format=\"currency\"></c-ui-number-format>",
+      "ja": "数値フォーマット",
+      "files": {
+        "html": "<template>\n    <span class=\"ui-numfmt\">{formatted}</span>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiNumberFormat — 汎用数値フォーマット表示。\n * value を format（decimal / currency / percent / compact）に従って整形表示する。\n * prefix / suffix を前後に付けられる純粋な表示コンポーネント。\n */\nexport default class UiNumberFormat extends LightningElement {\n    /** 値 */\n    @api value = 0;\n    /** 形式: decimal | currency | percent | compact */\n    @api format = 'decimal';\n    /** 通貨コード（currency 時） */\n    @api currency = 'JPY';\n    /** 接頭辞 */\n    @api prefix = '';\n    /** 接尾辞 */\n    @api suffix = '';\n\n    get formatted() {\n        const n = Number(this.value) || 0;\n        let s;\n        try {\n            if (this.format === 'currency') {\n                s = new Intl.NumberFormat('ja-JP', {\n                    style: 'currency',\n                    currency: this.currency\n                }).format(n);\n            } else if (this.format === 'percent') {\n                s = new Intl.NumberFormat('ja-JP', {\n                    style: 'percent',\n                    maximumFractionDigits: 1\n                }).format(n / 100);\n            } else if (this.format === 'compact') {\n                s = new Intl.NumberFormat('ja-JP', {\n                    notation: 'compact'\n                }).format(n);\n            } else {\n                s = n.toLocaleString('ja-JP');\n            }\n        } catch (e) {\n            s = String(n);\n        }\n        return `${this.prefix}${s}${this.suffix}`;\n    }\n}\n",
+        "css": ".ui-numfmt {\n    font-variant-numeric: tabular-nums;\n    color: #181818;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Number Format</masterLabel>\n    <description>汎用数値フォーマット。通貨/パーセント/コンパクト等で整形表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCollapsibleSection",
+      "title": "UI Collapsible Section",
+      "icon": "🔽",
+      "category": "レイアウト",
+      "demo": "collapsiblesection",
+      "description": "タイトル行クリックで本文 (default スロット) を開閉する単一の折りたたみセクション。toggle イベントを発火。",
+      "props": [
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "タイトル"
+        },
+        {
+          "name": "open",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "初期表示で開く"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "本文"
+        }
+      ],
+      "events": [
+        {
+          "name": "toggle",
+          "desc": "開閉時に発火（detail.open）"
+        }
+      ],
+      "usage": "<c-ui-collapsible-section title=\"詳細設定\" open>\n    本文をここに記述\n</c-ui-collapsible-section>",
+      "ja": "折りたたみセクション",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-collapse\">\n        <button\n            class=\"ui-collapse__header\"\n            type=\"button\"\n            aria-expanded={isOpen}\n            onclick={handleToggle}\n        >\n            <span class=\"ui-collapse__caret\">{caret}</span>\n            <span class=\"ui-collapse__title\">{title}</span>\n        </button>\n        <div lwc:if={isOpen} class=\"ui-collapse__body\">\n            <slot></slot>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiCollapsibleSection — 汎用折りたたみセクション。\n * タイトル行のクリックで本文 (default スロット) を開閉する単一セクション。\n * 開閉時に toggle イベント (detail.open) を発火する。\n */\nexport default class UiCollapsibleSection extends LightningElement {\n    /** タイトル */\n    @api title;\n    /** 初期表示で開く */\n    @api open = false;\n\n    @track _opened = false;\n\n    connectedCallback() {\n        this._opened = this.open;\n    }\n\n    get isOpen() {\n        return this._opened;\n    }\n\n    get caret() {\n        return this._opened ? '▾' : '▸';\n    }\n\n    handleToggle() {\n        this._opened = !this._opened;\n        this.dispatchEvent(\n            new CustomEvent('toggle', { detail: { open: this._opened } })\n        );\n    }\n}\n",
+        "css": ".ui-collapse {\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    overflow: hidden;\n    background: #ffffff;\n}\n\n.ui-collapse__header {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    width: 100%;\n    padding: 11px 14px;\n    border: none;\n    background: #fafaf9;\n    cursor: pointer;\n    text-align: left;\n    font-size: 0.9rem;\n    font-weight: 700;\n    color: #181818;\n    font-family: inherit;\n}\n.ui-collapse__header:hover {\n    background: #f0f0f0;\n}\n\n.ui-collapse__caret {\n    color: #706e6b;\n    font-size: 0.75rem;\n    width: 14px;\n    flex-shrink: 0;\n}\n\n.ui-collapse__title {\n    flex: 1;\n}\n\n.ui-collapse__body {\n    padding: 14px;\n    font-size: 0.875rem;\n    line-height: 1.6;\n    color: #444444;\n    border-top: 1px solid #ececec;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Collapsible Section</masterLabel>\n    <description>汎用折りたたみセクション。タイトルクリックで本文を開閉し toggle を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiDateRangePicker",
+      "title": "UI Date Range Picker",
+      "icon": "📆",
+      "category": "フォーム",
+      "demo": "daterange",
+      "description": "開始日と終了日の 2 つの日付入力を「〜」で並べる。変更時に change イベント (detail.{start,end}) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "start",
+          "type": "String",
+          "def": "''",
+          "desc": "開始日（YYYY-MM-DD）"
+        },
+        {
+          "name": "end",
+          "type": "String",
+          "def": "''",
+          "desc": "終了日（YYYY-MM-DD）"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.{start,end}）"
+        }
+      ],
+      "usage": "<c-ui-date-range-picker label=\"期間\" onchange={handleChange}></c-ui-date-range-picker>",
+      "ja": "日付範囲",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-daterange\">\n        <label lwc:if={label} class=\"ui-daterange__label\">{label}</label>\n        <div class=\"ui-daterange__row\">\n            <input\n                type=\"date\"\n                class=\"ui-daterange__input\"\n                value={start}\n                onchange={handleStart}\n            />\n            <span class=\"ui-daterange__sep\">〜</span>\n            <input\n                type=\"date\"\n                class=\"ui-daterange__input\"\n                value={end}\n                onchange={handleEnd}\n            />\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiDateRangePicker — 汎用日付範囲ピッカー。\n * 開始日と終了日の 2 つの日付入力を「〜」で並べる。\n * いずれか変更時に change イベント (detail.{ start, end }) を発火する。\n */\nexport default class UiDateRangePicker extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 開始日（YYYY-MM-DD） */\n    @api start = '';\n    /** 終了日（YYYY-MM-DD） */\n    @api end = '';\n\n    handleStart(event) {\n        this.start = event.target.value;\n        this.emit();\n    }\n\n    handleEnd(event) {\n        this.end = event.target.value;\n        this.emit();\n    }\n\n    emit() {\n        this.dispatchEvent(\n            new CustomEvent('change', {\n                detail: { start: this.start, end: this.end }\n            })\n        );\n    }\n}\n",
+        "css": ".ui-daterange {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-daterange__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-daterange__row {\n    display: inline-flex;\n    align-items: center;\n    gap: 8px;\n}\n\n.ui-daterange__input {\n    height: 34px;\n    padding: 0 10px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    font-size: 0.875rem;\n    color: #181818;\n    background: #ffffff;\n    font-family: inherit;\n}\n.ui-daterange__input:focus {\n    outline: none;\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n\n.ui-daterange__sep {\n    color: #706e6b;\n    font-size: 0.85rem;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Date Range Picker</masterLabel>\n    <description>汎用日付範囲ピッカー。開始/終了の日付を選び change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiMarquee",
+      "title": "UI Marquee",
+      "icon": "📜",
+      "category": "表示",
+      "demo": "marquee",
+      "description": "text を横方向にスクロール表示するマーキー。お知らせやティッカーに。pause-on-hover で停止可能。",
+      "props": [
+        {
+          "name": "text",
+          "type": "String",
+          "def": "—",
+          "desc": "表示テキスト"
+        },
+        {
+          "name": "speed",
+          "type": "Number",
+          "def": "14",
+          "desc": "1 周の秒数"
+        },
+        {
+          "name": "pause-on-hover",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true でホバー時に一時停止"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-marquee text=\"本日10時よりメンテナンスを実施します。\" pause-on-hover></c-ui-marquee>",
+      "ja": "マーキー",
+      "files": {
+        "html": "<template>\n    <div class={rootClass}>\n        <div class=\"ui-marquee__track\" style={trackStyle}>\n            <span class=\"ui-marquee__item\">{text}</span>\n            <span class=\"ui-marquee__item\" aria-hidden=\"true\">{text}</span>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiMarquee — 汎用マーキー（流れるテキスト）。\n * text を横方向にスクロール表示する。お知らせやティッカーに使う。\n * speed で 1 周の秒数、pause-on-hover でホバー時に一時停止する。\n */\nexport default class UiMarquee extends LightningElement {\n    /** 表示テキスト */\n    @api text;\n    /** 1 周の秒数 */\n    @api speed = 14;\n    /** true でホバー時に一時停止 */\n    @api pauseOnHover = false;\n\n    get rootClass() {\n        return this.pauseOnHover ? 'ui-marquee ui-marquee_pause' : 'ui-marquee';\n    }\n\n    get trackStyle() {\n        return `animation-duration: ${Number(this.speed) || 14}s`;\n    }\n}\n",
+        "css": ".ui-marquee {\n    overflow: hidden;\n    white-space: nowrap;\n    width: 100%;\n    background: #eef4ff;\n    border-radius: 6px;\n    padding: 8px 0;\n}\n\n.ui-marquee__track {\n    display: inline-flex;\n    width: max-content;\n    animation-name: ui-marquee-scroll;\n    animation-timing-function: linear;\n    animation-iteration-count: infinite;\n}\n\n.ui-marquee_pause:hover .ui-marquee__track {\n    animation-play-state: paused;\n}\n\n.ui-marquee__item {\n    padding-right: 48px;\n    font-size: 0.85rem;\n    color: #0b5cab;\n    font-weight: 600;\n}\n\n@keyframes ui-marquee-scroll {\n    from {\n        transform: translateX(0);\n    }\n    to {\n        transform: translateX(-50%);\n    }\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Marquee</masterLabel>\n    <description>汎用マーキー。テキストを横スクロール表示、ホバーで一時停止可。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

@@ -1,0 +1,20 @@
+<template>
+    <div class="ui-daterange">
+        <label lwc:if={label} class="ui-daterange__label">{label}</label>
+        <div class="ui-daterange__row">
+            <input
+                type="date"
+                class="ui-daterange__input"
+                value={start}
+                onchange={handleStart}
+            />
+            <span class="ui-daterange__sep">〜</span>
+            <input
+                type="date"
+                class="ui-daterange__input"
+                value={end}
+                onchange={handleEnd}
+            />
+        </div>
+    </div>
+</template>

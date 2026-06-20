@@ -3371,6 +3371,77 @@
             render();
             box.appendChild(wrap);
             controls.appendChild(out);
+        },
+
+        numberformat(box) {
+            const rows = [
+                ['decimal', new Intl.NumberFormat('ja-JP').format(1250000)],
+                ['currency', new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(1250000)],
+                ['percent', new Intl.NumberFormat('ja-JP', { style: 'percent', maximumFractionDigits: 1 }).format(0.125)],
+                ['compact', new Intl.NumberFormat('ja-JP', { notation: 'compact' }).format(1250000)]
+            ];
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:8px' });
+            rows.forEach((r) => {
+                col.appendChild(el('div', { style: 'display:flex;gap:14px;align-items:baseline' }, [
+                    el('span', { style: 'font-size:0.72rem;color:#706e6b;width:80px', text: r[0] }),
+                    el('span', { class: 'ui-numfmt', style: 'font-size:1.1rem;font-weight:700', text: r[1] })
+                ]));
+            });
+            box.appendChild(col);
+        },
+
+        collapsiblesection(box) {
+            const sections = [
+                ['配送について', '通常2〜4営業日でお届けします。離島・一部地域は追加で日数をいただく場合があります。'],
+                ['返品・交換', '到着後7日以内であれば返品・交換が可能です。'],
+                ['保証', 'メーカー1年保証が付属します。']
+            ];
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:8px;width:100%;max-width:420px' });
+            sections.forEach((s, idx) => {
+                let open = idx === 0;
+                const body = el('div', { class: 'ui-collapse__body', text: s[1] });
+                const caret = el('span', { class: 'ui-collapse__caret', text: open ? '▾' : '▸' });
+                const header = el('button', { class: 'ui-collapse__header', type: 'button' }, [
+                    caret,
+                    el('span', { class: 'ui-collapse__title', text: s[0] })
+                ]);
+                const wrap = el('div', { class: 'ui-collapse' }, [header]);
+                if (open) wrap.appendChild(body);
+                header.addEventListener('click', () => {
+                    open = !open;
+                    caret.textContent = open ? '▾' : '▸';
+                    if (open) wrap.appendChild(body);
+                    else body.remove();
+                });
+                col.appendChild(wrap);
+            });
+            box.appendChild(col);
+        },
+
+        daterange(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '期間: 未選択' });
+            const start = el('input', { type: 'date', class: 'ui-daterange__input', value: '2026-06-01' });
+            const end = el('input', { type: 'date', class: 'ui-daterange__input', value: '2026-06-30' });
+            function upd() {
+                out.textContent = '期間: ' + (start.value || '—') + ' 〜 ' + (end.value || '—');
+            }
+            start.addEventListener('change', upd);
+            end.addEventListener('change', upd);
+            upd();
+            box.appendChild(el('div', { class: 'ui-daterange' }, [
+                el('label', { class: 'ui-daterange__label', text: '対象期間' }),
+                el('div', { class: 'ui-daterange__row' }, [start, el('span', { class: 'ui-daterange__sep', text: '〜' }), end])
+            ]));
+            controls.appendChild(out);
+        },
+
+        marquee(box) {
+            const text = '📢 本日10時よりシステムメンテナンスを実施します。   ✨ 新機能「ダッシュボード」をリリースしました。   🎉 ユーザー登録が10万人を突破！';
+            const track = el('div', { class: 'ui-marquee__track', style: 'animation-duration:18s' }, [
+                el('span', { class: 'ui-marquee__item', text: text }),
+                el('span', { class: 'ui-marquee__item', text: text })
+            ]);
+            box.appendChild(el('div', { class: 'ui-marquee ui-marquee_pause', style: 'width:100%;max-width:460px' }, [track]));
         }
     };
 
