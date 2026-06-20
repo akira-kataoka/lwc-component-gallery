@@ -1,0 +1,11 @@
+<template>
+    <button
+        class={buttonClass}
+        type="button"
+        disabled={loading}
+        onclick={handleClick}
+    >
+        <span lwc:if={loading} class="ui-pbtn__spinner"></span>
+        <span class="ui-pbtn__label">{displayLabel}</span>
+    </button>
+</template>

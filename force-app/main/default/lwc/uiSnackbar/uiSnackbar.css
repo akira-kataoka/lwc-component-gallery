@@ -1,0 +1,44 @@
+.ui-snackbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 12px 12px 16px;
+    background: #2b2f36;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    max-width: 460px;
+}
+
+.ui-snackbar__message {
+    flex: 1;
+    line-height: 1.4;
+}
+
+.ui-snackbar__action {
+    border: none;
+    background: transparent;
+    color: #6db5ff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+}
+.ui-snackbar__action:hover {
+    color: #9fccff;
+}
+
+.ui-snackbar__close {
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 2px;
+}
+.ui-snackbar__close:hover {
+    color: #ffffff;
+}

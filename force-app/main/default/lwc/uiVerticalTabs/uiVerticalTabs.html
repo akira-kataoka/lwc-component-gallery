@@ -1,0 +1,19 @@
+<template>
+    <div class="ui-vtabs">
+        <div class="ui-vtabs__nav" role="tablist">
+            <template for:each={computedTabs} for:item="tab">
+                <button
+                    key={tab.value}
+                    class={tab.cssClass}
+                    role="tab"
+                    type="button"
+                    data-value={tab.value}
+                    onclick={handleSelect}
+                >
+                    {tab.label}
+                </button>
+            </template>
+        </div>
+        <div class="ui-vtabs__panel" role="tabpanel">{activeContent}</div>
+    </div>
+</template>

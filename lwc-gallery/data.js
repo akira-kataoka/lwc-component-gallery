@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T08:49:51.151Z",
+  "generatedAt": "2026-06-20T08:58:44.303Z",
   "components": [
     {
       "id": "uiBadge",
@@ -3894,6 +3894,177 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiTileSelect — タイル選択。\n * options 配列 ([{ label, icon, value }]) をアイコン付きタイルで並べ、\n * 単一選択する。選択時に change イベント (detail.value) を発火する。\n */\nexport default class UiTileSelect extends LightningElement {\n    _options = [];\n\n    /** [{ label, icon, value }] の配列 */\n    @api\n    get options() {\n        return this._options;\n    }\n    set options(value) {\n        this._options = Array.isArray(value) ? value : [];\n    }\n\n    /** 選択値 */\n    @api value;\n\n    get tiles() {\n        return this._options.map((o) => ({\n            label: o.label,\n            icon: o.icon,\n            value: o.value,\n            cssClass:\n                String(o.value) === String(this.value)\n                    ? 'ui-tile ui-tile_selected'\n                    : 'ui-tile'\n        }));\n    }\n\n    handleSelect(event) {\n        this.value = event.currentTarget.dataset.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
         "css": ".ui-tiles {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 10px;\n}\n\n.ui-tile {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    gap: 6px;\n    width: 96px;\n    padding: 14px 8px;\n    border: 1px solid #c9c9c9;\n    border-radius: 10px;\n    background: #ffffff;\n    cursor: pointer;\n    font-family: inherit;\n    transition: border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;\n}\n.ui-tile:hover {\n    border-color: #0176d3;\n    background: #f7fbff;\n}\n\n.ui-tile__icon {\n    font-size: 1.6rem;\n    line-height: 1;\n}\n\n.ui-tile__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n    text-align: center;\n}\n\n.ui-tile_selected {\n    border-color: #0176d3;\n    background: #eef4ff;\n    box-shadow: inset 0 0 0 1px #0176d3;\n}\n.ui-tile_selected .ui-tile__label {\n    color: #0b5cab;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Tile Select</masterLabel>\n    <description>タイル選択。アイコン付きタイルの単一選択で change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiProgressButton",
+      "title": "UI Progress Button",
+      "icon": "⏳",
+      "category": "アクション",
+      "demo": "progressbutton",
+      "description": "loading=true でスピナーと処理中ラベルに切替わるボタン。非同期処理中の二重押下を防ぐ。click イベントを発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "通常ラベル"
+        },
+        {
+          "name": "loading-label",
+          "type": "String",
+          "def": "'処理中…'",
+          "desc": "処理中ラベル"
+        },
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'brand'",
+          "desc": "brand | neutral | success | destructive"
+        },
+        {
+          "name": "loading",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true でスピナー表示・無効化"
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "desc": "ボタン押下時に発火"
+        }
+      ],
+      "usage": "<c-ui-progress-button label=\"保存\" loading={isSaving} onclick={handleSave}></c-ui-progress-button>",
+      "ja": "処理中ボタン",
+      "files": {
+        "html": "<template>\n    <button\n        class={buttonClass}\n        type=\"button\"\n        disabled={loading}\n        onclick={handleClick}\n    >\n        <span lwc:if={loading} class=\"ui-pbtn__spinner\"></span>\n        <span class=\"ui-pbtn__label\">{displayLabel}</span>\n    </button>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['brand', 'neutral', 'success', 'destructive'];\n\n/**\n * uiProgressButton — 汎用処理中ボタン。\n * loading=true でスピナーと処理中ラベルに切替わるボタン。click イベントを発火する。\n * 親で非同期処理中に loading を立てて二重押下を防ぐ用途。\n */\nexport default class UiProgressButton extends LightningElement {\n    /** 通常ラベル */\n    @api label;\n    /** 処理中ラベル */\n    @api loadingLabel = '処理中…';\n    /** 色バリアント: brand | neutral | success | destructive */\n    @api variant = 'brand';\n    /** true でスピナー表示・無効化 */\n    @api loading = false;\n\n    get buttonClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        return `ui-pbtn ui-pbtn_${variant}`;\n    }\n\n    get displayLabel() {\n        return this.loading ? this.loadingLabel : this.label;\n    }\n\n    handleClick() {\n        if (this.loading) {\n            return;\n        }\n        this.dispatchEvent(new CustomEvent('click'));\n    }\n}\n",
+        "css": ".ui-pbtn {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: 8px;\n    height: 34px;\n    padding: 0 18px;\n    border: 1px solid transparent;\n    border-radius: 6px;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-pbtn:disabled {\n    cursor: not-allowed;\n    opacity: 0.85;\n}\n\n.ui-pbtn_brand {\n    background: #0176d3;\n    color: #ffffff;\n}\n.ui-pbtn_brand:not(:disabled):hover {\n    background: #014486;\n}\n.ui-pbtn_neutral {\n    background: #ffffff;\n    color: #0176d3;\n    border-color: #c9c9c9;\n}\n.ui-pbtn_success {\n    background: #2e844a;\n    color: #ffffff;\n}\n.ui-pbtn_destructive {\n    background: #ba0517;\n    color: #ffffff;\n}\n\n.ui-pbtn__spinner {\n    width: 14px;\n    height: 14px;\n    border-radius: 50%;\n    border: 2px solid rgba(255, 255, 255, 0.45);\n    border-top-color: #ffffff;\n    animation: ui-pbtn-spin 0.6s linear infinite;\n}\n.ui-pbtn_neutral .ui-pbtn__spinner {\n    border-color: rgba(1, 118, 211, 0.35);\n    border-top-color: #0176d3;\n}\n\n@keyframes ui-pbtn-spin {\n    to {\n        transform: rotate(360deg);\n    }\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Progress Button</masterLabel>\n    <description>汎用処理中ボタン。loadingでスピナー表示・無効化し二重押下を防止。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiVerticalTabs",
+      "title": "UI Vertical Tabs",
+      "icon": "📑",
+      "category": "ナビゲーション",
+      "demo": "verticaltabs",
+      "description": "tabs 配列 ([{ label, value, content }]) を左に縦タブ、右に本文で表示する。切替時に select イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "tabs",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value, content }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "タブ選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-vertical-tabs tabs={tabs} onselect={handleSelect}></c-ui-vertical-tabs>",
+      "ja": "縦タブ",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-vtabs\">\n        <div class=\"ui-vtabs__nav\" role=\"tablist\">\n            <template for:each={computedTabs} for:item=\"tab\">\n                <button\n                    key={tab.value}\n                    class={tab.cssClass}\n                    role=\"tab\"\n                    type=\"button\"\n                    data-value={tab.value}\n                    onclick={handleSelect}\n                >\n                    {tab.label}\n                </button>\n            </template>\n        </div>\n        <div class=\"ui-vtabs__panel\" role=\"tabpanel\">{activeContent}</div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiVerticalTabs — 汎用縦タブ。\n * tabs 配列 ([{ label, value, content }]) を左に縦並びのタブ、右に本文で表示する。\n * 切替時に select イベント (detail.value) を発火する。\n */\nexport default class UiVerticalTabs extends LightningElement {\n    @track _tabs = [];\n    @track activeValue;\n\n    /** [{ label, value, content }] の配列 */\n    @api\n    get tabs() {\n        return this._tabs;\n    }\n    set tabs(value) {\n        this._tabs = Array.isArray(value) ? value : [];\n        if (this._tabs.length && !this._hasActive()) {\n            this.activeValue = this._tabs[0].value;\n        }\n    }\n\n    _hasActive() {\n        return this._tabs.some((t) => t.value === this.activeValue);\n    }\n\n    get computedTabs() {\n        return this._tabs.map((t) => ({\n            label: t.label,\n            value: t.value,\n            cssClass:\n                t.value === this.activeValue\n                    ? 'ui-vtabs__tab ui-vtabs__tab_active'\n                    : 'ui-vtabs__tab'\n        }));\n    }\n\n    get activeContent() {\n        const tab = this._tabs.find((t) => t.value === this.activeValue);\n        return tab ? tab.content : '';\n    }\n\n    handleSelect(event) {\n        this.activeValue = event.currentTarget.dataset.value;\n        this.dispatchEvent(\n            new CustomEvent('select', { detail: { value: this.activeValue } })\n        );\n    }\n}\n",
+        "css": ".ui-vtabs {\n    display: flex;\n    gap: 0;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    overflow: hidden;\n    min-height: 140px;\n}\n\n.ui-vtabs__nav {\n    display: flex;\n    flex-direction: column;\n    flex-shrink: 0;\n    min-width: 130px;\n    background: #fafaf9;\n    border-right: 1px solid #ececec;\n    padding: 6px;\n    gap: 2px;\n}\n\n.ui-vtabs__tab {\n    border: none;\n    background: transparent;\n    text-align: left;\n    padding: 9px 12px;\n    border-radius: 6px;\n    font-size: 0.82rem;\n    font-weight: 600;\n    color: #514f4d;\n    cursor: pointer;\n    font-family: inherit;\n    border-left: 3px solid transparent;\n}\n.ui-vtabs__tab:hover {\n    background: #f0f0f0;\n    color: #0176d3;\n}\n\n.ui-vtabs__tab_active {\n    background: #eef4ff;\n    color: #0176d3;\n    border-left-color: #0176d3;\n}\n\n.ui-vtabs__panel {\n    flex: 1;\n    padding: 16px 18px;\n    font-size: 0.875rem;\n    line-height: 1.6;\n    color: #444444;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Vertical Tabs</masterLabel>\n    <description>汎用縦タブ。左にタブ・右に本文で表示し select イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiSnackbar",
+      "title": "UI Snackbar",
+      "icon": "🍫",
+      "category": "フィードバック",
+      "demo": "snackbar",
+      "description": "show(message, actionLabel) で画面下部に短いメッセージとアクションを表示。自動クローズし、action / close イベントを発火。",
+      "props": [
+        {
+          "name": "duration",
+          "type": "Number",
+          "def": "4000",
+          "desc": "自動クローズまでの ms（0 で無効）"
+        }
+      ],
+      "events": [
+        {
+          "name": "action",
+          "desc": "アクション押下で発火"
+        },
+        {
+          "name": "close",
+          "desc": "閉じた時に発火"
+        }
+      ],
+      "methods": [
+        {
+          "name": "show(message, actionLabel)",
+          "desc": "スナックバーを表示"
+        },
+        {
+          "name": "close()",
+          "desc": "閉じる"
+        }
+      ],
+      "usage": "// 親から\nthis.template.querySelector('c-ui-snackbar').show('削除しました', '元に戻す');",
+      "ja": "スナックバー",
+      "files": {
+        "html": "<template>\n    <div lwc:if={isVisible} class=\"ui-snackbar\" role=\"status\" aria-live=\"polite\">\n        <span class=\"ui-snackbar__message\">{message}</span>\n        <button\n            lwc:if={hasAction}\n            class=\"ui-snackbar__action\"\n            type=\"button\"\n            onclick={handleAction}\n        >\n            {actionLabel}\n        </button>\n        <button\n            class=\"ui-snackbar__close\"\n            type=\"button\"\n            title=\"閉じる\"\n            onclick={close}\n        >\n            &times;\n        </button>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiSnackbar — 汎用スナックバー。\n * 画面下部に短いメッセージとアクションを表示する。show(message, actionLabel) で表示し、\n * duration 経過で自動的に閉じる。アクション押下で action、閉じる/自動クローズで close を発火。\n */\nexport default class UiSnackbar extends LightningElement {\n    /** 自動クローズまでの ms（0 で無効） */\n    @api duration = 4000;\n\n    @track _message = '';\n    @track _actionLabel = '';\n    @track _visible = false;\n    _timer;\n\n    /** スナックバーを表示する */\n    @api\n    show(message, actionLabel) {\n        this._message = message;\n        this._actionLabel = actionLabel || '';\n        this._visible = true;\n        if (this._timer) {\n            clearTimeout(this._timer);\n        }\n        if (this.duration > 0) {\n            // eslint-disable-next-line @lwc/lwc/no-async-operation\n            this._timer = setTimeout(() => this.close(), this.duration);\n        }\n    }\n\n    /** 閉じる */\n    @api\n    close() {\n        if (this._timer) {\n            clearTimeout(this._timer);\n        }\n        this._visible = false;\n        this.dispatchEvent(new CustomEvent('close'));\n    }\n\n    get isVisible() {\n        return this._visible;\n    }\n    get message() {\n        return this._message;\n    }\n    get hasAction() {\n        return !!this._actionLabel;\n    }\n    get actionLabel() {\n        return this._actionLabel;\n    }\n\n    handleAction() {\n        this.dispatchEvent(new CustomEvent('action'));\n        this.close();\n    }\n}\n",
+        "css": ".ui-snackbar {\n    display: inline-flex;\n    align-items: center;\n    gap: 14px;\n    padding: 12px 12px 12px 16px;\n    background: #2b2f36;\n    color: #ffffff;\n    border-radius: 8px;\n    font-size: 0.85rem;\n    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);\n    max-width: 460px;\n}\n\n.ui-snackbar__message {\n    flex: 1;\n    line-height: 1.4;\n}\n\n.ui-snackbar__action {\n    border: none;\n    background: transparent;\n    color: #6db5ff;\n    font-size: 0.82rem;\n    font-weight: 700;\n    cursor: pointer;\n    font-family: inherit;\n    white-space: nowrap;\n}\n.ui-snackbar__action:hover {\n    color: #9fccff;\n}\n\n.ui-snackbar__close {\n    border: none;\n    background: transparent;\n    color: rgba(255, 255, 255, 0.7);\n    font-size: 1.1rem;\n    line-height: 1;\n    cursor: pointer;\n    padding: 0 2px;\n}\n.ui-snackbar__close:hover {\n    color: #ffffff;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Snackbar</masterLabel>\n    <description>汎用スナックバー。show()でメッセージ＋アクションを表示し自動クローズ。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCountUp",
+      "title": "UI Count Up",
+      "icon": "🔢",
+      "category": "表示",
+      "demo": "countup",
+      "description": "0 から value までアニメーションで数値を増やして表示する。prefix / suffix 対応、play() で再生し直せる。",
+      "props": [
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "0",
+          "desc": "目標値"
+        },
+        {
+          "name": "duration",
+          "type": "Number",
+          "def": "1200",
+          "desc": "アニメーション時間(ms)"
+        },
+        {
+          "name": "prefix",
+          "type": "String",
+          "def": "''",
+          "desc": "接頭辞（例: ¥）"
+        },
+        {
+          "name": "suffix",
+          "type": "String",
+          "def": "''",
+          "desc": "接尾辞（例: 件）"
+        }
+      ],
+      "events": [],
+      "methods": [
+        {
+          "name": "play()",
+          "desc": "アニメーションを再生"
+        }
+      ],
+      "usage": "<c-ui-count-up value=\"1250000\" prefix=\"¥\"></c-ui-count-up>",
+      "ja": "カウントアップ",
+      "files": {
+        "html": "<template>\n    <span class=\"ui-countup\">{display}</span>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiCountUp — 汎用カウントアップ。\n * 0 から value までアニメーションで数値を増やして表示する。\n * prefix / suffix を前後に付けられる。play() メソッドで再生し直せる。\n */\nexport default class UiCountUp extends LightningElement {\n    /** 目標値 */\n    @api value = 0;\n    /** アニメーション時間(ms) */\n    @api duration = 1200;\n    /** 接頭辞（例: ¥） */\n    @api prefix = '';\n    /** 接尾辞（例: 件） */\n    @api suffix = '';\n\n    @track current = 0;\n    _timer;\n    _started = false;\n\n    renderedCallback() {\n        if (!this._started) {\n            this._started = true;\n            this.play();\n        }\n    }\n\n    /** アニメーションを最初から再生する */\n    @api\n    play() {\n        const target = Number(this.value) || 0;\n        const dur = Math.max(1, Number(this.duration) || 1000);\n        const steps = 30;\n        const interval = dur / steps;\n        let i = 0;\n        this.current = 0;\n        if (this._timer) {\n            clearInterval(this._timer);\n        }\n        // eslint-disable-next-line @lwc/lwc/no-async-operation\n        this._timer = setInterval(() => {\n            i += 1;\n            const t = i / steps;\n            const eased = 1 - Math.pow(1 - t, 3);\n            this.current = Math.round(target * eased);\n            if (i >= steps) {\n                this.current = target;\n                clearInterval(this._timer);\n            }\n        }, interval);\n    }\n\n    disconnectedCallback() {\n        if (this._timer) {\n            clearInterval(this._timer);\n        }\n    }\n\n    get display() {\n        return `${this.prefix}${this.current.toLocaleString('ja-JP')}${this.suffix}`;\n    }\n}\n",
+        "css": ".ui-countup {\n    font-size: 1.8rem;\n    font-weight: 800;\n    color: #181818;\n    font-variant-numeric: tabular-nums;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Count Up</masterLabel>\n    <description>汎用カウントアップ。0から目標値までアニメーション表示、play()で再生。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

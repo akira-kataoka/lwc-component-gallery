@@ -5046,3 +5046,174 @@
 .ui-tile_selected .ui-tile__label {
     color: #0b5cab;
 }
+
+
+/* ===== uiProgressButton ===== */
+.ui-pbtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 34px;
+    padding: 0 18px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-pbtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
+.ui-pbtn_brand {
+    background: #0176d3;
+    color: #ffffff;
+}
+.ui-pbtn_brand:not(:disabled):hover {
+    background: #014486;
+}
+.ui-pbtn_neutral {
+    background: #ffffff;
+    color: #0176d3;
+    border-color: #c9c9c9;
+}
+.ui-pbtn_success {
+    background: #2e844a;
+    color: #ffffff;
+}
+.ui-pbtn_destructive {
+    background: #ba0517;
+    color: #ffffff;
+}
+
+.ui-pbtn__spinner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    border-top-color: #ffffff;
+    animation: ui-pbtn-spin 0.6s linear infinite;
+}
+.ui-pbtn_neutral .ui-pbtn__spinner {
+    border-color: rgba(1, 118, 211, 0.35);
+    border-top-color: #0176d3;
+}
+
+@keyframes ui-pbtn-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ===== uiVerticalTabs ===== */
+.ui-vtabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 140px;
+}
+
+.ui-vtabs__nav {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    min-width: 130px;
+    background: #fafaf9;
+    border-right: 1px solid #ececec;
+    padding: 6px;
+    gap: 2px;
+}
+
+.ui-vtabs__tab {
+    border: none;
+    background: transparent;
+    text-align: left;
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #514f4d;
+    cursor: pointer;
+    font-family: inherit;
+    border-left: 3px solid transparent;
+}
+.ui-vtabs__tab:hover {
+    background: #f0f0f0;
+    color: #0176d3;
+}
+
+.ui-vtabs__tab_active {
+    background: #eef4ff;
+    color: #0176d3;
+    border-left-color: #0176d3;
+}
+
+.ui-vtabs__panel {
+    flex: 1;
+    padding: 16px 18px;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #444444;
+}
+
+
+/* ===== uiSnackbar ===== */
+.ui-snackbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 12px 12px 16px;
+    background: #2b2f36;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    max-width: 460px;
+}
+
+.ui-snackbar__message {
+    flex: 1;
+    line-height: 1.4;
+}
+
+.ui-snackbar__action {
+    border: none;
+    background: transparent;
+    color: #6db5ff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+}
+.ui-snackbar__action:hover {
+    color: #9fccff;
+}
+
+.ui-snackbar__close {
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 2px;
+}
+.ui-snackbar__close:hover {
+    color: #ffffff;
+}
+
+
+/* ===== uiCountUp ===== */
+.ui-countup {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #181818;
+    font-variant-numeric: tabular-nums;
+}

@@ -2198,6 +2198,86 @@ const COMPONENTS = [
         ],
         events: [{ name: 'change', desc: '選択時に発火（detail.value）' }],
         usage: `<c-ui-tile-select options={types} value="email" onchange={handleChange}></c-ui-tile-select>`
+    },
+    {
+        id: 'uiProgressButton',
+        title: 'UI Progress Button',
+        icon: '⏳',
+        category: 'アクション',
+        demo: 'progressbutton',
+        description:
+            'loading=true でスピナーと処理中ラベルに切替わるボタン。非同期処理中の二重押下を防ぐ。click イベントを発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: '通常ラベル' },
+            { name: 'loading-label', type: 'String', def: "'処理中…'", desc: '処理中ラベル' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | neutral | success | destructive'
+            },
+            { name: 'loading', type: 'Boolean', def: 'false', desc: 'true でスピナー表示・無効化' }
+        ],
+        events: [{ name: 'click', desc: 'ボタン押下時に発火' }],
+        usage: `<c-ui-progress-button label="保存" loading={isSaving} onclick={handleSave}></c-ui-progress-button>`
+    },
+    {
+        id: 'uiVerticalTabs',
+        title: 'UI Vertical Tabs',
+        icon: '📑',
+        category: 'ナビゲーション',
+        demo: 'verticaltabs',
+        description:
+            'tabs 配列 ([{ label, value, content }]) を左に縦タブ、右に本文で表示する。切替時に select イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'tabs',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value, content }] の配列'
+            }
+        ],
+        events: [{ name: 'select', desc: 'タブ選択時に発火（detail.value）' }],
+        usage: `<c-ui-vertical-tabs tabs={tabs} onselect={handleSelect}></c-ui-vertical-tabs>`
+    },
+    {
+        id: 'uiSnackbar',
+        title: 'UI Snackbar',
+        icon: '🍫',
+        category: 'フィードバック',
+        demo: 'snackbar',
+        description:
+            'show(message, actionLabel) で画面下部に短いメッセージとアクションを表示。自動クローズし、action / close イベントを発火。',
+        props: [
+            { name: 'duration', type: 'Number', def: '4000', desc: '自動クローズまでの ms（0 で無効）' }
+        ],
+        events: [
+            { name: 'action', desc: 'アクション押下で発火' },
+            { name: 'close', desc: '閉じた時に発火' }
+        ],
+        methods: [
+            { name: 'show(message, actionLabel)', desc: 'スナックバーを表示' },
+            { name: 'close()', desc: '閉じる' }
+        ],
+        usage: `// 親から\nthis.template.querySelector('c-ui-snackbar').show('削除しました', '元に戻す');`
+    },
+    {
+        id: 'uiCountUp',
+        title: 'UI Count Up',
+        icon: '🔢',
+        category: '表示',
+        demo: 'countup',
+        description:
+            '0 から value までアニメーションで数値を増やして表示する。prefix / suffix 対応、play() で再生し直せる。',
+        props: [
+            { name: 'value', type: 'Number', def: '0', desc: '目標値' },
+            { name: 'duration', type: 'Number', def: '1200', desc: 'アニメーション時間(ms)' },
+            { name: 'prefix', type: 'String', def: "''", desc: '接頭辞（例: ¥）' },
+            { name: 'suffix', type: 'String', def: "''", desc: '接尾辞（例: 件）' }
+        ],
+        events: [],
+        methods: [{ name: 'play()', desc: 'アニメーションを再生' }],
+        usage: `<c-ui-count-up value="1250000" prefix="¥"></c-ui-count-up>`
     }
 ];
 
@@ -2303,7 +2383,11 @@ const JA_NAMES = {
     uiRelatedList: '関連リスト',
     uiLookupField: 'ルックアップ',
     uiRecordHighlights: 'ハイライトパネル',
-    uiTileSelect: 'タイル選択'
+    uiTileSelect: 'タイル選択',
+    uiProgressButton: '処理中ボタン',
+    uiVerticalTabs: '縦タブ',
+    uiSnackbar: 'スナックバー',
+    uiCountUp: 'カウントアップ'
 };
 
 const FILE_KEYS = [

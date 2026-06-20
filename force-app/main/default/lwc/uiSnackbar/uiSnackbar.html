@@ -1,0 +1,21 @@
+<template>
+    <div lwc:if={isVisible} class="ui-snackbar" role="status" aria-live="polite">
+        <span class="ui-snackbar__message">{message}</span>
+        <button
+            lwc:if={hasAction}
+            class="ui-snackbar__action"
+            type="button"
+            onclick={handleAction}
+        >
+            {actionLabel}
+        </button>
+        <button
+            class="ui-snackbar__close"
+            type="button"
+            title="閉じる"
+            onclick={close}
+        >
+            &times;
+        </button>
+    </div>
+</template>

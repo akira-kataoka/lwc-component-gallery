@@ -2974,6 +2974,123 @@
             render();
             box.appendChild(wrap);
             controls.appendChild(out);
+        },
+
+        progressbutton(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'クリックで処理開始' });
+            const btn = el('button', { class: 'ui-pbtn ui-pbtn_brand', type: 'button' }, [
+                el('span', { class: 'ui-pbtn__label', text: '保存' })
+            ]);
+            let loading = false;
+            btn.addEventListener('click', () => {
+                if (loading) return;
+                loading = true;
+                btn.disabled = true;
+                btn.innerHTML = '';
+                btn.appendChild(el('span', { class: 'ui-pbtn__spinner' }));
+                btn.appendChild(el('span', { class: 'ui-pbtn__label', text: '処理中…' }));
+                out.textContent = '処理中…';
+                setTimeout(() => {
+                    loading = false;
+                    btn.disabled = false;
+                    btn.innerHTML = '';
+                    btn.appendChild(el('span', { class: 'ui-pbtn__label', text: '保存' }));
+                    out.textContent = '完了しました';
+                }, 1600);
+            });
+            box.appendChild(btn);
+            controls.appendChild(out);
+        },
+
+        verticaltabs(box) {
+            const tabs = [
+                ['概要', 'overview', 'このタブは概要を表示します。左の縦タブで切替えできます。'],
+                ['仕様', 'spec', '仕様タブの本文です。製品の詳細仕様を記載します。'],
+                ['レビュー', 'review', 'レビュータブの本文です。お客様の声を掲載します。'],
+                ['FAQ', 'faq', 'よくある質問とその回答を表示します。']
+            ];
+            let active = 'overview';
+            const nav = el('div', { class: 'ui-vtabs__nav' });
+            const panel = el('div', { class: 'ui-vtabs__panel' });
+            function render() {
+                nav.innerHTML = '';
+                tabs.forEach((t) => {
+                    const b = el('button', { class: 'ui-vtabs__tab' + (t[1] === active ? ' ui-vtabs__tab_active' : ''), type: 'button', text: t[0] });
+                    b.addEventListener('click', () => {
+                        active = t[1];
+                        render();
+                    });
+                    nav.appendChild(b);
+                });
+                const cur = tabs.find((t) => t[1] === active);
+                panel.textContent = cur ? cur[2] : '';
+            }
+            render();
+            box.appendChild(el('div', { class: 'ui-vtabs', style: 'width:100%;max-width:460px' }, [nav, panel]));
+        },
+
+        snackbar(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'ボタンでスナックバー表示' });
+            const trigger = el('button', { class: 'ui-button ui-button_brand' }, [
+                el('span', { class: 'ui-button__label', text: '削除' })
+            ]);
+            let timer;
+            trigger.addEventListener('click', () => {
+                const existing = document.querySelector('.demo-snackbar');
+                if (existing) existing.remove();
+                const action = el('button', { class: 'ui-snackbar__action', type: 'button', text: '元に戻す' });
+                const closeBtn = el('button', { class: 'ui-snackbar__close', type: 'button', html: '&times;' });
+                const bar = el('div', {
+                    class: 'ui-snackbar demo-snackbar',
+                    role: 'status',
+                    style: 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9998'
+                }, [
+                    el('span', { class: 'ui-snackbar__message', text: '1件を削除しました' }),
+                    action,
+                    closeBtn
+                ]);
+                const remove = () => {
+                    bar.remove();
+                    clearTimeout(timer);
+                };
+                action.addEventListener('click', () => {
+                    out.textContent = '「元に戻す」を実行';
+                    remove();
+                });
+                closeBtn.addEventListener('click', remove);
+                document.body.appendChild(bar);
+                out.textContent = '削除しました';
+                timer = setTimeout(remove, 4000);
+            });
+            box.appendChild(trigger);
+            controls.appendChild(out);
+        },
+
+        countup(box, controls) {
+            const display = el('span', { class: 'ui-countup', text: '¥0' });
+            const target = 1250000;
+            function play() {
+                let i = 0;
+                const steps = 30;
+                const timer = setInterval(() => {
+                    i += 1;
+                    const t = i / steps;
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    const v = Math.round(target * eased);
+                    display.textContent = '¥' + v.toLocaleString('ja-JP');
+                    if (i >= steps) {
+                        display.textContent = '¥' + target.toLocaleString('ja-JP');
+                        clearInterval(timer);
+                    }
+                }, 1200 / steps);
+            }
+            play();
+            box.appendChild(display);
+            const replay = el('button', { class: 'ui-button ui-button_neutral' }, [
+                el('span', { class: 'ui-button__label', text: '再生' })
+            ]);
+            replay.addEventListener('click', play);
+            controls.appendChild(replay);
         }
     };
 
