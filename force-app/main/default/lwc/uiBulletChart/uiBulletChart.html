@@ -1,0 +1,17 @@
+<template>
+    <div class="ui-bullet">
+        <div class="ui-bullet__head">
+            <span class="ui-bullet__label">{label}</span>
+            <span class="ui-bullet__value">{value}</span>
+        </div>
+        <div class="ui-bullet__track">
+            <div class="ui-bullet__bands">
+                <template for:each={bands} for:item="band">
+                    <span key={band.key} class="ui-bullet__band" style={band.style}></span>
+                </template>
+            </div>
+            <div class="ui-bullet__bar" style={valueStyle}></div>
+            <span lwc:if={hasTarget} class="ui-bullet__target" style={targetStyle}></span>
+        </div>
+    </div>
+</template>

@@ -3262,6 +3262,115 @@
             });
             box.appendChild(col);
             controls.appendChild(out);
+        },
+
+        heatmap(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'マスをクリック' });
+            const cols = 20;
+            const total = cols * 7;
+            const values = [];
+            for (let i = 0; i < total; i += 1) {
+                values.push(Math.floor(Math.random() * 5));
+            }
+            const max = Math.max(1, ...values);
+            const grid = el('div', { class: 'ui-heatmap', style: 'grid-template-columns:repeat(' + cols + ',1fr)' });
+            values.forEach((v) => {
+                const level = v > 0 ? Math.min(4, Math.ceil((v / max) * 4)) : 0;
+                const b = el('button', { class: 'ui-heatmap__cell ui-heatmap__cell_l' + level, type: 'button', title: String(v) });
+                b.addEventListener('click', () => { out.textContent = '値: ' + v; });
+                grid.appendChild(b);
+            });
+            box.appendChild(grid);
+            controls.appendChild(out);
+        },
+
+        bulletchart(box) {
+            const data = [['売上', 78, 90, 120, [50, 80]], ['新規', 62, 50, 100, [40, 70]], ['満足度', 88, 85, 100, [60, 80]]];
+            const shades = ['#e8e8e8', '#d2d2d2', '#bcbcbc'];
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:14px;width:100%;max-width:380px' });
+            data.forEach((d) => {
+                const label = d[0];
+                const value = d[1];
+                const target = d[2];
+                const max = d[3];
+                const ranges = d[4];
+                const stops = [0, ...ranges, max];
+                const bands = el('div', { class: 'ui-bullet__bands' });
+                for (let i = 0; i < stops.length - 1; i += 1) {
+                    bands.appendChild(el('span', { class: 'ui-bullet__band', style: 'width:' + ((stops[i + 1] - stops[i]) / max * 100) + '%;background:' + shades[i % shades.length] }));
+                }
+                const bar = el('div', { class: 'ui-bullet__bar', style: 'width:' + (value / max * 100) + '%' });
+                const tgt = el('span', { class: 'ui-bullet__target', style: 'left:' + (target / max * 100) + '%' });
+                col.appendChild(el('div', { class: 'ui-bullet' }, [
+                    el('div', { class: 'ui-bullet__head' }, [
+                        el('span', { class: 'ui-bullet__label', text: label }),
+                        el('span', { class: 'ui-bullet__value', text: String(value) })
+                    ]),
+                    el('div', { class: 'ui-bullet__track' }, [bands, bar, tgt])
+                ]));
+            });
+            box.appendChild(col);
+        },
+
+        leaderboard(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '行をクリック' });
+            const items = [['田中 太郎', 128], ['佐藤 花子', 96], ['鈴木 一郎', 84], ['高橋 桜', 61], ['伊藤 健', 43]];
+            const max = Math.max(...items.map((i) => i[1]));
+            const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
+            const ol = el('ol', { class: 'ui-lb', style: 'width:100%;max-width:360px' });
+            items.forEach((it, i) => {
+                const rank = i + 1;
+                const li = el('li', { class: 'ui-lb__row' + (rank <= 3 ? ' ui-lb__row_top' : '') }, [
+                    el('span', { class: 'ui-lb__rank', text: medals[rank] || String(rank) }),
+                    el('div', { class: 'ui-lb__body' }, [
+                        el('div', { class: 'ui-lb__top' }, [
+                            el('span', { class: 'ui-lb__name', text: it[0] }),
+                            el('span', { class: 'ui-lb__value', text: String(it[1]) })
+                        ]),
+                        el('div', { class: 'ui-lb__track' }, [el('div', { class: 'ui-lb__bar', style: 'width:' + (it[1] / max * 100) + '%' })])
+                    ])
+                ]);
+                li.addEventListener('click', () => { out.textContent = '選択: ' + it[0]; });
+                ol.appendChild(li);
+            });
+            box.appendChild(ol);
+            controls.appendChild(out);
+        },
+
+        filterchips(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '×で削除' });
+            let filters = [['業種: 製造業', 'industry'], ['地域: 関東', 'region'], ['ステータス: 商談中', 'status'], ['担当: 田中', 'owner']];
+            const wrap = el('div', { class: 'ui-fchips' });
+            function render() {
+                wrap.innerHTML = '';
+                if (filters.length === 0) {
+                    wrap.appendChild(el('span', { class: 'ui-fchips__label', text: 'フィルタなし' }));
+                    out.textContent = 'クリアしました';
+                    return;
+                }
+                wrap.appendChild(el('span', { class: 'ui-fchips__label', text: '絞り込み:' }));
+                filters.forEach((f, i) => {
+                    const rm = el('button', { class: 'ui-fchips__remove', type: 'button', title: '削除', html: '&times;' });
+                    rm.addEventListener('click', () => {
+                        out.textContent = '削除: ' + f[0];
+                        filters = filters.filter((x, j) => j !== i);
+                        render();
+                    });
+                    wrap.appendChild(el('span', { class: 'ui-fchips__chip' }, [
+                        el('span', { class: 'ui-fchips__text', text: f[0] }),
+                        rm
+                    ]));
+                });
+                const clr = el('button', { class: 'ui-fchips__clear', type: 'button', text: 'すべてクリア' });
+                clr.addEventListener('click', () => {
+                    filters = [];
+                    render();
+                });
+                wrap.appendChild(clr);
+            }
+            render();
+            box.appendChild(wrap);
+            controls.appendChild(out);
         }
     };
 

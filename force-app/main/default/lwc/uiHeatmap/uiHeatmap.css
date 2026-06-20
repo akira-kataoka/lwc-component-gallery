@@ -1,0 +1,36 @@
+.ui-heatmap {
+    display: grid;
+    gap: 3px;
+    width: fit-content;
+}
+
+.ui-heatmap__cell {
+    width: 14px;
+    height: 14px;
+    border: none;
+    border-radius: 3px;
+    padding: 0;
+    cursor: pointer;
+    background: #ebedf0;
+    transition: outline 0.1s ease;
+}
+.ui-heatmap__cell:hover {
+    outline: 1px solid #0176d3;
+    outline-offset: 1px;
+}
+
+.ui-heatmap__cell_l0 {
+    background: #ebedf0;
+}
+.ui-heatmap__cell_l1 {
+    background: #c6e7c8;
+}
+.ui-heatmap__cell_l2 {
+    background: #7bc97f;
+}
+.ui-heatmap__cell_l3 {
+    background: #3fa14a;
+}
+.ui-heatmap__cell_l4 {
+    background: #1d7a3f;
+}

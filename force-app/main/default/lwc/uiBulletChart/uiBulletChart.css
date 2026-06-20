@@ -1,0 +1,60 @@
+.ui-bullet {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ui-bullet__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.8rem;
+}
+
+.ui-bullet__label {
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-bullet__value {
+    font-weight: 800;
+    color: #181818;
+    font-variant-numeric: tabular-nums;
+}
+
+.ui-bullet__track {
+    position: relative;
+    height: 18px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ui-bullet__bands {
+    position: absolute;
+    inset: 0;
+    display: flex;
+}
+.ui-bullet__band {
+    height: 100%;
+}
+
+.ui-bullet__bar {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    height: 8px;
+    border-radius: 4px;
+    background: #0176d3;
+    transition: width 0.35s ease;
+}
+
+.ui-bullet__target {
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    width: 3px;
+    background: #181818;
+    border-radius: 1px;
+    transform: translateX(-50%);
+}

@@ -1,0 +1,22 @@
+<template>
+    <div lwc:if={hasFilters} class="ui-fchips">
+        <span class="ui-fchips__label">絞り込み:</span>
+        <template for:each={chips} for:item="chip">
+            <span key={chip.key} class="ui-fchips__chip">
+                <span class="ui-fchips__text">{chip.label}</span>
+                <button
+                    class="ui-fchips__remove"
+                    type="button"
+                    title="削除"
+                    data-value={chip.value}
+                    onclick={handleRemove}
+                >
+                    &times;
+                </button>
+            </span>
+        </template>
+        <button class="ui-fchips__clear" type="button" onclick={handleClear}>
+            すべてクリア
+        </button>
+    </div>
+</template>

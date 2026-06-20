@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T09:26:59.989Z",
+  "generatedAt": "2026-06-20T09:46:50.977Z",
   "components": [
     {
       "id": "uiBadge",
@@ -4389,6 +4389,155 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\nconst ICONS = {\n    pdf: '📕',\n    doc: '📘',\n    xls: '📗',\n    ppt: '📙',\n    img: '🖼️',\n    zip: '🗜️',\n    txt: '📄',\n    file: '📎'\n};\n\n/**\n * uiAttachmentItem — 添付ファイル行。\n * 種別アイコン・ファイル名・サイズと、ダウンロードボタンを表示する。\n * ダウンロード押下で download イベント (detail.name) を発火する。\n */\nexport default class UiAttachmentItem extends LightningElement {\n    /** ファイル名 */\n    @api name;\n    /** サイズ表記（例: 2.4 MB） */\n    @api size;\n    /** 種別: pdf | doc | xls | ppt | img | zip | txt | file */\n    @api type = 'file';\n\n    get iconChar() {\n        return ICONS[this.type] || ICONS.file;\n    }\n\n    handleDownload() {\n        this.dispatchEvent(\n            new CustomEvent('download', { detail: { name: this.name } })\n        );\n    }\n}\n",
         "css": ".ui-attach {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    padding: 8px 10px;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    background: #ffffff;\n    min-width: 240px;\n}\n\n.ui-attach__icon {\n    font-size: 1.3rem;\n    flex-shrink: 0;\n}\n\n.ui-attach__body {\n    display: flex;\n    flex-direction: column;\n    min-width: 0;\n    flex: 1;\n}\n\n.ui-attach__name {\n    font-size: 0.85rem;\n    color: #181818;\n    font-weight: 600;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n\n.ui-attach__size {\n    font-size: 0.72rem;\n    color: #969492;\n}\n\n.ui-attach__download {\n    width: 30px;\n    height: 30px;\n    border: 1px solid #e5e5e5;\n    border-radius: 7px;\n    background: #fafaf9;\n    color: #514f4d;\n    cursor: pointer;\n    font-size: 0.9rem;\n    flex-shrink: 0;\n}\n.ui-attach__download:hover {\n    background: #eef4ff;\n    border-color: #0176d3;\n    color: #0176d3;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Attachment Item</masterLabel>\n    <description>添付ファイル行。種別アイコン・名前・サイズ・DLボタンを表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiHeatmap",
+      "title": "UI Heatmap",
+      "icon": "🟩",
+      "category": "表示",
+      "demo": "heatmap",
+      "description": "values（数値配列）を columns 列のマス目に並べ、値の大小で濃淡を付ける貢献グラフ風ヒートマップ。マスクリックで cellselect を発火。",
+      "props": [
+        {
+          "name": "values",
+          "type": "Array",
+          "def": "[]",
+          "desc": "数値の配列（マス1つにつき1値）"
+        },
+        {
+          "name": "columns",
+          "type": "Number",
+          "def": "14",
+          "desc": "列数"
+        }
+      ],
+      "events": [
+        {
+          "name": "cellselect",
+          "desc": "マスクリックで発火（detail.{index,value}）"
+        }
+      ],
+      "usage": "<c-ui-heatmap values={days} columns=\"14\" oncellselect={handleCell}></c-ui-heatmap>",
+      "ja": "ヒートマップ",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-heatmap\" style={gridStyle}>\n        <template for:each={cells} for:item=\"cell\">\n            <button\n                key={cell.key}\n                class={cell.cssClass}\n                type=\"button\"\n                title={cell.title}\n                data-index={cell.index}\n                onclick={handleCell}\n            ></button>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiHeatmap — 汎用ヒートマップ。\n * values（数値配列）を columns 列のマス目に並べ、値の大きさで濃淡を付ける。\n * GitHub の貢献グラフ風の表示。マスクリックで cellselect イベントを発火する。\n */\nexport default class UiHeatmap extends LightningElement {\n    _values = [];\n\n    /** 数値の配列（マス1つにつき1値） */\n    @api\n    get values() {\n        return this._values;\n    }\n    set values(value) {\n        this._values = Array.isArray(value) ? value : [];\n    }\n\n    /** 列数 */\n    @api columns = 14;\n\n    get gridStyle() {\n        const cols = Number(this.columns) || 14;\n        return `grid-template-columns: repeat(${cols}, 1fr);`;\n    }\n\n    get cells() {\n        const vals = this._values.map((v) => Number(v) || 0);\n        const max = Math.max(1, ...vals);\n        return vals.map((v, i) => {\n            let level = 0;\n            if (v > 0) {\n                level = Math.min(4, Math.ceil((v / max) * 4));\n            }\n            return {\n                key: i,\n                index: i,\n                title: String(v),\n                cssClass: `ui-heatmap__cell ui-heatmap__cell_l${level}`\n            };\n        });\n    }\n\n    handleCell(event) {\n        const i = Number(event.currentTarget.dataset.index);\n        this.dispatchEvent(\n            new CustomEvent('cellselect', {\n                detail: { index: i, value: this._values[i] }\n            })\n        );\n    }\n}\n",
+        "css": ".ui-heatmap {\n    display: grid;\n    gap: 3px;\n    width: fit-content;\n}\n\n.ui-heatmap__cell {\n    width: 14px;\n    height: 14px;\n    border: none;\n    border-radius: 3px;\n    padding: 0;\n    cursor: pointer;\n    background: #ebedf0;\n    transition: outline 0.1s ease;\n}\n.ui-heatmap__cell:hover {\n    outline: 1px solid #0176d3;\n    outline-offset: 1px;\n}\n\n.ui-heatmap__cell_l0 {\n    background: #ebedf0;\n}\n.ui-heatmap__cell_l1 {\n    background: #c6e7c8;\n}\n.ui-heatmap__cell_l2 {\n    background: #7bc97f;\n}\n.ui-heatmap__cell_l3 {\n    background: #3fa14a;\n}\n.ui-heatmap__cell_l4 {\n    background: #1d7a3f;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Heatmap</masterLabel>\n    <description>汎用ヒートマップ。値の大小を濃淡マスで表示する貢献グラフ風。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiBulletChart",
+      "title": "UI Bullet Chart",
+      "icon": "🎯",
+      "category": "ダッシュボード",
+      "demo": "bulletchart",
+      "description": "value（実績）・target（目標マーカー）を定性レンジの帯の上に重ね、KPI 達成度を 1 行で可視化するブレットチャート。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "0",
+          "desc": "実績値"
+        },
+        {
+          "name": "target",
+          "type": "Number",
+          "def": "—",
+          "desc": "目標値（マーカー）"
+        },
+        {
+          "name": "max",
+          "type": "Number",
+          "def": "100",
+          "desc": "最大値"
+        },
+        {
+          "name": "ranges",
+          "type": "Array",
+          "def": "[]",
+          "desc": "定性レンジの区切り値（例: [40, 70]）"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-bullet-chart label=\"売上\" value=\"78\" target=\"90\" max=\"120\" ranges={ranges}></c-ui-bullet-chart>",
+      "ja": "ブレットチャート",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-bullet\">\n        <div class=\"ui-bullet__head\">\n            <span class=\"ui-bullet__label\">{label}</span>\n            <span class=\"ui-bullet__value\">{value}</span>\n        </div>\n        <div class=\"ui-bullet__track\">\n            <div class=\"ui-bullet__bands\">\n                <template for:each={bands} for:item=\"band\">\n                    <span key={band.key} class=\"ui-bullet__band\" style={band.style}></span>\n                </template>\n            </div>\n            <div class=\"ui-bullet__bar\" style={valueStyle}></div>\n            <span lwc:if={hasTarget} class=\"ui-bullet__target\" style={targetStyle}></span>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiBulletChart — 汎用ブレットチャート。\n * value（実績）・target（目標マーカー）・max を、定性レンジ（ranges）の帯の上に表示する。\n * KPI の達成度を 1 行でコンパクトに可視化する。\n */\nexport default class UiBulletChart extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 実績値 */\n    @api value = 0;\n    /** 目標値（マーカー） */\n    @api target;\n    /** 最大値 */\n    @api max = 100;\n\n    _ranges = [];\n\n    /** 定性レンジの区切り値（小→大、例: [40, 70]） */\n    @api\n    get ranges() {\n        return this._ranges;\n    }\n    set ranges(value) {\n        this._ranges = Array.isArray(value) ? value : [];\n    }\n\n    get maxValue() {\n        return Number(this.max) || 100;\n    }\n\n    get bands() {\n        const shades = ['#e8e8e8', '#d2d2d2', '#bcbcbc', '#a6a6a6'];\n        const stops = [0, ...this._ranges.map((r) => Number(r) || 0), this.maxValue];\n        const bands = [];\n        for (let i = 0; i < stops.length - 1; i += 1) {\n            const w = ((stops[i + 1] - stops[i]) / this.maxValue) * 100;\n            bands.push({\n                key: i,\n                style: `width: ${w}%; background: ${shades[i % shades.length]};`\n            });\n        }\n        return bands;\n    }\n\n    get valueStyle() {\n        const w = Math.min(100, Math.max(0, ((Number(this.value) || 0) / this.maxValue) * 100));\n        return `width: ${w}%`;\n    }\n\n    get hasTarget() {\n        return this.target !== undefined && this.target !== null && this.target !== '';\n    }\n\n    get targetStyle() {\n        const left = Math.min(100, Math.max(0, ((Number(this.target) || 0) / this.maxValue) * 100));\n        return `left: ${left}%`;\n    }\n}\n",
+        "css": ".ui-bullet {\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    gap: 5px;\n}\n\n.ui-bullet__head {\n    display: flex;\n    justify-content: space-between;\n    align-items: baseline;\n    font-size: 0.8rem;\n}\n\n.ui-bullet__label {\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-bullet__value {\n    font-weight: 800;\n    color: #181818;\n    font-variant-numeric: tabular-nums;\n}\n\n.ui-bullet__track {\n    position: relative;\n    height: 18px;\n    border-radius: 4px;\n    overflow: hidden;\n}\n\n.ui-bullet__bands {\n    position: absolute;\n    inset: 0;\n    display: flex;\n}\n.ui-bullet__band {\n    height: 100%;\n}\n\n.ui-bullet__bar {\n    position: absolute;\n    top: 5px;\n    left: 0;\n    height: 8px;\n    border-radius: 4px;\n    background: #0176d3;\n    transition: width 0.35s ease;\n}\n\n.ui-bullet__target {\n    position: absolute;\n    top: 1px;\n    bottom: 1px;\n    width: 3px;\n    background: #181818;\n    border-radius: 1px;\n    transform: translateX(-50%);\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Bullet Chart</masterLabel>\n    <description>汎用ブレットチャート。実績・目標・定性レンジで達成度を1行可視化。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiLeaderboard",
+      "title": "UI Leaderboard",
+      "icon": "🏆",
+      "category": "ダッシュボード",
+      "demo": "leaderboard",
+      "description": "items 配列 ([{ name, value }]) を値の降順で並べ、順位（上位はメダル）・バー・値で表示するランキング。行クリックで select を発火。",
+      "props": [
+        {
+          "name": "items",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ name, value }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "行クリックで発火（detail.name）"
+        }
+      ],
+      "usage": "<c-ui-leaderboard items={ranking} onselect={handleSelect}></c-ui-leaderboard>",
+      "ja": "ランキング",
+      "files": {
+        "html": "<template>\n    <ol class=\"ui-lb\">\n        <template for:each={rows} for:item=\"row\">\n            <li\n                key={row.key}\n                class={row.rowClass}\n                data-name={row.name}\n                onclick={handleSelect}\n            >\n                <span class=\"ui-lb__rank\">{row.badge}</span>\n                <div class=\"ui-lb__body\">\n                    <div class=\"ui-lb__top\">\n                        <span class=\"ui-lb__name\">{row.name}</span>\n                        <span class=\"ui-lb__value\">{row.value}</span>\n                    </div>\n                    <div class=\"ui-lb__track\">\n                        <div class=\"ui-lb__bar\" style={row.barStyle}></div>\n                    </div>\n                </div>\n            </li>\n        </template>\n    </ol>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' };\n\n/**\n * uiLeaderboard — 汎用ランキング。\n * items 配列 ([{ name, value }]) を値の大きい順に並べ、順位・バー・値で表示する。\n * 行クリックで select イベント (detail.name) を発火する。\n */\nexport default class UiLeaderboard extends LightningElement {\n    _items = [];\n\n    /** [{ name, value }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    get rows() {\n        const sorted = [...this._items].sort(\n            (a, b) => (Number(b.value) || 0) - (Number(a.value) || 0)\n        );\n        const max = Math.max(1, ...sorted.map((s) => Number(s.value) || 0));\n        return sorted.map((s, i) => {\n            const rank = i + 1;\n            return {\n                key: i,\n                rank,\n                badge: MEDALS[rank] || String(rank),\n                name: s.name,\n                value: s.value,\n                barStyle: `width: ${((Number(s.value) || 0) / max) * 100}%`,\n                rowClass: rank <= 3 ? 'ui-lb__row ui-lb__row_top' : 'ui-lb__row'\n            };\n        });\n    }\n\n    handleSelect(event) {\n        this.dispatchEvent(\n            new CustomEvent('select', {\n                detail: { name: event.currentTarget.dataset.name }\n            })\n        );\n    }\n}\n",
+        "css": ".ui-lb {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n    display: flex;\n    flex-direction: column;\n    gap: 6px;\n}\n\n.ui-lb__row {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 8px 10px;\n    border: 1px solid #ececec;\n    border-radius: 8px;\n    cursor: pointer;\n    background: #ffffff;\n}\n.ui-lb__row:hover {\n    background: #f7fbff;\n    border-color: #cfe0fb;\n}\n.ui-lb__row_top {\n    background: #fffdf5;\n}\n\n.ui-lb__rank {\n    width: 28px;\n    text-align: center;\n    font-size: 1.05rem;\n    font-weight: 800;\n    color: #706e6b;\n    flex-shrink: 0;\n}\n\n.ui-lb__body {\n    flex: 1;\n    min-width: 0;\n}\n\n.ui-lb__top {\n    display: flex;\n    justify-content: space-between;\n    align-items: baseline;\n    margin-bottom: 4px;\n}\n\n.ui-lb__name {\n    font-size: 0.85rem;\n    font-weight: 600;\n    color: #181818;\n}\n\n.ui-lb__value {\n    font-size: 0.85rem;\n    font-weight: 800;\n    color: #0176d3;\n    font-variant-numeric: tabular-nums;\n}\n\n.ui-lb__track {\n    height: 6px;\n    background: #f0f0f0;\n    border-radius: 3px;\n    overflow: hidden;\n}\n\n.ui-lb__bar {\n    height: 100%;\n    background: #0176d3;\n    border-radius: 3px;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Leaderboard</masterLabel>\n    <description>汎用ランキング。値の降順で順位・バー・値を表示し select を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiFilterChips",
+      "title": "UI Filter Chips",
+      "icon": "🏷️",
+      "category": "フォーム",
+      "demo": "filterchips",
+      "description": "適用中のフィルタ ([{ label, value }]) を×付きチップで並べ「すべてクリア」を備える。remove / clear イベントを発火。",
+      "props": [
+        {
+          "name": "filters",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "remove",
+          "desc": "個別削除で発火（detail.value）"
+        },
+        {
+          "name": "clear",
+          "desc": "全消去で発火"
+        }
+      ],
+      "usage": "<c-ui-filter-chips filters={active} onremove={handleRemove} onclear={handleClear}></c-ui-filter-chips>",
+      "ja": "フィルターチップ",
+      "files": {
+        "html": "<template>\n    <div lwc:if={hasFilters} class=\"ui-fchips\">\n        <span class=\"ui-fchips__label\">絞り込み:</span>\n        <template for:each={chips} for:item=\"chip\">\n            <span key={chip.key} class=\"ui-fchips__chip\">\n                <span class=\"ui-fchips__text\">{chip.label}</span>\n                <button\n                    class=\"ui-fchips__remove\"\n                    type=\"button\"\n                    title=\"削除\"\n                    data-value={chip.value}\n                    onclick={handleRemove}\n                >\n                    &times;\n                </button>\n            </span>\n        </template>\n        <button class=\"ui-fchips__clear\" type=\"button\" onclick={handleClear}>\n            すべてクリア\n        </button>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiFilterChips — 汎用フィルターチップ。\n * 適用中のフィルタ ([{ label, value }]) を×付きチップで並べ、「すべてクリア」を備える。\n * 個別削除で remove イベント (detail.value)、全消去で clear イベントを発火する。\n */\nexport default class UiFilterChips extends LightningElement {\n    _filters = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get filters() {\n        return this._filters;\n    }\n    set filters(value) {\n        this._filters = Array.isArray(value) ? value : [];\n    }\n\n    get hasFilters() {\n        return this._filters.length > 0;\n    }\n\n    get chips() {\n        return this._filters.map((f, i) => ({\n            key: i,\n            label: f.label,\n            value: f.value\n        }));\n    }\n\n    handleRemove(event) {\n        this.dispatchEvent(\n            new CustomEvent('remove', {\n                detail: { value: event.currentTarget.dataset.value }\n            })\n        );\n    }\n\n    handleClear() {\n        this.dispatchEvent(new CustomEvent('clear'));\n    }\n}\n",
+        "css": ".ui-fchips {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 8px;\n}\n\n.ui-fchips__label {\n    font-size: 0.78rem;\n    color: #706e6b;\n    font-weight: 600;\n}\n\n.ui-fchips__chip {\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n    padding: 3px 4px 3px 10px;\n    background: #eef4ff;\n    color: #0b5cab;\n    border-radius: 14px;\n    font-size: 0.78rem;\n    font-weight: 600;\n}\n\n.ui-fchips__remove {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 16px;\n    height: 16px;\n    border: none;\n    border-radius: 50%;\n    background: transparent;\n    color: #0b5cab;\n    font-size: 0.95rem;\n    line-height: 1;\n    cursor: pointer;\n}\n.ui-fchips__remove:hover {\n    background: rgba(1, 92, 171, 0.15);\n}\n\n.ui-fchips__clear {\n    border: none;\n    background: transparent;\n    color: #706e6b;\n    font-size: 0.76rem;\n    font-weight: 600;\n    cursor: pointer;\n    text-decoration: underline;\n    font-family: inherit;\n}\n.ui-fchips__clear:hover {\n    color: #ba0517;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Filter Chips</masterLabel>\n    <description>汎用フィルターチップ。適用中フィルタを×付きで表示し remove/clear を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

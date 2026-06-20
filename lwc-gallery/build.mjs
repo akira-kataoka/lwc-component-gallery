@@ -2428,6 +2428,90 @@ const COMPONENTS = [
         ],
         events: [{ name: 'download', desc: 'ダウンロード押下で発火（detail.name）' }],
         usage: `<c-ui-attachment-item name="提案書.pdf" size="2.4 MB" type="pdf" ondownload={handleDownload}></c-ui-attachment-item>`
+    },
+    {
+        id: 'uiHeatmap',
+        title: 'UI Heatmap',
+        icon: '🟩',
+        category: '表示',
+        demo: 'heatmap',
+        description:
+            'values（数値配列）を columns 列のマス目に並べ、値の大小で濃淡を付ける貢献グラフ風ヒートマップ。マスクリックで cellselect を発火。',
+        props: [
+            {
+                name: 'values',
+                type: 'Array',
+                def: '[]',
+                desc: '数値の配列（マス1つにつき1値）'
+            },
+            { name: 'columns', type: 'Number', def: '14', desc: '列数' }
+        ],
+        events: [{ name: 'cellselect', desc: 'マスクリックで発火（detail.{index,value}）' }],
+        usage: `<c-ui-heatmap values={days} columns="14" oncellselect={handleCell}></c-ui-heatmap>`
+    },
+    {
+        id: 'uiBulletChart',
+        title: 'UI Bullet Chart',
+        icon: '🎯',
+        category: 'ダッシュボード',
+        demo: 'bulletchart',
+        description:
+            'value（実績）・target（目標マーカー）を定性レンジの帯の上に重ね、KPI 達成度を 1 行で可視化するブレットチャート。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'Number', def: '0', desc: '実績値' },
+            { name: 'target', type: 'Number', def: '—', desc: '目標値（マーカー）' },
+            { name: 'max', type: 'Number', def: '100', desc: '最大値' },
+            {
+                name: 'ranges',
+                type: 'Array',
+                def: '[]',
+                desc: '定性レンジの区切り値（例: [40, 70]）'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-bullet-chart label="売上" value="78" target="90" max="120" ranges={ranges}></c-ui-bullet-chart>`
+    },
+    {
+        id: 'uiLeaderboard',
+        title: 'UI Leaderboard',
+        icon: '🏆',
+        category: 'ダッシュボード',
+        demo: 'leaderboard',
+        description:
+            'items 配列 ([{ name, value }]) を値の降順で並べ、順位（上位はメダル）・バー・値で表示するランキング。行クリックで select を発火。',
+        props: [
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ name, value }] の配列'
+            }
+        ],
+        events: [{ name: 'select', desc: '行クリックで発火（detail.name）' }],
+        usage: `<c-ui-leaderboard items={ranking} onselect={handleSelect}></c-ui-leaderboard>`
+    },
+    {
+        id: 'uiFilterChips',
+        title: 'UI Filter Chips',
+        icon: '🏷️',
+        category: 'フォーム',
+        demo: 'filterchips',
+        description:
+            '適用中のフィルタ ([{ label, value }]) を×付きチップで並べ「すべてクリア」を備える。remove / clear イベントを発火。',
+        props: [
+            {
+                name: 'filters',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            }
+        ],
+        events: [
+            { name: 'remove', desc: '個別削除で発火（detail.value）' },
+            { name: 'clear', desc: '全消去で発火' }
+        ],
+        usage: `<c-ui-filter-chips filters={active} onremove={handleRemove} onclear={handleClear}></c-ui-filter-chips>`
     }
 ];
 
@@ -2545,7 +2629,11 @@ const JA_NAMES = {
     uiContactCard: '連絡先カード',
     uiPriceCard: '料金カード',
     uiStepWizard: 'ステップウィザード',
-    uiAttachmentItem: '添付ファイル'
+    uiAttachmentItem: '添付ファイル',
+    uiHeatmap: 'ヒートマップ',
+    uiBulletChart: 'ブレットチャート',
+    uiLeaderboard: 'ランキング',
+    uiFilterChips: 'フィルターチップ'
 };
 
 const FILE_KEYS = [

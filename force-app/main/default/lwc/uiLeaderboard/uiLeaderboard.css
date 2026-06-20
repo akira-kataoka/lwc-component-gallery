@@ -1,0 +1,73 @@
+.ui-lb {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ui-lb__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border: 1px solid #ececec;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #ffffff;
+}
+.ui-lb__row:hover {
+    background: #f7fbff;
+    border-color: #cfe0fb;
+}
+.ui-lb__row_top {
+    background: #fffdf5;
+}
+
+.ui-lb__rank {
+    width: 28px;
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #706e6b;
+    flex-shrink: 0;
+}
+
+.ui-lb__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.ui-lb__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+}
+
+.ui-lb__name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #181818;
+}
+
+.ui-lb__value {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0176d3;
+    font-variant-numeric: tabular-nums;
+}
+
+.ui-lb__track {
+    height: 6px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.ui-lb__bar {
+    height: 100%;
+    background: #0176d3;
+    border-radius: 3px;
+}

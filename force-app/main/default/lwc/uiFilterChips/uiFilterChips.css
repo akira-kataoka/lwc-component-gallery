@@ -1,0 +1,56 @@
+.ui-fchips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.ui-fchips__label {
+    font-size: 0.78rem;
+    color: #706e6b;
+    font-weight: 600;
+}
+
+.ui-fchips__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 4px 3px 10px;
+    background: #eef4ff;
+    color: #0b5cab;
+    border-radius: 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.ui-fchips__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #0b5cab;
+    font-size: 0.95rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.ui-fchips__remove:hover {
+    background: rgba(1, 92, 171, 0.15);
+}
+
+.ui-fchips__clear {
+    border: none;
+    background: transparent;
+    color: #706e6b;
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+}
+.ui-fchips__clear:hover {
+    color: #ba0517;
+}

@@ -1,0 +1,14 @@
+<template>
+    <div class="ui-heatmap" style={gridStyle}>
+        <template for:each={cells} for:item="cell">
+            <button
+                key={cell.key}
+                class={cell.cssClass}
+                type="button"
+                title={cell.title}
+                data-index={cell.index}
+                onclick={handleCell}
+            ></button>
+        </template>
+    </div>
+</template>

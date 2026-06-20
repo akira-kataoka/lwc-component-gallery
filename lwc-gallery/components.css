@@ -5736,3 +5736,240 @@
     border-color: #0176d3;
     color: #0176d3;
 }
+
+
+/* ===== uiHeatmap ===== */
+.ui-heatmap {
+    display: grid;
+    gap: 3px;
+    width: fit-content;
+}
+
+.ui-heatmap__cell {
+    width: 14px;
+    height: 14px;
+    border: none;
+    border-radius: 3px;
+    padding: 0;
+    cursor: pointer;
+    background: #ebedf0;
+    transition: outline 0.1s ease;
+}
+.ui-heatmap__cell:hover {
+    outline: 1px solid #0176d3;
+    outline-offset: 1px;
+}
+
+.ui-heatmap__cell_l0 {
+    background: #ebedf0;
+}
+.ui-heatmap__cell_l1 {
+    background: #c6e7c8;
+}
+.ui-heatmap__cell_l2 {
+    background: #7bc97f;
+}
+.ui-heatmap__cell_l3 {
+    background: #3fa14a;
+}
+.ui-heatmap__cell_l4 {
+    background: #1d7a3f;
+}
+
+
+/* ===== uiBulletChart ===== */
+.ui-bullet {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ui-bullet__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.8rem;
+}
+
+.ui-bullet__label {
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-bullet__value {
+    font-weight: 800;
+    color: #181818;
+    font-variant-numeric: tabular-nums;
+}
+
+.ui-bullet__track {
+    position: relative;
+    height: 18px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ui-bullet__bands {
+    position: absolute;
+    inset: 0;
+    display: flex;
+}
+.ui-bullet__band {
+    height: 100%;
+}
+
+.ui-bullet__bar {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    height: 8px;
+    border-radius: 4px;
+    background: #0176d3;
+    transition: width 0.35s ease;
+}
+
+.ui-bullet__target {
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    width: 3px;
+    background: #181818;
+    border-radius: 1px;
+    transform: translateX(-50%);
+}
+
+
+/* ===== uiLeaderboard ===== */
+.ui-lb {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ui-lb__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border: 1px solid #ececec;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #ffffff;
+}
+.ui-lb__row:hover {
+    background: #f7fbff;
+    border-color: #cfe0fb;
+}
+.ui-lb__row_top {
+    background: #fffdf5;
+}
+
+.ui-lb__rank {
+    width: 28px;
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #706e6b;
+    flex-shrink: 0;
+}
+
+.ui-lb__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.ui-lb__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+}
+
+.ui-lb__name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #181818;
+}
+
+.ui-lb__value {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0176d3;
+    font-variant-numeric: tabular-nums;
+}
+
+.ui-lb__track {
+    height: 6px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.ui-lb__bar {
+    height: 100%;
+    background: #0176d3;
+    border-radius: 3px;
+}
+
+
+/* ===== uiFilterChips ===== */
+.ui-fchips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.ui-fchips__label {
+    font-size: 0.78rem;
+    color: #706e6b;
+    font-weight: 600;
+}
+
+.ui-fchips__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 4px 3px 10px;
+    background: #eef4ff;
+    color: #0b5cab;
+    border-radius: 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.ui-fchips__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #0b5cab;
+    font-size: 0.95rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.ui-fchips__remove:hover {
+    background: rgba(1, 92, 171, 0.15);
+}
+
+.ui-fchips__clear {
+    border: none;
+    background: transparent;
+    color: #706e6b;
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+}
+.ui-fchips__clear:hover {
+    color: #ba0517;
+}

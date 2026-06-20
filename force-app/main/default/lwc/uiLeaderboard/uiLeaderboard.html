@@ -1,0 +1,23 @@
+<template>
+    <ol class="ui-lb">
+        <template for:each={rows} for:item="row">
+            <li
+                key={row.key}
+                class={row.rowClass}
+                data-name={row.name}
+                onclick={handleSelect}
+            >
+                <span class="ui-lb__rank">{row.badge}</span>
+                <div class="ui-lb__body">
+                    <div class="ui-lb__top">
+                        <span class="ui-lb__name">{row.name}</span>
+                        <span class="ui-lb__value">{row.value}</span>
+                    </div>
+                    <div class="ui-lb__track">
+                        <div class="ui-lb__bar" style={row.barStyle}></div>
+                    </div>
+                </div>
+            </li>
+        </template>
+    </ol>
+</template>
