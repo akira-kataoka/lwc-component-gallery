@@ -1,0 +1,18 @@
+<template>
+    <div class="ui-avgroup">
+        <template for:each={visible} for:item="person">
+            <span key={person.key} class="ui-avgroup__item" title={person.name}>
+                <img
+                    lwc:if={person.hasImage}
+                    src={person.src}
+                    alt={person.name}
+                    class="ui-avgroup__img"
+                />
+                <span lwc:else class="ui-avgroup__initials">{person.initials}</span>
+            </span>
+        </template>
+        <span lwc:if={hasOverflow} class="ui-avgroup__item ui-avgroup__more">
+            {overflowText}
+        </span>
+    </div>
+</template>

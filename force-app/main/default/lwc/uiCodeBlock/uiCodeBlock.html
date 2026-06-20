@@ -1,0 +1,11 @@
+<template>
+    <div class="ui-codeblock">
+        <div class="ui-codeblock__bar">
+            <span class="ui-codeblock__label">{label}</span>
+            <button class="ui-codeblock__copy" type="button" onclick={handleCopy}>
+                {copyLabel}
+            </button>
+        </div>
+        <pre class="ui-codeblock__pre"><code>{code}</code></pre>
+    </div>
+</template>

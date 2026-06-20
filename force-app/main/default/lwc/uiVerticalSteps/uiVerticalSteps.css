@@ -1,0 +1,80 @@
+.ui-vsteps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ui-vsteps__item {
+    position: relative;
+    display: flex;
+    gap: 12px;
+    padding: 0 0 18px 0;
+}
+
+/* 縦の接続線 */
+.ui-vsteps__item::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 28px;
+    bottom: -4px;
+    width: 2px;
+    background: #dddbda;
+}
+.ui-vsteps__item:last-child::before {
+    display: none;
+}
+
+.ui-vsteps__marker {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #dddbda;
+    background: #ffffff;
+    color: #706e6b;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.ui-vsteps__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 3px;
+}
+
+.ui-vsteps__label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-vsteps__desc {
+    font-size: 0.8rem;
+    color: #706e6b;
+    line-height: 1.5;
+}
+
+.ui-vsteps__item_complete::before {
+    background: #2e844a;
+}
+.ui-vsteps__item_complete .ui-vsteps__marker {
+    border-color: #2e844a;
+    background: #2e844a;
+    color: #ffffff;
+}
+
+.ui-vsteps__item_active .ui-vsteps__marker {
+    border-color: #0176d3;
+    color: #0176d3;
+    box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.18);
+}
+.ui-vsteps__item_active .ui-vsteps__label {
+    color: #0176d3;
+}

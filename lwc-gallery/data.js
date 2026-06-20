@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T06:58:21.832Z",
+  "generatedAt": "2026-06-20T07:05:17.768Z",
   "components": [
     {
       "id": "uiBadge",
@@ -2194,6 +2194,140 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiCarousel — 汎用カルーセル。\n * slides 配列 ([{ title, text }]) を 1 枚ずつ表示し、前後ボタンと\n * ドットで切替える。切替時に change イベント (detail.index) を発火する。\n */\nexport default class UiCarousel extends LightningElement {\n    _slides = [];\n\n    /** [{ title, text }] の配列 */\n    @api\n    get slides() {\n        return this._slides;\n    }\n    set slides(value) {\n        this._slides = Array.isArray(value) ? value : [];\n    }\n\n    @track index = 0;\n\n    get current() {\n        return this._slides[this.index] || {};\n    }\n\n    get dots() {\n        return this._slides.map((s, i) => ({\n            key: i,\n            idx: i,\n            cssClass:\n                i === this.index\n                    ? 'ui-carousel__dot ui-carousel__dot_active'\n                    : 'ui-carousel__dot'\n        }));\n    }\n\n    get hasSlides() {\n        return this._slides.length > 0;\n    }\n\n    emit() {\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { index: this.index } })\n        );\n    }\n\n    handlePrev() {\n        const n = this._slides.length;\n        if (n) {\n            this.index = (this.index - 1 + n) % n;\n            this.emit();\n        }\n    }\n\n    handleNext() {\n        const n = this._slides.length;\n        if (n) {\n            this.index = (this.index + 1) % n;\n            this.emit();\n        }\n    }\n\n    handleDot(event) {\n        this.index = Number(event.currentTarget.dataset.idx);\n        this.emit();\n    }\n}\n",
         "css": ".ui-carousel {\n    width: 100%;\n    max-width: 420px;\n}\n\n.ui-carousel__frame {\n    display: flex;\n    align-items: stretch;\n    border: 1px solid #e5e5e5;\n    border-radius: 10px;\n    overflow: hidden;\n    background: #ffffff;\n}\n\n.ui-carousel__nav {\n    width: 40px;\n    border: none;\n    background: #fafaf9;\n    color: #514f4d;\n    font-size: 1.4rem;\n    cursor: pointer;\n    flex-shrink: 0;\n}\n.ui-carousel__nav:hover {\n    background: #eef4ff;\n    color: #0176d3;\n}\n\n.ui-carousel__slide {\n    flex: 1;\n    padding: 24px 18px;\n    text-align: center;\n    min-height: 96px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    gap: 6px;\n}\n\n.ui-carousel__title {\n    font-size: 1rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-carousel__text {\n    font-size: 0.85rem;\n    color: #514f4d;\n    line-height: 1.5;\n}\n\n.ui-carousel__dots {\n    display: flex;\n    justify-content: center;\n    gap: 6px;\n    margin-top: 10px;\n}\n\n.ui-carousel__dot {\n    width: 8px;\n    height: 8px;\n    border-radius: 50%;\n    border: none;\n    background: #c9c9c9;\n    cursor: pointer;\n    padding: 0;\n}\n.ui-carousel__dot_active {\n    background: #0176d3;\n    width: 20px;\n    border-radius: 4px;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Carousel</masterLabel>\n    <description>汎用カルーセル。スライドを前後ボタン/ドットで切替え change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiAvatarGroup",
+      "title": "UI Avatar Group",
+      "icon": "👥",
+      "category": "表示",
+      "demo": "avatargroup",
+      "description": "people 配列を重ねて表示し、max を超える分を「+N」で集約するアバターグループ。",
+      "props": [
+        {
+          "name": "people",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ name, src }] の配列"
+        },
+        {
+          "name": "max",
+          "type": "Number",
+          "def": "4",
+          "desc": "表示する最大人数"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-avatar-group people={members} max=\"4\"></c-ui-avatar-group>",
+      "ja": "アバターグループ",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-avgroup\">\n        <template for:each={visible} for:item=\"person\">\n            <span key={person.key} class=\"ui-avgroup__item\" title={person.name}>\n                <img\n                    lwc:if={person.hasImage}\n                    src={person.src}\n                    alt={person.name}\n                    class=\"ui-avgroup__img\"\n                />\n                <span lwc:else class=\"ui-avgroup__initials\">{person.initials}</span>\n            </span>\n        </template>\n        <span lwc:if={hasOverflow} class=\"ui-avgroup__item ui-avgroup__more\">\n            {overflowText}\n        </span>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nfunction toInitials(name) {\n    const t = (name || '').trim();\n    if (!t) {\n        return '?';\n    }\n    const p = t.split(/\\s+/);\n    return p.length === 1\n        ? p[0].slice(0, 2).toUpperCase()\n        : (p[0][0] + p[1][0]).toUpperCase();\n}\n\n/**\n * uiAvatarGroup — 汎用アバターグループ。\n * people 配列 ([{ name, src }]) を重ねて表示し、max を超える分は「+N」で集約する。\n */\nexport default class UiAvatarGroup extends LightningElement {\n    _people = [];\n\n    /** [{ name, src }] の配列 */\n    @api\n    get people() {\n        return this._people;\n    }\n    set people(value) {\n        this._people = Array.isArray(value) ? value : [];\n    }\n\n    /** 表示する最大人数 */\n    @api max = 4;\n\n    get visible() {\n        const max = Number(this.max) || 4;\n        return this._people.slice(0, max).map((p, i) => ({\n            key: i,\n            name: p.name,\n            src: p.src,\n            hasImage: !!p.src,\n            initials: toInitials(p.name)\n        }));\n    }\n\n    get overflow() {\n        const o = this._people.length - (Number(this.max) || 4);\n        return o > 0 ? o : 0;\n    }\n\n    get hasOverflow() {\n        return this.overflow > 0;\n    }\n\n    get overflowText() {\n        return `+${this.overflow}`;\n    }\n}\n",
+        "css": ".ui-avgroup {\n    display: inline-flex;\n    align-items: center;\n}\n\n.ui-avgroup__item {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 34px;\n    height: 34px;\n    border-radius: 50%;\n    background: #0176d3;\n    color: #ffffff;\n    font-size: 0.75rem;\n    font-weight: 700;\n    border: 2px solid #ffffff;\n    overflow: hidden;\n    flex-shrink: 0;\n}\n\n.ui-avgroup__item + .ui-avgroup__item {\n    margin-left: -10px;\n}\n\n.ui-avgroup__img {\n    width: 100%;\n    height: 100%;\n    object-fit: cover;\n}\n\n.ui-avgroup__more {\n    background: #e5e5e5;\n    color: #514f4d;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Avatar Group</masterLabel>\n    <description>汎用アバターグループ。複数アバターを重ね、超過分を+Nで集約。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCodeBlock",
+      "title": "UI Code Block",
+      "icon": "💻",
+      "category": "表示",
+      "demo": "codeblock",
+      "description": "コードを等幅で表示し、コピーボタンでクリップボードへコピーする。copy イベントを発火。",
+      "props": [
+        {
+          "name": "code",
+          "type": "String",
+          "def": "''",
+          "desc": "表示するコード"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "def": "'CODE'",
+          "desc": "言語ラベル"
+        }
+      ],
+      "events": [
+        {
+          "name": "copy",
+          "desc": "コピー時に発火"
+        }
+      ],
+      "usage": "<c-ui-code-block code={snippet} label=\"JS\"></c-ui-code-block>",
+      "ja": "コードブロック",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-codeblock\">\n        <div class=\"ui-codeblock__bar\">\n            <span class=\"ui-codeblock__label\">{label}</span>\n            <button class=\"ui-codeblock__copy\" type=\"button\" onclick={handleCopy}>\n                {copyLabel}\n            </button>\n        </div>\n        <pre class=\"ui-codeblock__pre\"><code>{code}</code></pre>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiCodeBlock — 汎用コードブロック。\n * code をシンタックス色なしの等幅で表示し、コピーボタンでクリップボードへコピーする。\n * コピー時に copy イベントを発火する。\n */\nexport default class UiCodeBlock extends LightningElement {\n    /** 表示するコード */\n    @api code = '';\n    /** 言語ラベル（例: JS, Apex） */\n    @api label = 'CODE';\n\n    @track copied = false;\n    _timer;\n\n    get copyLabel() {\n        return this.copied ? '✓ コピー済み' : '📋 コピー';\n    }\n\n    handleCopy() {\n        const text = this.code || '';\n        const done = () => {\n            this.copied = true;\n            this.dispatchEvent(new CustomEvent('copy'));\n            if (this._timer) {\n                clearTimeout(this._timer);\n            }\n            // eslint-disable-next-line @lwc/lwc/no-async-operation\n            this._timer = setTimeout(() => {\n                this.copied = false;\n            }, 1500);\n        };\n        if (navigator.clipboard && navigator.clipboard.writeText) {\n            navigator.clipboard.writeText(text).then(done, done);\n        } else {\n            done();\n        }\n    }\n}\n",
+        "css": ".ui-codeblock {\n    border-radius: 8px;\n    overflow: hidden;\n    background: #1b1f27;\n    width: 100%;\n}\n\n.ui-codeblock__bar {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 6px 10px;\n    background: rgba(255, 255, 255, 0.06);\n    border-bottom: 1px solid rgba(255, 255, 255, 0.08);\n}\n\n.ui-codeblock__label {\n    font-size: 0.7rem;\n    font-weight: 700;\n    letter-spacing: 0.05em;\n    color: #b8c0cc;\n}\n\n.ui-codeblock__copy {\n    border: 1px solid rgba(255, 255, 255, 0.18);\n    background: rgba(255, 255, 255, 0.06);\n    color: #e6edf3;\n    font-size: 0.72rem;\n    padding: 3px 9px;\n    border-radius: 6px;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-codeblock__copy:hover {\n    background: rgba(255, 255, 255, 0.16);\n}\n\n.ui-codeblock__pre {\n    margin: 0;\n    padding: 12px 14px;\n    overflow-x: auto;\n    color: #e6edf3;\n    font-family: 'SFMono-Regular', Consolas, monospace;\n    font-size: 0.78rem;\n    line-height: 1.6;\n    white-space: pre;\n    tab-size: 4;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Code Block</masterLabel>\n    <description>汎用コードブロック。等幅表示とコピーボタン（copy イベント）を備える。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiVerticalSteps",
+      "title": "UI Vertical Steps",
+      "icon": "🪜",
+      "category": "ナビゲーション",
+      "demo": "verticalsteps",
+      "description": "steps 配列 ([{ label, description }]) を縦並びで表示し、current までを色分けする。",
+      "props": [
+        {
+          "name": "steps",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, description }] の配列"
+        },
+        {
+          "name": "current",
+          "type": "Number",
+          "def": "1",
+          "desc": "現在ステップ（1 始まり）"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-vertical-steps steps={steps} current=\"2\"></c-ui-vertical-steps>",
+      "ja": "縦ステップ",
+      "files": {
+        "html": "<template>\n    <ol class=\"ui-vsteps\">\n        <template for:each={computedSteps} for:item=\"step\">\n            <li key={step.key} class={step.itemClass}>\n                <span class=\"ui-vsteps__marker\">{step.marker}</span>\n                <div class=\"ui-vsteps__content\">\n                    <span class=\"ui-vsteps__label\">{step.label}</span>\n                    <span lwc:if={step.hasDescription} class=\"ui-vsteps__desc\">\n                        {step.description}\n                    </span>\n                </div>\n            </li>\n        </template>\n    </ol>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiVerticalSteps — 汎用縦型ステップ。\n * steps 配列 ([{ label, description }]) を縦並びで表示し、\n * current（1 始まり）までを完了/現在/未到達で色分けする。\n */\nexport default class UiVerticalSteps extends LightningElement {\n    _steps = [];\n\n    /** [{ label, description }] の配列 */\n    @api\n    get steps() {\n        return this._steps;\n    }\n    set steps(value) {\n        this._steps = Array.isArray(value) ? value : [];\n    }\n\n    /** 現在ステップ（1 始まり） */\n    @api current = 1;\n\n    get computedSteps() {\n        const cur = Number(this.current);\n        return this._steps.map((step, index) => {\n            const num = index + 1;\n            let state = 'upcoming';\n            if (num < cur) {\n                state = 'complete';\n            } else if (num === cur) {\n                state = 'active';\n            }\n            return {\n                key: index,\n                label: step.label,\n                description: step.description,\n                hasDescription: !!step.description,\n                marker: state === 'complete' ? '✓' : String(num),\n                itemClass: `ui-vsteps__item ui-vsteps__item_${state}`\n            };\n        });\n    }\n}\n",
+        "css": ".ui-vsteps {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n}\n\n.ui-vsteps__item {\n    position: relative;\n    display: flex;\n    gap: 12px;\n    padding: 0 0 18px 0;\n}\n\n/* 縦の接続線 */\n.ui-vsteps__item::before {\n    content: '';\n    position: absolute;\n    left: 13px;\n    top: 28px;\n    bottom: -4px;\n    width: 2px;\n    background: #dddbda;\n}\n.ui-vsteps__item:last-child::before {\n    display: none;\n}\n\n.ui-vsteps__marker {\n    position: relative;\n    z-index: 1;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 28px;\n    height: 28px;\n    border-radius: 50%;\n    border: 2px solid #dddbda;\n    background: #ffffff;\n    color: #706e6b;\n    font-size: 0.8rem;\n    font-weight: 700;\n    flex-shrink: 0;\n}\n\n.ui-vsteps__content {\n    display: flex;\n    flex-direction: column;\n    gap: 2px;\n    padding-top: 3px;\n}\n\n.ui-vsteps__label {\n    font-size: 0.875rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-vsteps__desc {\n    font-size: 0.8rem;\n    color: #706e6b;\n    line-height: 1.5;\n}\n\n.ui-vsteps__item_complete::before {\n    background: #2e844a;\n}\n.ui-vsteps__item_complete .ui-vsteps__marker {\n    border-color: #2e844a;\n    background: #2e844a;\n    color: #ffffff;\n}\n\n.ui-vsteps__item_active .ui-vsteps__marker {\n    border-color: #0176d3;\n    color: #0176d3;\n    box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.18);\n}\n.ui-vsteps__item_active .ui-vsteps__label {\n    color: #0176d3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Vertical Steps</masterLabel>\n    <description>汎用縦型ステップ。説明付きで完了/現在/未到達を色分け表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiTagInput",
+      "title": "UI Tag Input",
+      "icon": "🔖",
+      "category": "フォーム",
+      "demo": "taginput",
+      "description": "Enter でタグを追加し ×（または Backspace）で削除する入力。変更時に change イベント (detail.tags) を発火。",
+      "props": [
+        {
+          "name": "tags",
+          "type": "Array",
+          "def": "[]",
+          "desc": "タグ文字列の配列"
+        },
+        {
+          "name": "placeholder",
+          "type": "String",
+          "def": "'タグを入力して Enter'",
+          "desc": "プレースホルダ"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "追加／削除時に発火（detail.tags）"
+        }
+      ],
+      "usage": "<c-ui-tag-input tags={tags} onchange={handleChange}></c-ui-tag-input>",
+      "ja": "タグ入力",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-taginput\">\n        <template for:each={computedTags} for:item=\"tag\">\n            <span key={tag.key} class=\"ui-taginput__tag\">\n                <span class=\"ui-taginput__label\">{tag.label}</span>\n                <button\n                    class=\"ui-taginput__remove\"\n                    type=\"button\"\n                    title=\"削除\"\n                    data-index={tag.key}\n                    onclick={handleRemove}\n                >\n                    &times;\n                </button>\n            </span>\n        </template>\n        <input\n            class=\"ui-taginput__field\"\n            type=\"text\"\n            placeholder={placeholder}\n            onkeydown={handleKeydown}\n        />\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiTagInput — 汎用タグ入力。\n * Enter で入力テキストをタグとして追加し、×で削除する。\n * 変更時に change イベント (detail.tags) を発火する。\n */\nexport default class UiTagInput extends LightningElement {\n    @track _tags = [];\n\n    /** タグ文字列の配列 */\n    @api\n    get tags() {\n        return this._tags;\n    }\n    set tags(value) {\n        this._tags = Array.isArray(value) ? [...value] : [];\n    }\n\n    /** プレースホルダ */\n    @api placeholder = 'タグを入力して Enter';\n\n    get computedTags() {\n        return this._tags.map((t, i) => ({ key: i, label: t }));\n    }\n\n    handleKeydown(event) {\n        if (event.key === 'Enter') {\n            event.preventDefault();\n            const value = event.target.value.trim();\n            if (value && !this._tags.includes(value)) {\n                this._tags = [...this._tags, value];\n                this.emit();\n            }\n            event.target.value = '';\n        } else if (\n            event.key === 'Backspace' &&\n            !event.target.value &&\n            this._tags.length\n        ) {\n            this._tags = this._tags.slice(0, -1);\n            this.emit();\n        }\n    }\n\n    handleRemove(event) {\n        const idx = Number(event.currentTarget.dataset.index);\n        this._tags = this._tags.filter((t, i) => i !== idx);\n        this.emit();\n    }\n\n    emit() {\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { tags: [...this._tags] } })\n        );\n    }\n}\n",
+        "css": ".ui-taginput {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 6px;\n    padding: 6px 8px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    background: #ffffff;\n    min-height: 38px;\n}\n.ui-taginput:focus-within {\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n\n.ui-taginput__tag {\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n    padding: 2px 4px 2px 8px;\n    background: #eef4ff;\n    color: #0b5cab;\n    border-radius: 12px;\n    font-size: 0.78rem;\n    font-weight: 600;\n}\n\n.ui-taginput__remove {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 16px;\n    height: 16px;\n    border: none;\n    border-radius: 50%;\n    background: transparent;\n    color: #0b5cab;\n    font-size: 0.9rem;\n    line-height: 1;\n    cursor: pointer;\n}\n.ui-taginput__remove:hover {\n    background: rgba(1, 92, 171, 0.15);\n}\n\n.ui-taginput__field {\n    flex: 1;\n    min-width: 120px;\n    border: none;\n    outline: none;\n    font-size: 0.85rem;\n    color: #181818;\n    font-family: inherit;\n    padding: 2px;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Tag Input</masterLabel>\n    <description>汎用タグ入力。Enterで追加・×で削除し change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

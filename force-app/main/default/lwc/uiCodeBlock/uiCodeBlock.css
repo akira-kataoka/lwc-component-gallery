@@ -1,0 +1,48 @@
+.ui-codeblock {
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1b1f27;
+    width: 100%;
+}
+
+.ui-codeblock__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ui-codeblock__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #b8c0cc;
+}
+
+.ui-codeblock__copy {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
+    color: #e6edf3;
+    font-size: 0.72rem;
+    padding: 3px 9px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-codeblock__copy:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.ui-codeblock__pre {
+    margin: 0;
+    padding: 12px 14px;
+    overflow-x: auto;
+    color: #e6edf3;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    white-space: pre;
+    tab-size: 4;
+}

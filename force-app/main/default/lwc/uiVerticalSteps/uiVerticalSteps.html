@@ -1,0 +1,15 @@
+<template>
+    <ol class="ui-vsteps">
+        <template for:each={computedSteps} for:item="step">
+            <li key={step.key} class={step.itemClass}>
+                <span class="ui-vsteps__marker">{step.marker}</span>
+                <div class="ui-vsteps__content">
+                    <span class="ui-vsteps__label">{step.label}</span>
+                    <span lwc:if={step.hasDescription} class="ui-vsteps__desc">
+                        {step.description}
+                    </span>
+                </div>
+            </li>
+        </template>
+    </ol>
+</template>

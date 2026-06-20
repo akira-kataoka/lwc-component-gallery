@@ -1,0 +1,35 @@
+.ui-avgroup {
+    display: inline-flex;
+    align-items: center;
+}
+
+.ui-avgroup__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #0176d3;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 2px solid #ffffff;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.ui-avgroup__item + .ui-avgroup__item {
+    margin-left: -10px;
+}
+
+.ui-avgroup__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ui-avgroup__more {
+    background: #e5e5e5;
+    color: #514f4d;
+}

@@ -1,0 +1,24 @@
+<template>
+    <div class="ui-taginput">
+        <template for:each={computedTags} for:item="tag">
+            <span key={tag.key} class="ui-taginput__tag">
+                <span class="ui-taginput__label">{tag.label}</span>
+                <button
+                    class="ui-taginput__remove"
+                    type="button"
+                    title="削除"
+                    data-index={tag.key}
+                    onclick={handleRemove}
+                >
+                    &times;
+                </button>
+            </span>
+        </template>
+        <input
+            class="ui-taginput__field"
+            type="text"
+            placeholder={placeholder}
+            onkeydown={handleKeydown}
+        />
+    </div>
+</template>

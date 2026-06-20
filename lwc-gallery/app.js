@@ -199,13 +199,28 @@
         ]);
         card.appendChild(header);
 
-        // プレビュー
+        // プレビュー（PC / タブレット / スマホ 幅切替つき）
         const demoBox = el('div', { class: 'demo' });
         const controls = el('div', { class: 'demo__controls' });
+        const stage = el('div', { class: 'demo-stage demo-stage_pc' }, [demoBox]);
+        const toolbar = el('div', { class: 'demo-devices' });
+        [['pc', '🖥️', 'PC'], ['tablet', '📱', 'タブレット'], ['phone', '📲', 'スマホ']].forEach((d, i) => {
+            const b = el('button', { class: 'demo-device' + (i === 0 ? ' is-active' : ''), type: 'button' }, [
+                el('span', { text: d[1] }),
+                el('span', { class: 'demo-device__label', text: d[2] })
+            ]);
+            b.addEventListener('click', () => {
+                toolbar.querySelectorAll('.demo-device').forEach((x) => x.classList.remove('is-active'));
+                b.classList.add('is-active');
+                stage.className = 'demo-stage demo-stage_' + d[0];
+            });
+            toolbar.appendChild(b);
+        });
         const demoWrap = el('div', null, [
-            demoBox,
+            toolbar,
+            stage,
             controls,
-            el('p', { class: 'demo__note', text: '※ プレビューは実 LWC の CSS を用いた再現です（lightning-icon は省略）。' })
+            el('p', { class: 'demo__note', text: '※ プレビューは実 LWC の CSS を用いた再現です（lightning-icon は省略）。上のボタンで端末幅を切替えできます。' })
         ]);
         card.appendChild(section('プレビュー', demoWrap));
         const renderer = DEMOS[comp.demo];
@@ -1749,6 +1764,151 @@
             ]);
             render();
             box.appendChild(el('div', { class: 'ui-carousel' }, [frame, dots]));
+        },
+
+        avatargroup(box) {
+            const names = ['田中 太郎', '佐藤 花子', '鈴木 一郎', '高橋 桜', '伊藤 健', '渡辺 みき'];
+            const max = 4;
+            const group = el('div', { class: 'ui-avgroup' });
+            const ini = (n) => {
+                const t = n.trim().split(/\s+/);
+                return t.length === 1 ? t[0].slice(0, 2) : t[0][0] + t[1][0];
+            };
+            names.slice(0, max).forEach((n) => {
+                group.appendChild(
+                    el('span', { class: 'ui-avgroup__item', title: n }, [
+                        el('span', { class: 'ui-avgroup__initials', text: ini(n) })
+                    ])
+                );
+            });
+            const o = names.length - max;
+            if (o > 0) {
+                group.appendChild(el('span', { class: 'ui-avgroup__item ui-avgroup__more', text: '+' + o }));
+            }
+            box.appendChild(group);
+        },
+
+        codeblock(box) {
+            const code =
+                "import { LightningElement } from 'lwc';\n\nexport default class Hello extends LightningElement {\n    greeting = 'こんにちは';\n}";
+            const copyBtn = el('button', { class: 'ui-codeblock__copy', type: 'button', text: '📋 コピー' });
+            copyBtn.addEventListener('click', () => {
+                const done = () => {
+                    copyBtn.textContent = '✓ コピー済み';
+                    setTimeout(() => {
+                        copyBtn.textContent = '📋 コピー';
+                    }, 1500);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(code).then(done, done);
+                } else {
+                    done();
+                }
+            });
+            const pre = el('pre', { class: 'ui-codeblock__pre' });
+            pre.appendChild(el('code', { text: code }));
+            box.appendChild(
+                el('div', { class: 'ui-codeblock', style: 'max-width:420px' }, [
+                    el('div', { class: 'ui-codeblock__bar' }, [
+                        el('span', { class: 'ui-codeblock__label', text: 'JS' }),
+                        copyBtn
+                    ]),
+                    pre
+                ])
+            );
+        },
+
+        verticalsteps(box, controls) {
+            const steps = [
+                ['注文受付', 'ご注文を受け付けました'],
+                ['出荷準備', '商品を梱包しています'],
+                ['発送', '配送業者へ引き渡し'],
+                ['お届け', '配達完了']
+            ];
+            let current = 2;
+            const ol = el('ol', { class: 'ui-vsteps', style: 'max-width:320px' });
+            function render() {
+                ol.innerHTML = '';
+                steps.forEach((s, i) => {
+                    const num = i + 1;
+                    const state = num < current ? 'complete' : num === current ? 'active' : 'upcoming';
+                    ol.appendChild(
+                        el('li', { class: 'ui-vsteps__item ui-vsteps__item_' + state }, [
+                            el('span', { class: 'ui-vsteps__marker', text: state === 'complete' ? '✓' : String(num) }),
+                            el('div', { class: 'ui-vsteps__content' }, [
+                                el('span', { class: 'ui-vsteps__label', text: s[0] }),
+                                el('span', { class: 'ui-vsteps__desc', text: s[1] })
+                            ])
+                        ])
+                    );
+                });
+            }
+            render();
+            box.appendChild(ol);
+            const prev = el('button', { class: 'ui-button ui-button_neutral' }, [
+                el('span', { class: 'ui-button__label', text: '戻る' })
+            ]);
+            const next = el('button', { class: 'ui-button ui-button_brand' }, [
+                el('span', { class: 'ui-button__label', text: '次へ' })
+            ]);
+            prev.addEventListener('click', () => {
+                if (current > 1) {
+                    current -= 1;
+                    render();
+                }
+            });
+            next.addEventListener('click', () => {
+                if (current < steps.length) {
+                    current += 1;
+                    render();
+                }
+            });
+            controls.appendChild(prev);
+            controls.appendChild(next);
+        },
+
+        taginput(box, controls) {
+            let tags = ['Salesforce', 'LWC'];
+            const out = el('span', { class: 'demo__out' });
+            const wrap = el('div', { class: 'ui-taginput', style: 'max-width:360px' });
+            const field = el('input', { class: 'ui-taginput__field', type: 'text', placeholder: 'タグを入力して Enter' });
+            function render() {
+                wrap.innerHTML = '';
+                tags.forEach((t, i) => {
+                    const rm = el('button', { class: 'ui-taginput__remove', type: 'button', title: '削除', html: '&times;' });
+                    rm.addEventListener('click', () => {
+                        tags = tags.filter((x, j) => j !== i);
+                        render();
+                    });
+                    wrap.appendChild(
+                        el('span', { class: 'ui-taginput__tag' }, [
+                            el('span', { class: 'ui-taginput__label', text: t }),
+                            rm
+                        ])
+                    );
+                });
+                wrap.appendChild(field);
+                out.textContent = 'タグ: ' + (tags.join(', ') || '（なし）');
+            }
+            field.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const v = field.value.trim();
+                    if (v && !tags.includes(v)) {
+                        tags = [...tags, v];
+                    }
+                    field.value = '';
+                    render();
+                    field.focus();
+                } else if (e.key === 'Backspace' && !field.value && tags.length) {
+                    tags = tags.slice(0, -1);
+                    render();
+                    field.focus();
+                }
+            });
+            render();
+            box.appendChild(wrap);
+            controls.appendChild(out);
         }
     };
 

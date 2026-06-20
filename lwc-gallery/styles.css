@@ -371,6 +371,63 @@ html[data-theme='dark'] .nav-link.is-active {
     gap: 12px;
     align-items: center;
 }
+/* デバイス幅プレビュー切替 */
+.demo-devices {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+.demo-device {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-sub);
+    border-radius: 7px;
+    padding: 5px 11px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+.demo-device:hover {
+    background: var(--surface-2);
+}
+.demo-device.is-active {
+    background: var(--brand);
+    color: #ffffff;
+    border-color: var(--brand);
+}
+.demo-stage {
+    transition: max-width 0.22s ease;
+}
+.demo-stage_pc {
+    max-width: 100%;
+}
+.demo-stage_tablet {
+    max-width: 768px;
+    margin: 0 auto;
+}
+.demo-stage_phone {
+    max-width: 375px;
+    margin: 0 auto;
+}
+.demo-stage_tablet .demo,
+.demo-stage_phone .demo {
+    border-style: solid;
+    border-width: 6px;
+    border-color: #2b2f36;
+    border-radius: 18px;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
+}
+
+@media (max-width: 560px) {
+    .demo-device__label {
+        display: none;
+    }
+}
+
 .demo__controls {
     margin-top: 12px;
     display: flex;

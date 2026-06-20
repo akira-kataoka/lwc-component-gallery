@@ -1,0 +1,56 @@
+.ui-taginput {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    background: #ffffff;
+    min-height: 38px;
+}
+.ui-taginput:focus-within {
+    border-color: #0176d3;
+    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);
+}
+
+.ui-taginput__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px 2px 8px;
+    background: #eef4ff;
+    color: #0b5cab;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.ui-taginput__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #0b5cab;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.ui-taginput__remove:hover {
+    background: rgba(1, 92, 171, 0.15);
+}
+
+.ui-taginput__field {
+    flex: 1;
+    min-width: 120px;
+    border: none;
+    outline: none;
+    font-size: 0.85rem;
+    color: #181818;
+    font-family: inherit;
+    padding: 2px;
+}

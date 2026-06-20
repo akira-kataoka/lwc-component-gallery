@@ -1321,6 +1321,91 @@ const COMPONENTS = [
         ],
         events: [{ name: 'change', desc: '切替時に発火（detail.index）' }],
         usage: `<c-ui-carousel slides={slides} onchange={handleChange}></c-ui-carousel>`
+    },
+    {
+        id: 'uiAvatarGroup',
+        title: 'UI Avatar Group',
+        icon: '👥',
+        category: '表示',
+        demo: 'avatargroup',
+        description:
+            'people 配列を重ねて表示し、max を超える分を「+N」で集約するアバターグループ。',
+        props: [
+            {
+                name: 'people',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ name, src }] の配列'
+            },
+            { name: 'max', type: 'Number', def: '4', desc: '表示する最大人数' }
+        ],
+        events: [],
+        usage: `<c-ui-avatar-group people={members} max="4"></c-ui-avatar-group>`
+    },
+    {
+        id: 'uiCodeBlock',
+        title: 'UI Code Block',
+        icon: '💻',
+        category: '表示',
+        demo: 'codeblock',
+        description:
+            'コードを等幅で表示し、コピーボタンでクリップボードへコピーする。copy イベントを発火。',
+        props: [
+            { name: 'code', type: 'String', def: "''", desc: '表示するコード' },
+            { name: 'label', type: 'String', def: "'CODE'", desc: '言語ラベル' }
+        ],
+        events: [{ name: 'copy', desc: 'コピー時に発火' }],
+        usage: `<c-ui-code-block code={snippet} label="JS"></c-ui-code-block>`
+    },
+    {
+        id: 'uiVerticalSteps',
+        title: 'UI Vertical Steps',
+        icon: '🪜',
+        category: 'ナビゲーション',
+        demo: 'verticalsteps',
+        description:
+            'steps 配列 ([{ label, description }]) を縦並びで表示し、current までを色分けする。',
+        props: [
+            {
+                name: 'steps',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, description }] の配列'
+            },
+            {
+                name: 'current',
+                type: 'Number',
+                def: '1',
+                desc: '現在ステップ（1 始まり）'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-vertical-steps steps={steps} current="2"></c-ui-vertical-steps>`
+    },
+    {
+        id: 'uiTagInput',
+        title: 'UI Tag Input',
+        icon: '🔖',
+        category: 'フォーム',
+        demo: 'taginput',
+        description:
+            'Enter でタグを追加し ×（または Backspace）で削除する入力。変更時に change イベント (detail.tags) を発火。',
+        props: [
+            {
+                name: 'tags',
+                type: 'Array',
+                def: '[]',
+                desc: 'タグ文字列の配列'
+            },
+            {
+                name: 'placeholder',
+                type: 'String',
+                def: "'タグを入力して Enter'",
+                desc: 'プレースホルダ'
+            }
+        ],
+        events: [{ name: 'change', desc: '追加／削除時に発火（detail.tags）' }],
+        usage: `<c-ui-tag-input tags={tags} onchange={handleChange}></c-ui-tag-input>`
     }
 ];
 
@@ -1382,7 +1467,11 @@ const JA_NAMES = {
     uiSegmentedProgress: 'セグメント進捗',
     uiTree: 'ツリー',
     uiCalendar: 'カレンダー',
-    uiCarousel: 'カルーセル'
+    uiCarousel: 'カルーセル',
+    uiAvatarGroup: 'アバターグループ',
+    uiCodeBlock: 'コードブロック',
+    uiVerticalSteps: '縦ステップ',
+    uiTagInput: 'タグ入力'
 };
 
 const FILE_KEYS = [
