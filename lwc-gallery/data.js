@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T08:23:21.095Z",
+  "generatedAt": "2026-06-20T08:33:27.497Z",
   "components": [
     {
       "id": "uiBadge",
@@ -3403,6 +3403,148 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiTagCloud — 汎用タグクラウド。\n * tags 配列 ([{ label, weight }]) を重みに応じた文字サイズ・濃さで表示する。\n * タグクリックで select イベント (detail.label) を発火する。\n */\nexport default class UiTagCloud extends LightningElement {\n    _tags = [];\n\n    /** [{ label, weight }] の配列 */\n    @api\n    get tags() {\n        return this._tags;\n    }\n    set tags(value) {\n        this._tags = Array.isArray(value) ? value : [];\n    }\n\n    get computedTags() {\n        const weights = this._tags.map((t) => Number(t.weight) || 1);\n        const max = Math.max(1, ...weights);\n        const min = Math.min(...weights, max);\n        const range = max - min || 1;\n        return this._tags.map((t, i) => {\n            const w = Number(t.weight) || 1;\n            const ratio = (w - min) / range;\n            const size = (0.75 + ratio * 0.95).toFixed(2);\n            const opacity = (0.55 + ratio * 0.45).toFixed(2);\n            return {\n                key: i,\n                label: t.label,\n                style: `font-size: ${size}rem; opacity: ${opacity};`\n            };\n        });\n    }\n\n    handleClick(event) {\n        const label = event.currentTarget.dataset.label;\n        this.dispatchEvent(new CustomEvent('select', { detail: { label } }));\n    }\n}\n",
         "css": ".ui-tagcloud {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 6px 12px;\n    line-height: 1.4;\n}\n\n.ui-tagcloud__tag {\n    border: none;\n    background: transparent;\n    color: #0176d3;\n    cursor: pointer;\n    padding: 2px 2px;\n    font-family: inherit;\n    font-weight: 600;\n    transition: color 0.12s ease;\n}\n.ui-tagcloud__tag:hover {\n    color: #014486;\n    text-decoration: underline;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Tag Cloud</masterLabel>\n    <description>汎用タグクラウド。重みに応じた文字サイズで表示し select を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiMetricCard",
+      "title": "UI Metric Card",
+      "icon": "📇",
+      "category": "ダッシュボード",
+      "demo": "metriccard",
+      "description": "アイコン・ラベル・大きな値・前期比をまとめた KPI カード。ダッシュボードの定番部品。",
+      "props": [
+        {
+          "name": "icon",
+          "type": "String",
+          "def": "—",
+          "desc": "アイコン文字（絵文字可）"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "指標ラベル"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "—",
+          "desc": "主要な値"
+        },
+        {
+          "name": "delta",
+          "type": "String",
+          "def": "—",
+          "desc": "差分テキスト（例: +12.5%）"
+        },
+        {
+          "name": "trend",
+          "type": "String",
+          "def": "'flat'",
+          "desc": "up | down | flat"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-metric-card icon=\"💰\" label=\"今月の売上\" value=\"¥1,250,000\" delta=\"+12.5%\" trend=\"up\"></c-ui-metric-card>",
+      "ja": "指標カード",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-metric\">\n        <span lwc:if={icon} class=\"ui-metric__icon\">{icon}</span>\n        <div class=\"ui-metric__body\">\n            <span class=\"ui-metric__label\">{label}</span>\n            <span class=\"ui-metric__value\">{value}</span>\n            <span lwc:if={hasDelta} class={deltaClass}>\n                <span class=\"ui-metric__trend\">{trendIcon}</span>\n                {delta}\n            </span>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst TRENDS = {\n    up: { icon: '▲', cls: 'up' },\n    down: { icon: '▼', cls: 'down' },\n    flat: { icon: '▬', cls: 'flat' }\n};\n\n/**\n * uiMetricCard — 汎用指標カード（ダッシュボード KPI）。\n * アイコン・ラベル・大きな値・前期比をまとめた KPI カード。\n */\nexport default class UiMetricCard extends LightningElement {\n    /** アイコン文字（絵文字可） */\n    @api icon;\n    /** 指標ラベル */\n    @api label;\n    /** 主要な値 */\n    @api value;\n    /** 差分テキスト（例: +12.5%） */\n    @api delta;\n    /** 増減: up | down | flat */\n    @api trend = 'flat';\n\n    get hasDelta() {\n        return this.delta !== undefined && this.delta !== null && this.delta !== '';\n    }\n\n    get trendIcon() {\n        return (TRENDS[this.trend] || TRENDS.flat).icon;\n    }\n\n    get deltaClass() {\n        const cls = (TRENDS[this.trend] || TRENDS.flat).cls;\n        return `ui-metric__delta ui-metric__delta_${cls}`;\n    }\n}\n",
+        "css": ".ui-metric {\n    display: flex;\n    align-items: center;\n    gap: 14px;\n    padding: 16px 18px;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 10px;\n    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);\n    min-width: 180px;\n}\n\n.ui-metric__icon {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 46px;\n    height: 46px;\n    border-radius: 12px;\n    background: #eef4ff;\n    font-size: 1.5rem;\n    flex-shrink: 0;\n}\n\n.ui-metric__body {\n    display: flex;\n    flex-direction: column;\n    gap: 2px;\n}\n\n.ui-metric__label {\n    font-size: 0.75rem;\n    color: #706e6b;\n    font-weight: 600;\n}\n\n.ui-metric__value {\n    font-size: 1.6rem;\n    font-weight: 800;\n    color: #181818;\n    line-height: 1.1;\n}\n\n.ui-metric__delta {\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n    font-size: 0.75rem;\n    font-weight: 700;\n}\n.ui-metric__trend {\n    font-size: 0.6rem;\n}\n\n.ui-metric__delta_up {\n    color: #2e844a;\n}\n.ui-metric__delta_down {\n    color: #ba0517;\n}\n.ui-metric__delta_flat {\n    color: #706e6b;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Metric Card</masterLabel>\n    <description>汎用指標カード。アイコン・ラベル・値・前期比のKPIカード。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiDonutChart",
+      "title": "UI Donut Chart",
+      "icon": "🍩",
+      "category": "ダッシュボード",
+      "demo": "donutchart",
+      "description": "segments 配列 ([{ label, value, color }]) を conic-gradient のドーナツと凡例で表示する構成比チャート。",
+      "props": [
+        {
+          "name": "segments",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value, color }] の配列"
+        },
+        {
+          "name": "center-label",
+          "type": "String",
+          "def": "—",
+          "desc": "中央の見出し（任意）"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-donut-chart segments={data} center-label=\"売上\"></c-ui-donut-chart>",
+      "ja": "ドーナツチャート",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-donut-wrap\">\n        <div class=\"ui-donut\" style={backgroundStyle}>\n            <div class=\"ui-donut__hole\">\n                <span lwc:if={centerLabel} class=\"ui-donut__center\">{centerLabel}</span>\n            </div>\n        </div>\n        <ul class=\"ui-donut__legend\">\n            <template for:each={legend} for:item=\"item\">\n                <li key={item.key} class=\"ui-donut__item\">\n                    <span class=\"ui-donut__sw\" style={item.swatchStyle}></span>\n                    <span class=\"ui-donut__lbl\">{item.label}</span>\n                    <span class=\"ui-donut__pct\">{item.pct}%</span>\n                </li>\n            </template>\n        </ul>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiDonutChart — 汎用ドーナツチャート。\n * segments 配列 ([{ label, value, color }]) を conic-gradient のドーナツと\n * 凡例で表示する純粋な表示コンポーネント。\n */\nexport default class UiDonutChart extends LightningElement {\n    _segments = [];\n\n    /** [{ label, value, color }] の配列 */\n    @api\n    get segments() {\n        return this._segments;\n    }\n    set segments(value) {\n        this._segments = Array.isArray(value) ? value : [];\n    }\n\n    /** 中央に表示する見出し（任意） */\n    @api centerLabel;\n\n    get total() {\n        return (\n            this._segments.reduce((a, s) => a + (Number(s.value) || 0), 0) || 1\n        );\n    }\n\n    get backgroundStyle() {\n        let acc = 0;\n        const parts = this._segments.map((s) => {\n            const start = (acc / this.total) * 360;\n            acc += Number(s.value) || 0;\n            const end = (acc / this.total) * 360;\n            return `${s.color} ${start.toFixed(1)}deg ${end.toFixed(1)}deg`;\n        });\n        return `background: conic-gradient(${parts.join(', ')});`;\n    }\n\n    get legend() {\n        return this._segments.map((s, i) => ({\n            key: i,\n            label: s.label,\n            pct: Math.round(((Number(s.value) || 0) / this.total) * 100),\n            swatchStyle: `background: ${s.color}`\n        }));\n    }\n}\n",
+        "css": ".ui-donut-wrap {\n    display: inline-flex;\n    align-items: center;\n    gap: 18px;\n}\n\n.ui-donut {\n    position: relative;\n    width: 108px;\n    height: 108px;\n    border-radius: 50%;\n    flex-shrink: 0;\n}\n\n.ui-donut__hole {\n    position: absolute;\n    inset: 24px;\n    background: #ffffff;\n    border-radius: 50%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.ui-donut__center {\n    font-size: 0.78rem;\n    font-weight: 700;\n    color: #181818;\n    text-align: center;\n}\n\n.ui-donut__legend {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n    display: flex;\n    flex-direction: column;\n    gap: 6px;\n}\n\n.ui-donut__item {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    font-size: 0.8rem;\n}\n\n.ui-donut__sw {\n    width: 11px;\n    height: 11px;\n    border-radius: 3px;\n    flex-shrink: 0;\n}\n\n.ui-donut__lbl {\n    color: #444444;\n    min-width: 66px;\n}\n\n.ui-donut__pct {\n    font-weight: 700;\n    color: #181818;\n    font-variant-numeric: tabular-nums;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Donut Chart</masterLabel>\n    <description>汎用ドーナツチャート。conic-gradientと凡例で構成比を表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiActivityFeed",
+      "title": "UI Activity Feed",
+      "icon": "📋",
+      "category": "ダッシュボード",
+      "demo": "activityfeed",
+      "description": "items 配列 ([{ icon, text, time }]) を時系列の活動ログとして表示するフィード。",
+      "props": [
+        {
+          "name": "items",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ icon, text, time }] の配列"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-activity-feed items={activities}></c-ui-activity-feed>",
+      "ja": "アクティビティフィード",
+      "files": {
+        "html": "<template>\n    <ul class=\"ui-feed\">\n        <template for:each={rows} for:item=\"row\">\n            <li key={row.key} class=\"ui-feed__item\">\n                <span class=\"ui-feed__icon\">{row.icon}</span>\n                <div class=\"ui-feed__content\">\n                    <span class=\"ui-feed__text\">{row.text}</span>\n                    <span class=\"ui-feed__time\">{row.time}</span>\n                </div>\n            </li>\n        </template>\n    </ul>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiActivityFeed — 汎用アクティビティフィード。\n * items 配列 ([{ icon, text, time }]) を時系列の活動ログとして表示する。\n */\nexport default class UiActivityFeed extends LightningElement {\n    _items = [];\n\n    /** [{ icon, text, time }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    get rows() {\n        return this._items.map((it, i) => ({\n            key: i,\n            icon: it.icon || '•',\n            text: it.text,\n            time: it.time\n        }));\n    }\n}\n",
+        "css": ".ui-feed {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n}\n\n.ui-feed__item {\n    display: flex;\n    gap: 10px;\n    padding: 10px 0;\n    border-bottom: 1px solid #f0f0f0;\n}\n.ui-feed__item:last-child {\n    border-bottom: none;\n}\n\n.ui-feed__icon {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 30px;\n    height: 30px;\n    border-radius: 50%;\n    background: #f0f4f9;\n    font-size: 0.9rem;\n    flex-shrink: 0;\n}\n\n.ui-feed__content {\n    display: flex;\n    flex-direction: column;\n    gap: 1px;\n    min-width: 0;\n}\n\n.ui-feed__text {\n    font-size: 0.85rem;\n    color: #181818;\n    line-height: 1.4;\n}\n\n.ui-feed__time {\n    font-size: 0.72rem;\n    color: #969492;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Activity Feed</masterLabel>\n    <description>汎用アクティビティフィード。アイコン・テキスト・時刻の活動ログ。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiGoalProgress",
+      "title": "UI Goal Progress",
+      "icon": "🎯",
+      "category": "ダッシュボード",
+      "demo": "goalprogress",
+      "description": "current / target の達成度をバーと割合で表示する目標プログレス。達成で色が変わる。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "current",
+          "type": "Number",
+          "def": "0",
+          "desc": "現在値"
+        },
+        {
+          "name": "target",
+          "type": "Number",
+          "def": "100",
+          "desc": "目標値"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-goal-progress label=\"月間目標\" current=\"820000\" target=\"1000000\"></c-ui-goal-progress>",
+      "ja": "目標プログレス",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-goal\">\n        <div class=\"ui-goal__head\">\n            <span class=\"ui-goal__label\">{label}</span>\n            <span class=\"ui-goal__pct\">{pctText}</span>\n        </div>\n        <div class=\"ui-goal__track\">\n            <div class={fillClass} style={barStyle}></div>\n        </div>\n        <div class=\"ui-goal__value\">{valueText}</div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiGoalProgress — 汎用目標プログレス。\n * current / target の達成度をバーと割合で表示するダッシュボード向け部品。\n */\nexport default class UiGoalProgress extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 現在値 */\n    @api current = 0;\n    /** 目標値 */\n    @api target = 100;\n\n    get ratio() {\n        const target = Number(this.target) || 1;\n        const cur = Number(this.current) || 0;\n        return Math.min(1, Math.max(0, cur / target));\n    }\n\n    get pctText() {\n        return `${Math.round(this.ratio * 100)}%`;\n    }\n\n    get barStyle() {\n        return `width: ${Math.round(this.ratio * 100)}%`;\n    }\n\n    get fillClass() {\n        return this.ratio >= 1\n            ? 'ui-goal__fill ui-goal__fill_done'\n            : 'ui-goal__fill';\n    }\n\n    get valueText() {\n        const cur = Number(this.current) || 0;\n        const target = Number(this.target) || 0;\n        return `${cur.toLocaleString('ja-JP')} / ${target.toLocaleString('ja-JP')}`;\n    }\n}\n",
+        "css": ".ui-goal {\n    display: flex;\n    flex-direction: column;\n    gap: 6px;\n    width: 100%;\n    max-width: 320px;\n}\n\n.ui-goal__head {\n    display: flex;\n    justify-content: space-between;\n    align-items: baseline;\n}\n\n.ui-goal__label {\n    font-size: 0.82rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-goal__pct {\n    font-size: 1rem;\n    font-weight: 800;\n    color: #0176d3;\n}\n\n.ui-goal__track {\n    height: 10px;\n    background: #ececec;\n    border-radius: 5px;\n    overflow: hidden;\n}\n\n.ui-goal__fill {\n    height: 100%;\n    background: #0176d3;\n    border-radius: 5px;\n    transition: width 0.35s ease;\n}\n.ui-goal__fill_done {\n    background: #2e844a;\n}\n\n.ui-goal__value {\n    font-size: 0.75rem;\n    color: #706e6b;\n    text-align: right;\n    font-variant-numeric: tabular-nums;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Goal Progress</masterLabel>\n    <description>汎用目標プログレス。current/targetの達成度をバーと割合で表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

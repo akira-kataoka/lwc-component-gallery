@@ -1,0 +1,13 @@
+<template>
+    <ul class="ui-feed">
+        <template for:each={rows} for:item="row">
+            <li key={row.key} class="ui-feed__item">
+                <span class="ui-feed__icon">{row.icon}</span>
+                <div class="ui-feed__content">
+                    <span class="ui-feed__text">{row.text}</span>
+                    <span class="ui-feed__time">{row.time}</span>
+                </div>
+            </li>
+        </template>
+    </ul>
+</template>

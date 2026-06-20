@@ -2635,6 +2635,101 @@
             });
             box.appendChild(wrap);
             controls.appendChild(out);
+        },
+
+        metriccard(box) {
+            const icons = { up: '▲', down: '▼', flat: '▬' };
+            const data = [
+                ['💰', '今月の売上', '¥1,250,000', '+12.5%', 'up'],
+                ['👥', '新規顧客', '86', '+8', 'up'],
+                ['📉', '解約率', '2.4%', '-0.5%', 'down']
+            ];
+            const wrap = el('div', { style: 'display:flex;flex-wrap:wrap;gap:12px' });
+            data.forEach((d) => {
+                wrap.appendChild(
+                    el('div', { class: 'ui-metric' }, [
+                        el('span', { class: 'ui-metric__icon', text: d[0] }),
+                        el('div', { class: 'ui-metric__body' }, [
+                            el('span', { class: 'ui-metric__label', text: d[1] }),
+                            el('span', { class: 'ui-metric__value', text: d[2] }),
+                            el('span', { class: 'ui-metric__delta ui-metric__delta_' + d[4] }, [
+                                el('span', { class: 'ui-metric__trend', text: icons[d[4]] }),
+                                ' ' + d[3]
+                            ])
+                        ])
+                    ])
+                );
+            });
+            box.appendChild(wrap);
+        },
+
+        donutchart(box) {
+            const segs = [['新規', 45, '#0176d3'], ['既存', 30, '#2e844a'], ['休眠', 15, '#dd7a01'], ['その他', 10, '#969492']];
+            const total = segs.reduce((a, s) => a + s[1], 0);
+            let acc = 0;
+            const parts = segs.map((s) => {
+                const start = (acc / total) * 360;
+                acc += s[1];
+                const end = (acc / total) * 360;
+                return s[2] + ' ' + start.toFixed(1) + 'deg ' + end.toFixed(1) + 'deg';
+            });
+            const donut = el('div', { class: 'ui-donut', style: 'background:conic-gradient(' + parts.join(', ') + ')' }, [
+                el('div', { class: 'ui-donut__hole' }, [el('span', { class: 'ui-donut__center', text: '顧客' })])
+            ]);
+            const legend = el('ul', { class: 'ui-donut__legend' });
+            segs.forEach((s) => {
+                legend.appendChild(
+                    el('li', { class: 'ui-donut__item' }, [
+                        el('span', { class: 'ui-donut__sw', style: 'background:' + s[2] }),
+                        el('span', { class: 'ui-donut__lbl', text: s[0] }),
+                        el('span', { class: 'ui-donut__pct', text: Math.round((s[1] / total) * 100) + '%' })
+                    ])
+                );
+            });
+            box.appendChild(el('div', { class: 'ui-donut-wrap' }, [donut, legend]));
+        },
+
+        activityfeed(box) {
+            const items = [
+                ['✅', '「提案書.pdf」を承認しました', '5分前'],
+                ['💬', '佐藤さんがコメントを追加', '23分前'],
+                ['📦', '注文 #1042 を出荷', '1時間前'],
+                ['👤', '新規ユーザーが登録', '3時間前']
+            ];
+            const ul = el('ul', { class: 'ui-feed', style: 'width:100%;max-width:360px' });
+            items.forEach((it) => {
+                ul.appendChild(
+                    el('li', { class: 'ui-feed__item' }, [
+                        el('span', { class: 'ui-feed__icon', text: it[0] }),
+                        el('div', { class: 'ui-feed__content' }, [
+                            el('span', { class: 'ui-feed__text', text: it[1] }),
+                            el('span', { class: 'ui-feed__time', text: it[2] })
+                        ])
+                    ])
+                );
+            });
+            box.appendChild(ul);
+        },
+
+        goalprogress(box) {
+            const goals = [['月間売上目標', 820000, 1000000], ['新規契約', 45, 40], ['問い合わせ対応', 120, 200]];
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:14px;width:100%;max-width:340px' });
+            goals.forEach((g) => {
+                const ratio = Math.min(1, g[1] / g[2]);
+                const pct = Math.round(ratio * 100);
+                const fill = el('div', { class: 'ui-goal__fill' + (ratio >= 1 ? ' ui-goal__fill_done' : ''), style: 'width:' + pct + '%' });
+                col.appendChild(
+                    el('div', { class: 'ui-goal' }, [
+                        el('div', { class: 'ui-goal__head' }, [
+                            el('span', { class: 'ui-goal__label', text: g[0] }),
+                            el('span', { class: 'ui-goal__pct', text: pct + '%' })
+                        ]),
+                        el('div', { class: 'ui-goal__track' }, [fill]),
+                        el('div', { class: 'ui-goal__value', text: g[1].toLocaleString('ja-JP') + ' / ' + g[2].toLocaleString('ja-JP') })
+                    ])
+                );
+            });
+            box.appendChild(col);
         }
     };
 

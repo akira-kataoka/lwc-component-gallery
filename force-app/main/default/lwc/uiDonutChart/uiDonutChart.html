@@ -1,0 +1,18 @@
+<template>
+    <div class="ui-donut-wrap">
+        <div class="ui-donut" style={backgroundStyle}>
+            <div class="ui-donut__hole">
+                <span lwc:if={centerLabel} class="ui-donut__center">{centerLabel}</span>
+            </div>
+        </div>
+        <ul class="ui-donut__legend">
+            <template for:each={legend} for:item="item">
+                <li key={item.key} class="ui-donut__item">
+                    <span class="ui-donut__sw" style={item.swatchStyle}></span>
+                    <span class="ui-donut__lbl">{item.label}</span>
+                    <span class="ui-donut__pct">{item.pct}%</span>
+                </li>
+            </template>
+        </ul>
+    </div>
+</template>

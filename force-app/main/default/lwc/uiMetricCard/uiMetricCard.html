@@ -1,0 +1,13 @@
+<template>
+    <div class="ui-metric">
+        <span lwc:if={icon} class="ui-metric__icon">{icon}</span>
+        <div class="ui-metric__body">
+            <span class="ui-metric__label">{label}</span>
+            <span class="ui-metric__value">{value}</span>
+            <span lwc:if={hasDelta} class={deltaClass}>
+                <span class="ui-metric__trend">{trendIcon}</span>
+                {delta}
+            </span>
+        </div>
+    </div>
+</template>

@@ -1945,6 +1945,84 @@ const COMPONENTS = [
         ],
         events: [{ name: 'select', desc: 'タグクリックで発火（detail.label）' }],
         usage: `<c-ui-tag-cloud tags={keywords} onselect={handleSelect}></c-ui-tag-cloud>`
+    },
+    {
+        id: 'uiMetricCard',
+        title: 'UI Metric Card',
+        icon: '📇',
+        category: 'ダッシュボード',
+        demo: 'metriccard',
+        description:
+            'アイコン・ラベル・大きな値・前期比をまとめた KPI カード。ダッシュボードの定番部品。',
+        props: [
+            { name: 'icon', type: 'String', def: '—', desc: 'アイコン文字（絵文字可）' },
+            { name: 'label', type: 'String', def: '—', desc: '指標ラベル' },
+            { name: 'value', type: 'String', def: '—', desc: '主要な値' },
+            { name: 'delta', type: 'String', def: '—', desc: '差分テキスト（例: +12.5%）' },
+            {
+                name: 'trend',
+                type: 'String',
+                def: "'flat'",
+                desc: 'up | down | flat'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-metric-card icon="💰" label="今月の売上" value="¥1,250,000" delta="+12.5%" trend="up"></c-ui-metric-card>`
+    },
+    {
+        id: 'uiDonutChart',
+        title: 'UI Donut Chart',
+        icon: '🍩',
+        category: 'ダッシュボード',
+        demo: 'donutchart',
+        description:
+            'segments 配列 ([{ label, value, color }]) を conic-gradient のドーナツと凡例で表示する構成比チャート。',
+        props: [
+            {
+                name: 'segments',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value, color }] の配列'
+            },
+            { name: 'center-label', type: 'String', def: '—', desc: '中央の見出し（任意）' }
+        ],
+        events: [],
+        usage: `<c-ui-donut-chart segments={data} center-label="売上"></c-ui-donut-chart>`
+    },
+    {
+        id: 'uiActivityFeed',
+        title: 'UI Activity Feed',
+        icon: '📋',
+        category: 'ダッシュボード',
+        demo: 'activityfeed',
+        description:
+            'items 配列 ([{ icon, text, time }]) を時系列の活動ログとして表示するフィード。',
+        props: [
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ icon, text, time }] の配列'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-activity-feed items={activities}></c-ui-activity-feed>`
+    },
+    {
+        id: 'uiGoalProgress',
+        title: 'UI Goal Progress',
+        icon: '🎯',
+        category: 'ダッシュボード',
+        demo: 'goalprogress',
+        description:
+            'current / target の達成度をバーと割合で表示する目標プログレス。達成で色が変わる。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'current', type: 'Number', def: '0', desc: '現在値' },
+            { name: 'target', type: 'Number', def: '100', desc: '目標値' }
+        ],
+        events: [],
+        usage: `<c-ui-goal-progress label="月間目標" current="820000" target="1000000"></c-ui-goal-progress>`
     }
 ];
 
@@ -2038,7 +2116,11 @@ const JA_NAMES = {
     uiExpandableText: '開閉テキスト',
     uiGrid: 'グリッド',
     uiPillToggleGroup: 'ピル複数選択',
-    uiTagCloud: 'タグクラウド'
+    uiTagCloud: 'タグクラウド',
+    uiMetricCard: '指標カード',
+    uiDonutChart: 'ドーナツチャート',
+    uiActivityFeed: 'アクティビティフィード',
+    uiGoalProgress: '目標プログレス'
 };
 
 const FILE_KEYS = [
