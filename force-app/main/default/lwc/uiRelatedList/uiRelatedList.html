@@ -1,0 +1,34 @@
+<template>
+    <article class="ui-rellist">
+        <header class="ui-rellist__header">
+            <lightning-icon
+                icon-name={iconName}
+                size="small"
+                class="ui-rellist__icon"
+            ></lightning-icon>
+            <h2 class="ui-rellist__title">{title}</h2>
+            <span class="ui-rellist__count">{count}</span>
+            <button class="ui-rellist__new" type="button" onclick={handleNew}>
+                新規
+            </button>
+        </header>
+        <ul class="ui-rellist__items">
+            <template for:each={rows} for:item="row">
+                <li
+                    key={row.key}
+                    class="ui-rellist__item"
+                    data-index={row.index}
+                    onclick={handleSelect}
+                >
+                    <span class="ui-rellist__item-title">{row.title}</span>
+                    <span lwc:if={row.hasSubtitle} class="ui-rellist__item-sub">
+                        {row.subtitle}
+                    </span>
+                    <span lwc:if={row.hasMeta} class="ui-rellist__item-meta">
+                        {row.meta}
+                    </span>
+                </li>
+            </template>
+        </ul>
+    </article>
+</template>

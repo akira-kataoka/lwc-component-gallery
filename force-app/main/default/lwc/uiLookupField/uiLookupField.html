@@ -1,0 +1,49 @@
+<template>
+    <div class="ui-lookup" onfocusout={handleFocusOut}>
+        <label lwc:if={label} class="ui-lookup__label">{label}</label>
+
+        <div lwc:if={hasSelection} class="ui-lookup__selected">
+            <span class="ui-lookup__sel-icon">{selected.icon}</span>
+            <span class="ui-lookup__sel-label">{selected.label}</span>
+            <button
+                class="ui-lookup__clear"
+                type="button"
+                title="クリア"
+                onclick={handleClear}
+            >
+                &times;
+            </button>
+        </div>
+
+        <template lwc:else>
+            <input
+                class="ui-lookup__input"
+                type="text"
+                value={query}
+                placeholder={placeholder}
+                oninput={handleInput}
+                onfocus={handleFocus}
+            />
+            <ul lwc:if={open} class="ui-lookup__menu" role="listbox">
+                <template for:each={filtered} for:item="opt">
+                    <li key={opt.value} role="none">
+                        <button
+                            class="ui-lookup__item"
+                            type="button"
+                            role="option"
+                            data-value={opt.value}
+                            onclick={handleSelect}
+                        >
+                            <span class="ui-lookup__item-icon">{opt.icon}</span>
+                            <span class="ui-lookup__item-body">
+                                <span class="ui-lookup__item-label">{opt.label}</span>
+                                <span class="ui-lookup__item-sub">{opt.sublabel}</span>
+                            </span>
+                        </button>
+                    </li>
+                </template>
+                <li lwc:if={isEmpty} class="ui-lookup__empty">該当なし</li>
+            </ul>
+        </template>
+    </div>
+</template>

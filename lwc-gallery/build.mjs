@@ -2111,6 +2111,93 @@ const COMPONENTS = [
         ],
         events: [{ name: 'select', desc: 'ステップクリックで発火（detail.step）' }],
         usage: `<c-ui-record-path steps="見込,提案,交渉,受注" current="提案" onselect={handleSelect}></c-ui-record-path>`
+    },
+    {
+        id: 'uiRelatedList',
+        title: 'UI Related List',
+        icon: '🗃️',
+        category: 'レコード',
+        demo: 'relatedlist',
+        description:
+            'items 配列 ([{ title, subtitle, meta }]) を関連リスト風カードで表示。件数バッジ・新規ボタン付き。行クリックで select、新規で new を発火。',
+        props: [
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ title, subtitle, meta }] の配列'
+            },
+            { name: 'title', type: 'String', def: '—', desc: 'ヘッダタイトル' },
+            { name: 'icon-name', type: 'String', def: "'standard:record'", desc: 'ヘッダアイコン' }
+        ],
+        events: [
+            { name: 'select', desc: '行クリックで発火（detail.index）' },
+            { name: 'new', desc: '新規ボタンで発火' }
+        ],
+        usage: `<c-ui-related-list title="商談" items={opps} onselect={handleSelect} onnew={handleNew}></c-ui-related-list>`
+    },
+    {
+        id: 'uiLookupField',
+        title: 'UI Lookup Field',
+        icon: '🔎',
+        category: 'レコード',
+        demo: 'lookupfield',
+        description:
+            '入力で options を絞り込み、アイコン＋サブラベル付きの候補から選択するルックアップ。選択時に change イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'options',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, sublabel, icon, value }] の配列'
+            },
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'placeholder', type: 'String', def: "'検索…'", desc: 'プレースホルダ' }
+        ],
+        events: [{ name: 'change', desc: '選択／クリア時に発火（detail.value）' }],
+        usage: `<c-ui-lookup-field label="取引先" options={results} onchange={handleChange}></c-ui-lookup-field>`
+    },
+    {
+        id: 'uiRecordHighlights',
+        title: 'UI Record Highlights',
+        icon: '⭐',
+        category: 'レコード',
+        demo: 'highlights',
+        description:
+            'アイコン・タイトル・サブタイトルと主要フィールド ([{ label, value }]) を横並びで表示する Record ヘッダ向けパネル。',
+        props: [
+            { name: 'icon', type: 'String', def: "'🏢'", desc: '先頭アイコン' },
+            { name: 'title', type: 'String', def: '—', desc: 'タイトル' },
+            { name: 'subtitle', type: 'String', def: '—', desc: 'サブタイトル' },
+            {
+                name: 'fields',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-record-highlights title="株式会社サンプル" subtitle="製造業" fields={highlights}></c-ui-record-highlights>`
+    },
+    {
+        id: 'uiTileSelect',
+        title: 'UI Tile Select',
+        icon: '🔲',
+        category: 'フォーム',
+        demo: 'tileselect',
+        description:
+            'options 配列 ([{ label, icon, value }]) をアイコン付きタイルで並べ単一選択する。選択時に change イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'options',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, icon, value }] の配列'
+            },
+            { name: 'value', type: 'String', def: '—', desc: '選択値' }
+        ],
+        events: [{ name: 'change', desc: '選択時に発火（detail.value）' }],
+        usage: `<c-ui-tile-select options={types} value="email" onchange={handleChange}></c-ui-tile-select>`
     }
 ];
 
@@ -2212,7 +2299,11 @@ const JA_NAMES = {
     uiRecordCard: 'レコードカード',
     uiRecordView: 'レコード表示',
     uiRecordEdit: 'レコード編集',
-    uiRecordPath: 'レコードパス'
+    uiRecordPath: 'レコードパス',
+    uiRelatedList: '関連リスト',
+    uiLookupField: 'ルックアップ',
+    uiRecordHighlights: 'ハイライトパネル',
+    uiTileSelect: 'タイル選択'
 };
 
 const FILE_KEYS = [

@@ -1,0 +1,91 @@
+.ui-rellist {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 260px;
+}
+
+.ui-rellist__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #ececec;
+    background: #fafaf9;
+}
+
+.ui-rellist__title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-rellist__count {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #514f4d;
+    background: #ececeb;
+    border-radius: 10px;
+    padding: 1px 8px;
+}
+
+.ui-rellist__new {
+    margin-left: auto;
+    border: 1px solid #c9c9c9;
+    background: #ffffff;
+    color: #0176d3;
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-rellist__new:hover {
+    background: #f3f9ff;
+}
+
+.ui-rellist__items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ui-rellist__item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'title meta' 'sub meta';
+    gap: 0 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #f3f3f3;
+    cursor: pointer;
+}
+.ui-rellist__item:last-child {
+    border-bottom: none;
+}
+.ui-rellist__item:hover {
+    background: #f3f9ff;
+}
+
+.ui-rellist__item-title {
+    grid-area: title;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0176d3;
+}
+
+.ui-rellist__item-sub {
+    grid-area: sub;
+    font-size: 0.75rem;
+    color: #706e6b;
+}
+
+.ui-rellist__item-meta {
+    grid-area: meta;
+    align-self: center;
+    font-size: 0.75rem;
+    color: #514f4d;
+    white-space: nowrap;
+}

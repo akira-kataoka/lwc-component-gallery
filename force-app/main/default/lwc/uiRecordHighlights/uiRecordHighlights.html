@@ -1,0 +1,17 @@
+<template>
+    <div class="ui-highlights">
+        <span class="ui-highlights__icon">{icon}</span>
+        <div class="ui-highlights__head">
+            <span class="ui-highlights__title">{title}</span>
+            <span lwc:if={subtitle} class="ui-highlights__sub">{subtitle}</span>
+        </div>
+        <div class="ui-highlights__fields">
+            <template for:each={cells} for:item="cell">
+                <div key={cell.key} class="ui-highlights__cell">
+                    <span class="ui-highlights__flabel">{cell.label}</span>
+                    <span class="ui-highlights__fvalue">{cell.value}</span>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

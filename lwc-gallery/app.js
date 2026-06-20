@@ -2822,6 +2822,158 @@
             render();
             box.appendChild(ol);
             controls.appendChild(out);
+        },
+
+        relatedlist(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '行クリックで選択' });
+            const items = [
+                ['新規システム導入 - 第1期', '株式会社サンプル商事', '¥3,200,000'],
+                ['保守契約 更新', '株式会社テスト工業', '¥1,800,000'],
+                ['追加ライセンス', 'サンプル物流', '¥640,000']
+            ];
+            const ul = el('ul', { class: 'ui-rellist__items' });
+            items.forEach((it) => {
+                const li = el('li', { class: 'ui-rellist__item' }, [
+                    el('span', { class: 'ui-rellist__item-title', text: it[0] }),
+                    el('span', { class: 'ui-rellist__item-sub', text: it[1] }),
+                    el('span', { class: 'ui-rellist__item-meta', text: it[2] })
+                ]);
+                li.addEventListener('click', () => {
+                    out.textContent = '選択: ' + it[0];
+                });
+                ul.appendChild(li);
+            });
+            const newBtn = el('button', { class: 'ui-rellist__new', type: 'button', text: '新規' });
+            newBtn.addEventListener('click', () => {
+                out.textContent = '新規作成';
+            });
+            box.appendChild(el('article', { class: 'ui-rellist', style: 'max-width:380px' }, [
+                el('header', { class: 'ui-rellist__header' }, [
+                    el('span', { style: 'font-size:1.1rem', text: '💼' }),
+                    el('h2', { class: 'ui-rellist__title', text: '商談' }),
+                    el('span', { class: 'ui-rellist__count', text: '3' }),
+                    newBtn
+                ]),
+                ul
+            ]));
+            controls.appendChild(out);
+        },
+
+        lookupfield(box, controls) {
+            const opts = [
+                ['株式会社サンプル商事', '製造業 ・ 東京', '🏢', 'a1'],
+                ['株式会社テスト工業', '製造業 ・ 大阪', '🏢', 'a2'],
+                ['サンプル物流', '運輸 ・ 福岡', '🚚', 'a3'],
+                ['テスト商事', '卸売 ・ 名古屋', '🏪', 'a4']
+            ];
+            const out = el('span', { class: 'demo__out', text: '選択: （なし）' });
+            let open = false;
+            const host = el('div', { class: 'ui-lookup', style: 'max-width:280px;position:relative' });
+            const input = el('input', { class: 'ui-lookup__input', type: 'text', placeholder: '取引先を検索…' });
+            const menu = el('ul', { class: 'ui-lookup__menu', style: 'display:none' });
+            const selIcon = el('span', { class: 'ui-lookup__sel-icon' });
+            const selLabel = el('span', { class: 'ui-lookup__sel-label' });
+            const clr = el('button', { class: 'ui-lookup__clear', type: 'button', html: '&times;' });
+            const selectedBox = el('div', { class: 'ui-lookup__selected', style: 'display:none' }, [selIcon, selLabel, clr]);
+            function choose(o) {
+                open = false;
+                menu.style.display = 'none';
+                input.style.display = 'none';
+                selectedBox.style.display = '';
+                selIcon.textContent = o[2];
+                selLabel.textContent = o[0];
+                out.textContent = '選択: ' + o[0];
+            }
+            clr.addEventListener('click', () => {
+                selectedBox.style.display = 'none';
+                input.style.display = '';
+                input.value = '';
+                out.textContent = '選択: （なし）';
+            });
+            function renderMenu() {
+                menu.innerHTML = '';
+                const q = input.value.toLowerCase();
+                const f = opts.filter((o) => o[0].toLowerCase().includes(q));
+                if (f.length === 0) {
+                    menu.appendChild(el('li', { class: 'ui-lookup__empty', text: '該当なし' }));
+                } else {
+                    f.forEach((o) => {
+                        const b = el('button', { class: 'ui-lookup__item', type: 'button' }, [
+                            el('span', { class: 'ui-lookup__item-icon', text: o[2] }),
+                            el('span', { class: 'ui-lookup__item-body' }, [
+                                el('span', { class: 'ui-lookup__item-label', text: o[0] }),
+                                el('span', { class: 'ui-lookup__item-sub', text: o[1] })
+                            ])
+                        ]);
+                        b.addEventListener('click', () => choose(o));
+                        menu.appendChild(el('li', {}, [b]));
+                    });
+                }
+                menu.style.display = open ? '' : 'none';
+            }
+            input.addEventListener('input', () => {
+                open = true;
+                renderMenu();
+            });
+            input.addEventListener('focus', () => {
+                open = true;
+                renderMenu();
+            });
+            host.addEventListener('focusout', (e) => {
+                if (open && (!e.relatedTarget || !host.contains(e.relatedTarget))) {
+                    open = false;
+                    menu.style.display = 'none';
+                }
+            });
+            host.appendChild(input);
+            host.appendChild(selectedBox);
+            host.appendChild(menu);
+            box.appendChild(host);
+            controls.appendChild(out);
+        },
+
+        highlights(box) {
+            const fields = [['電話', '03-1234-5678'], ['年間売上', '¥12億'], ['従業員', '1,200名'], ['評価', 'ホット']];
+            const cells = el('div', { class: 'ui-highlights__fields' });
+            fields.forEach((f) => {
+                cells.appendChild(el('div', { class: 'ui-highlights__cell' }, [
+                    el('span', { class: 'ui-highlights__flabel', text: f[0] }),
+                    el('span', { class: 'ui-highlights__fvalue', text: f[1] })
+                ]));
+            });
+            box.appendChild(el('div', { class: 'ui-highlights', style: 'width:100%;max-width:560px' }, [
+                el('span', { class: 'ui-highlights__icon', text: '🏢' }),
+                el('div', { class: 'ui-highlights__head' }, [
+                    el('span', { class: 'ui-highlights__title', text: '株式会社サンプル商事' }),
+                    el('span', { class: 'ui-highlights__sub', text: '製造業 ・ 顧客' })
+                ]),
+                cells
+            ]));
+        },
+
+        tileselect(box, controls) {
+            const opts = [['📧', 'メール', 'email'], ['📞', '電話', 'phone'], ['💬', 'チャット', 'chat'], ['🤝', '訪問', 'visit']];
+            let value = 'email';
+            const out = el('span', { class: 'demo__out', text: '選択: メール' });
+            const wrap = el('div', { class: 'ui-tiles' });
+            function render() {
+                wrap.innerHTML = '';
+                opts.forEach((o) => {
+                    const b = el('button', { class: 'ui-tile' + (o[2] === value ? ' ui-tile_selected' : ''), type: 'button' }, [
+                        el('span', { class: 'ui-tile__icon', text: o[0] }),
+                        el('span', { class: 'ui-tile__label', text: o[1] })
+                    ]);
+                    b.addEventListener('click', () => {
+                        value = o[2];
+                        out.textContent = '選択: ' + o[1];
+                        render();
+                    });
+                    wrap.appendChild(b);
+                });
+            }
+            render();
+            box.appendChild(wrap);
+            controls.appendChild(out);
         }
     };
 

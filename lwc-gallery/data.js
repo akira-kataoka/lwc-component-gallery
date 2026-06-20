@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T08:43:27.207Z",
+  "generatedAt": "2026-06-20T08:49:51.151Z",
   "components": [
     {
       "id": "uiBadge",
@@ -3727,6 +3727,173 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiRecordPath — レコードパス（ステータスパス）。\n * steps（カンマ区切り）と current（現在のステップ名）から、Salesforce Path 風の\n * シェブロン表示を生成する。ステップクリックで select イベント (detail.step) を発火。\n * Record ページの商談ステージや状況の可視化に使う。\n */\nexport default class UiRecordPath extends LightningElement {\n    /** カンマ区切りのステップ名 */\n    @api steps = '';\n    /** 現在のステップ名 */\n    @api current;\n\n    get stepList() {\n        return this.steps\n            ? this.steps.split(',').map((s) => s.trim()).filter((s) => s)\n            : [];\n    }\n\n    get computedSteps() {\n        const list = this.stepList;\n        const curIndex = list.indexOf(this.current);\n        return list.map((label, i) => {\n            let state = 'upcoming';\n            if (curIndex >= 0 && i < curIndex) {\n                state = 'complete';\n            } else if (i === curIndex) {\n                state = 'current';\n            }\n            return {\n                key: label,\n                label,\n                cssClass: `ui-path__step ui-path__step_${state}`\n            };\n        });\n    }\n\n    handleSelect(event) {\n        const step = event.currentTarget.dataset.step;\n        this.dispatchEvent(new CustomEvent('select', { detail: { step } }));\n    }\n}\n",
         "css": ".ui-path {\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style: none;\n    width: 100%;\n}\n\n.ui-path__step {\n    position: relative;\n    flex: 1;\n    height: 34px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background: #ececec;\n    color: #514f4d;\n    font-size: 0.78rem;\n    font-weight: 600;\n    cursor: pointer;\n    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%, 12px 50%);\n    margin-left: -8px;\n    padding-left: 8px;\n}\n.ui-path__step:first-child {\n    margin-left: 0;\n    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);\n    padding-left: 0;\n}\n\n.ui-path__step:hover {\n    filter: brightness(0.96);\n}\n\n.ui-path__step_complete {\n    background: #c5e0c8;\n    color: #1d7a3f;\n}\n\n.ui-path__step_current {\n    background: #0176d3;\n    color: #ffffff;\n}\n\n.ui-path__label {\n    padding: 0 6px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Record Path</masterLabel>\n    <description>レコードパス。商談ステージ等をSalesforce Path風シェブロンで表示。</description>\n    <targets>\n        <target>lightning__RecordPage</target>\n        <target>lightning__AppPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiRelatedList",
+      "title": "UI Related List",
+      "icon": "🗃️",
+      "category": "レコード",
+      "demo": "relatedlist",
+      "description": "items 配列 ([{ title, subtitle, meta }]) を関連リスト風カードで表示。件数バッジ・新規ボタン付き。行クリックで select、新規で new を発火。",
+      "props": [
+        {
+          "name": "items",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ title, subtitle, meta }] の配列"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "ヘッダタイトル"
+        },
+        {
+          "name": "icon-name",
+          "type": "String",
+          "def": "'standard:record'",
+          "desc": "ヘッダアイコン"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "行クリックで発火（detail.index）"
+        },
+        {
+          "name": "new",
+          "desc": "新規ボタンで発火"
+        }
+      ],
+      "usage": "<c-ui-related-list title=\"商談\" items={opps} onselect={handleSelect} onnew={handleNew}></c-ui-related-list>",
+      "ja": "関連リスト",
+      "files": {
+        "html": "<template>\n    <article class=\"ui-rellist\">\n        <header class=\"ui-rellist__header\">\n            <lightning-icon\n                icon-name={iconName}\n                size=\"small\"\n                class=\"ui-rellist__icon\"\n            ></lightning-icon>\n            <h2 class=\"ui-rellist__title\">{title}</h2>\n            <span class=\"ui-rellist__count\">{count}</span>\n            <button class=\"ui-rellist__new\" type=\"button\" onclick={handleNew}>\n                新規\n            </button>\n        </header>\n        <ul class=\"ui-rellist__items\">\n            <template for:each={rows} for:item=\"row\">\n                <li\n                    key={row.key}\n                    class=\"ui-rellist__item\"\n                    data-index={row.index}\n                    onclick={handleSelect}\n                >\n                    <span class=\"ui-rellist__item-title\">{row.title}</span>\n                    <span lwc:if={row.hasSubtitle} class=\"ui-rellist__item-sub\">\n                        {row.subtitle}\n                    </span>\n                    <span lwc:if={row.hasMeta} class=\"ui-rellist__item-meta\">\n                        {row.meta}\n                    </span>\n                </li>\n            </template>\n        </ul>\n    </article>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiRelatedList — 関連リスト。\n * items 配列 ([{ title, subtitle, meta }]) を Salesforce の関連リスト風カードで表示し、\n * 件数バッジと「新規」ボタンを持つ。行クリックで select、新規で new イベントを発火する。\n * 親で Apex 等から取得したレコード配列を渡して使う。\n */\nexport default class UiRelatedList extends LightningElement {\n    _items = [];\n\n    /** [{ title, subtitle, meta }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    /** ヘッダタイトル */\n    @api title;\n    /** ヘッダアイコン（lightning-icon 名） */\n    @api iconName = 'standard:record';\n\n    get count() {\n        return this._items.length;\n    }\n\n    get rows() {\n        return this._items.map((it, i) => ({\n            key: i,\n            index: i,\n            title: it.title,\n            subtitle: it.subtitle,\n            meta: it.meta,\n            hasSubtitle: !!it.subtitle,\n            hasMeta: !!it.meta\n        }));\n    }\n\n    handleSelect(event) {\n        this.dispatchEvent(\n            new CustomEvent('select', {\n                detail: { index: Number(event.currentTarget.dataset.index) }\n            })\n        );\n    }\n\n    handleNew() {\n        this.dispatchEvent(new CustomEvent('new'));\n    }\n}\n",
+        "css": ".ui-rellist {\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    overflow: hidden;\n    min-width: 260px;\n}\n\n.ui-rellist__header {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    padding: 10px 14px;\n    border-bottom: 1px solid #ececec;\n    background: #fafaf9;\n}\n\n.ui-rellist__title {\n    margin: 0;\n    font-size: 0.9rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-rellist__count {\n    font-size: 0.72rem;\n    font-weight: 700;\n    color: #514f4d;\n    background: #ececeb;\n    border-radius: 10px;\n    padding: 1px 8px;\n}\n\n.ui-rellist__new {\n    margin-left: auto;\n    border: 1px solid #c9c9c9;\n    background: #ffffff;\n    color: #0176d3;\n    font-size: 0.74rem;\n    font-weight: 600;\n    padding: 4px 10px;\n    border-radius: 5px;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-rellist__new:hover {\n    background: #f3f9ff;\n}\n\n.ui-rellist__items {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n}\n\n.ui-rellist__item {\n    display: grid;\n    grid-template-columns: 1fr auto;\n    grid-template-areas: 'title meta' 'sub meta';\n    gap: 0 8px;\n    padding: 10px 14px;\n    border-bottom: 1px solid #f3f3f3;\n    cursor: pointer;\n}\n.ui-rellist__item:last-child {\n    border-bottom: none;\n}\n.ui-rellist__item:hover {\n    background: #f3f9ff;\n}\n\n.ui-rellist__item-title {\n    grid-area: title;\n    font-size: 0.85rem;\n    font-weight: 600;\n    color: #0176d3;\n}\n\n.ui-rellist__item-sub {\n    grid-area: sub;\n    font-size: 0.75rem;\n    color: #706e6b;\n}\n\n.ui-rellist__item-meta {\n    grid-area: meta;\n    align-self: center;\n    font-size: 0.75rem;\n    color: #514f4d;\n    white-space: nowrap;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Related List</masterLabel>\n    <description>関連リスト。件数バッジ・新規ボタン付きでレコード配列を一覧表示。</description>\n    <targets>\n        <target>lightning__RecordPage</target>\n        <target>lightning__AppPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiLookupField",
+      "title": "UI Lookup Field",
+      "icon": "🔎",
+      "category": "レコード",
+      "demo": "lookupfield",
+      "description": "入力で options を絞り込み、アイコン＋サブラベル付きの候補から選択するルックアップ。選択時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "options",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, sublabel, icon, value }] の配列"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "placeholder",
+          "type": "String",
+          "def": "'検索…'",
+          "desc": "プレースホルダ"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "選択／クリア時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-lookup-field label=\"取引先\" options={results} onchange={handleChange}></c-ui-lookup-field>",
+      "ja": "ルックアップ",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-lookup\" onfocusout={handleFocusOut}>\n        <label lwc:if={label} class=\"ui-lookup__label\">{label}</label>\n\n        <div lwc:if={hasSelection} class=\"ui-lookup__selected\">\n            <span class=\"ui-lookup__sel-icon\">{selected.icon}</span>\n            <span class=\"ui-lookup__sel-label\">{selected.label}</span>\n            <button\n                class=\"ui-lookup__clear\"\n                type=\"button\"\n                title=\"クリア\"\n                onclick={handleClear}\n            >\n                &times;\n            </button>\n        </div>\n\n        <template lwc:else>\n            <input\n                class=\"ui-lookup__input\"\n                type=\"text\"\n                value={query}\n                placeholder={placeholder}\n                oninput={handleInput}\n                onfocus={handleFocus}\n            />\n            <ul lwc:if={open} class=\"ui-lookup__menu\" role=\"listbox\">\n                <template for:each={filtered} for:item=\"opt\">\n                    <li key={opt.value} role=\"none\">\n                        <button\n                            class=\"ui-lookup__item\"\n                            type=\"button\"\n                            role=\"option\"\n                            data-value={opt.value}\n                            onclick={handleSelect}\n                        >\n                            <span class=\"ui-lookup__item-icon\">{opt.icon}</span>\n                            <span class=\"ui-lookup__item-body\">\n                                <span class=\"ui-lookup__item-label\">{opt.label}</span>\n                                <span class=\"ui-lookup__item-sub\">{opt.sublabel}</span>\n                            </span>\n                        </button>\n                    </li>\n                </template>\n                <li lwc:if={isEmpty} class=\"ui-lookup__empty\">該当なし</li>\n            </ul>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiLookupField — ルックアップ検索フィールド。\n * 入力で options を絞り込み、アイコン＋サブラベル付きの候補から選択する。\n * 選択時に change イベント (detail.value)、クリアで change(null) を発火する。\n * options は親で Apex 検索結果などを渡す（[{ label, sublabel, icon, value }]）。\n */\nexport default class UiLookupField extends LightningElement {\n    _options = [];\n\n    /** [{ label, sublabel, icon, value }] の配列 */\n    @api\n    get options() {\n        return this._options;\n    }\n    set options(value) {\n        this._options = Array.isArray(value) ? value : [];\n    }\n\n    /** ラベル */\n    @api label;\n    /** プレースホルダ */\n    @api placeholder = '検索…';\n\n    @track query = '';\n    @track open = false;\n    @track selected = null;\n\n    get filtered() {\n        const q = (this.query || '').toLowerCase();\n        return this._options.filter((o) =>\n            (o.label || '').toLowerCase().includes(q)\n        );\n    }\n\n    get hasSelection() {\n        return !!this.selected;\n    }\n\n    get isEmpty() {\n        return this.filtered.length === 0;\n    }\n\n    handleInput(event) {\n        this.query = event.target.value;\n        this.open = true;\n    }\n\n    handleFocus() {\n        this.open = true;\n    }\n\n    handleSelect(event) {\n        const v = event.currentTarget.dataset.value;\n        this.selected = this._options.find((o) => String(o.value) === v) || null;\n        this.open = false;\n        this.query = '';\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: v } })\n        );\n    }\n\n    handleClear() {\n        this.selected = null;\n        this.dispatchEvent(new CustomEvent('change', { detail: { value: null } }));\n    }\n\n    handleFocusOut(event) {\n        if (\n            this.open &&\n            (!event.relatedTarget ||\n                !event.currentTarget.contains(event.relatedTarget))\n        ) {\n            this.open = false;\n        }\n    }\n}\n",
+        "css": ".ui-lookup {\n    position: relative;\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-lookup__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-lookup__input {\n    height: 34px;\n    padding: 0 12px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    font-size: 0.875rem;\n    color: #181818;\n    background: #ffffff;\n    font-family: inherit;\n}\n.ui-lookup__input:focus {\n    outline: none;\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n\n.ui-lookup__selected {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    height: 34px;\n    padding: 0 6px 0 10px;\n    border: 1px solid #0176d3;\n    border-radius: 6px;\n    background: #f3f9ff;\n}\n.ui-lookup__sel-icon {\n    font-size: 1rem;\n}\n.ui-lookup__sel-label {\n    flex: 1;\n    font-size: 0.85rem;\n    color: #181818;\n    font-weight: 600;\n}\n.ui-lookup__clear {\n    border: none;\n    background: transparent;\n    color: #706e6b;\n    font-size: 1.1rem;\n    line-height: 1;\n    cursor: pointer;\n    padding: 0 4px;\n}\n.ui-lookup__clear:hover {\n    color: #181818;\n}\n\n.ui-lookup__menu {\n    position: absolute;\n    top: 100%;\n    left: 0;\n    right: 0;\n    margin: 4px 0 0;\n    padding: 4px;\n    list-style: none;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);\n    z-index: 20;\n    max-height: 240px;\n    overflow-y: auto;\n}\n\n.ui-lookup__item {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    width: 100%;\n    text-align: left;\n    border: none;\n    background: transparent;\n    padding: 7px 10px;\n    border-radius: 6px;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-lookup__item:hover {\n    background: #f3f9ff;\n}\n\n.ui-lookup__item-icon {\n    font-size: 1.1rem;\n    flex-shrink: 0;\n}\n\n.ui-lookup__item-body {\n    display: flex;\n    flex-direction: column;\n    min-width: 0;\n}\n.ui-lookup__item-label {\n    font-size: 0.85rem;\n    color: #181818;\n    font-weight: 600;\n}\n.ui-lookup__item-sub {\n    font-size: 0.72rem;\n    color: #706e6b;\n}\n\n.ui-lookup__empty {\n    padding: 8px 10px;\n    font-size: 0.8rem;\n    color: #969492;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Lookup Field</masterLabel>\n    <description>ルックアップ検索フィールド。候補をアイコン付きで絞り込み選択し change を発火。</description>\n    <targets>\n        <target>lightning__RecordPage</target>\n        <target>lightning__AppPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiRecordHighlights",
+      "title": "UI Record Highlights",
+      "icon": "⭐",
+      "category": "レコード",
+      "demo": "highlights",
+      "description": "アイコン・タイトル・サブタイトルと主要フィールド ([{ label, value }]) を横並びで表示する Record ヘッダ向けパネル。",
+      "props": [
+        {
+          "name": "icon",
+          "type": "String",
+          "def": "'🏢'",
+          "desc": "先頭アイコン"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "タイトル"
+        },
+        {
+          "name": "subtitle",
+          "type": "String",
+          "def": "—",
+          "desc": "サブタイトル"
+        },
+        {
+          "name": "fields",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-record-highlights title=\"株式会社サンプル\" subtitle=\"製造業\" fields={highlights}></c-ui-record-highlights>",
+      "ja": "ハイライトパネル",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-highlights\">\n        <span class=\"ui-highlights__icon\">{icon}</span>\n        <div class=\"ui-highlights__head\">\n            <span class=\"ui-highlights__title\">{title}</span>\n            <span lwc:if={subtitle} class=\"ui-highlights__sub\">{subtitle}</span>\n        </div>\n        <div class=\"ui-highlights__fields\">\n            <template for:each={cells} for:item=\"cell\">\n                <div key={cell.key} class=\"ui-highlights__cell\">\n                    <span class=\"ui-highlights__flabel\">{cell.label}</span>\n                    <span class=\"ui-highlights__fvalue\">{cell.value}</span>\n                </div>\n            </template>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiRecordHighlights — ハイライトパネル。\n * アイコン・タイトル・サブタイトルと、主要フィールド（[{ label, value }]）を\n * 横並びで表示する Record ページのヘッダ向け部品。\n */\nexport default class UiRecordHighlights extends LightningElement {\n    /** 先頭アイコン（絵文字または lightning-icon は親で差し替え可） */\n    @api icon = '🏢';\n    /** タイトル（例: 取引先名） */\n    @api title;\n    /** サブタイトル（例: 業種・タイプ） */\n    @api subtitle;\n\n    _fields = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get fields() {\n        return this._fields;\n    }\n    set fields(value) {\n        this._fields = Array.isArray(value) ? value : [];\n    }\n\n    get cells() {\n        return this._fields.map((f, i) => ({\n            key: i,\n            label: f.label,\n            value: f.value\n        }));\n    }\n}\n",
+        "css": ".ui-highlights {\n    display: flex;\n    align-items: center;\n    gap: 16px;\n    padding: 14px 18px;\n    background: linear-gradient(180deg, #f3f8fd 0%, #ffffff 100%);\n    border: 1px solid #e5e5e5;\n    border-radius: 10px;\n    flex-wrap: wrap;\n}\n\n.ui-highlights__icon {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 48px;\n    height: 48px;\n    border-radius: 12px;\n    background: #0176d3;\n    font-size: 1.5rem;\n    flex-shrink: 0;\n}\n\n.ui-highlights__head {\n    display: flex;\n    flex-direction: column;\n    gap: 1px;\n    margin-right: 8px;\n}\n\n.ui-highlights__title {\n    font-size: 1.05rem;\n    font-weight: 800;\n    color: #181818;\n}\n\n.ui-highlights__sub {\n    font-size: 0.78rem;\n    color: #706e6b;\n}\n\n.ui-highlights__fields {\n    display: flex;\n    gap: 24px;\n    flex-wrap: wrap;\n    padding-left: 16px;\n    border-left: 1px solid #e5e5e5;\n}\n\n.ui-highlights__cell {\n    display: flex;\n    flex-direction: column;\n    gap: 1px;\n}\n\n.ui-highlights__flabel {\n    font-size: 0.7rem;\n    color: #706e6b;\n    font-weight: 600;\n}\n\n.ui-highlights__fvalue {\n    font-size: 0.9rem;\n    font-weight: 700;\n    color: #181818;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Record Highlights</masterLabel>\n    <description>ハイライトパネル。アイコン・タイトル・主要フィールドを横並び表示。</description>\n    <targets>\n        <target>lightning__RecordPage</target>\n        <target>lightning__AppPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiTileSelect",
+      "title": "UI Tile Select",
+      "icon": "🔲",
+      "category": "フォーム",
+      "demo": "tileselect",
+      "description": "options 配列 ([{ label, icon, value }]) をアイコン付きタイルで並べ単一選択する。選択時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "options",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, icon, value }] の配列"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "—",
+          "desc": "選択値"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-tile-select options={types} value=\"email\" onchange={handleChange}></c-ui-tile-select>",
+      "ja": "タイル選択",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-tiles\" role=\"radiogroup\">\n        <template for:each={tiles} for:item=\"tile\">\n            <button\n                key={tile.value}\n                class={tile.cssClass}\n                type=\"button\"\n                role=\"radio\"\n                data-value={tile.value}\n                onclick={handleSelect}\n            >\n                <span class=\"ui-tile__icon\">{tile.icon}</span>\n                <span class=\"ui-tile__label\">{tile.label}</span>\n            </button>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiTileSelect — タイル選択。\n * options 配列 ([{ label, icon, value }]) をアイコン付きタイルで並べ、\n * 単一選択する。選択時に change イベント (detail.value) を発火する。\n */\nexport default class UiTileSelect extends LightningElement {\n    _options = [];\n\n    /** [{ label, icon, value }] の配列 */\n    @api\n    get options() {\n        return this._options;\n    }\n    set options(value) {\n        this._options = Array.isArray(value) ? value : [];\n    }\n\n    /** 選択値 */\n    @api value;\n\n    get tiles() {\n        return this._options.map((o) => ({\n            label: o.label,\n            icon: o.icon,\n            value: o.value,\n            cssClass:\n                String(o.value) === String(this.value)\n                    ? 'ui-tile ui-tile_selected'\n                    : 'ui-tile'\n        }));\n    }\n\n    handleSelect(event) {\n        this.value = event.currentTarget.dataset.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-tiles {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 10px;\n}\n\n.ui-tile {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    gap: 6px;\n    width: 96px;\n    padding: 14px 8px;\n    border: 1px solid #c9c9c9;\n    border-radius: 10px;\n    background: #ffffff;\n    cursor: pointer;\n    font-family: inherit;\n    transition: border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;\n}\n.ui-tile:hover {\n    border-color: #0176d3;\n    background: #f7fbff;\n}\n\n.ui-tile__icon {\n    font-size: 1.6rem;\n    line-height: 1;\n}\n\n.ui-tile__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n    text-align: center;\n}\n\n.ui-tile_selected {\n    border-color: #0176d3;\n    background: #eef4ff;\n    box-shadow: inset 0 0 0 1px #0176d3;\n}\n.ui-tile_selected .ui-tile__label {\n    color: #0b5cab;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Tile Select</masterLabel>\n    <description>タイル選択。アイコン付きタイルの単一選択で change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

@@ -1,0 +1,120 @@
+.ui-lookup {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ui-lookup__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-lookup__input {
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #181818;
+    background: #ffffff;
+    font-family: inherit;
+}
+.ui-lookup__input:focus {
+    outline: none;
+    border-color: #0176d3;
+    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);
+}
+
+.ui-lookup__selected {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+    padding: 0 6px 0 10px;
+    border: 1px solid #0176d3;
+    border-radius: 6px;
+    background: #f3f9ff;
+}
+.ui-lookup__sel-icon {
+    font-size: 1rem;
+}
+.ui-lookup__sel-label {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #181818;
+    font-weight: 600;
+}
+.ui-lookup__clear {
+    border: none;
+    background: transparent;
+    color: #706e6b;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+}
+.ui-lookup__clear:hover {
+    color: #181818;
+}
+
+.ui-lookup__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 4px 0 0;
+    padding: 4px;
+    list-style: none;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    z-index: 20;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.ui-lookup__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: transparent;
+    padding: 7px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-lookup__item:hover {
+    background: #f3f9ff;
+}
+
+.ui-lookup__item-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.ui-lookup__item-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.ui-lookup__item-label {
+    font-size: 0.85rem;
+    color: #181818;
+    font-weight: 600;
+}
+.ui-lookup__item-sub {
+    font-size: 0.72rem;
+    color: #706e6b;
+}
+
+.ui-lookup__empty {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    color: #969492;
+}

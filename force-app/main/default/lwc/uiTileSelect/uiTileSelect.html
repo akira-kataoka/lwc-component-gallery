@@ -1,0 +1,17 @@
+<template>
+    <div class="ui-tiles" role="radiogroup">
+        <template for:each={tiles} for:item="tile">
+            <button
+                key={tile.value}
+                class={tile.cssClass}
+                type="button"
+                role="radio"
+                data-value={tile.value}
+                onclick={handleSelect}
+            >
+                <span class="ui-tile__icon">{tile.icon}</span>
+                <span class="ui-tile__label">{tile.label}</span>
+            </button>
+        </template>
+    </div>
+</template>
