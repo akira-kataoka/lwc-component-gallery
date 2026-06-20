@@ -2278,6 +2278,73 @@ const COMPONENTS = [
         events: [],
         methods: [{ name: 'play()', desc: 'アニメーションを再生' }],
         usage: `<c-ui-count-up value="1250000" prefix="¥"></c-ui-count-up>`
+    },
+    {
+        id: 'uiColorInput',
+        title: 'UI Color Input',
+        icon: '🎨',
+        category: 'フォーム',
+        demo: 'colorinput',
+        description:
+            'ネイティブのカラーピッカーと HEX 表示を組み合わせた入力。変更時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'String', def: "'#0176d3'", desc: '値（HEX）' }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.value）' }],
+        usage: `<c-ui-color-input label="テーマ色" value="#0176d3" onchange={handleChange}></c-ui-color-input>`
+    },
+    {
+        id: 'uiTimeInput',
+        title: 'UI Time Input',
+        icon: '⏰',
+        category: 'フォーム',
+        demo: 'timeinput',
+        description:
+            'ラベル付きの時刻入力。変更時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'String', def: "''", desc: '値（HH:mm）' },
+            { name: 'disabled', type: 'Boolean', def: 'false', desc: 'true で無効化' }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.value）' }],
+        usage: `<c-ui-time-input label="開始時刻" onchange={handleChange}></c-ui-time-input>`
+    },
+    {
+        id: 'uiChatBubble',
+        title: 'UI Chat Bubble',
+        icon: '💬',
+        category: '表示',
+        demo: 'chatbubble',
+        description:
+            'text・author・time を吹き出しで表示。side=right で自分側（右・青）、left で相手側（左・グレー）。',
+        props: [
+            { name: 'text', type: 'String', def: '—', desc: '本文' },
+            { name: 'author', type: 'String', def: '—', desc: '送信者名' },
+            { name: 'time', type: 'String', def: '—', desc: '時刻' },
+            { name: 'side', type: 'String', def: "'left'", desc: 'left | right' }
+        ],
+        events: [],
+        usage: `<c-ui-chat-bubble text="承知しました！" author="自分" time="10:24" side="right"></c-ui-chat-bubble>`
+    },
+    {
+        id: 'uiMultiProgress',
+        title: 'UI Multi Progress',
+        icon: '🧱',
+        category: 'フィードバック',
+        demo: 'multiprogress',
+        description:
+            'segments 配列 ([{ label, value, color }]) を 1 本のバーに積み上げ、凡例付きで構成比を表示。',
+        props: [
+            {
+                name: 'segments',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value, color }] の配列'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-multi-progress segments={data}></c-ui-multi-progress>`
     }
 ];
 
@@ -2387,7 +2454,11 @@ const JA_NAMES = {
     uiProgressButton: '処理中ボタン',
     uiVerticalTabs: '縦タブ',
     uiSnackbar: 'スナックバー',
-    uiCountUp: 'カウントアップ'
+    uiCountUp: 'カウントアップ',
+    uiColorInput: 'カラー入力',
+    uiTimeInput: '時刻入力',
+    uiChatBubble: 'チャットバブル',
+    uiMultiProgress: '多段プログレス'
 };
 
 const FILE_KEYS = [

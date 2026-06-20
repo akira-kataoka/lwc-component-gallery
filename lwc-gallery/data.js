@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T08:58:44.303Z",
+  "generatedAt": "2026-06-20T09:15:20.431Z",
   "components": [
     {
       "id": "uiBadge",
@@ -4065,6 +4065,152 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiCountUp — 汎用カウントアップ。\n * 0 から value までアニメーションで数値を増やして表示する。\n * prefix / suffix を前後に付けられる。play() メソッドで再生し直せる。\n */\nexport default class UiCountUp extends LightningElement {\n    /** 目標値 */\n    @api value = 0;\n    /** アニメーション時間(ms) */\n    @api duration = 1200;\n    /** 接頭辞（例: ¥） */\n    @api prefix = '';\n    /** 接尾辞（例: 件） */\n    @api suffix = '';\n\n    @track current = 0;\n    _timer;\n    _started = false;\n\n    renderedCallback() {\n        if (!this._started) {\n            this._started = true;\n            this.play();\n        }\n    }\n\n    /** アニメーションを最初から再生する */\n    @api\n    play() {\n        const target = Number(this.value) || 0;\n        const dur = Math.max(1, Number(this.duration) || 1000);\n        const steps = 30;\n        const interval = dur / steps;\n        let i = 0;\n        this.current = 0;\n        if (this._timer) {\n            clearInterval(this._timer);\n        }\n        // eslint-disable-next-line @lwc/lwc/no-async-operation\n        this._timer = setInterval(() => {\n            i += 1;\n            const t = i / steps;\n            const eased = 1 - Math.pow(1 - t, 3);\n            this.current = Math.round(target * eased);\n            if (i >= steps) {\n                this.current = target;\n                clearInterval(this._timer);\n            }\n        }, interval);\n    }\n\n    disconnectedCallback() {\n        if (this._timer) {\n            clearInterval(this._timer);\n        }\n    }\n\n    get display() {\n        return `${this.prefix}${this.current.toLocaleString('ja-JP')}${this.suffix}`;\n    }\n}\n",
         "css": ".ui-countup {\n    font-size: 1.8rem;\n    font-weight: 800;\n    color: #181818;\n    font-variant-numeric: tabular-nums;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Count Up</masterLabel>\n    <description>汎用カウントアップ。0から目標値までアニメーション表示、play()で再生。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiColorInput",
+      "title": "UI Color Input",
+      "icon": "🎨",
+      "category": "フォーム",
+      "demo": "colorinput",
+      "description": "ネイティブのカラーピッカーと HEX 表示を組み合わせた入力。変更時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "'#0176d3'",
+          "desc": "値（HEX）"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-color-input label=\"テーマ色\" value=\"#0176d3\" onchange={handleChange}></c-ui-color-input>",
+      "ja": "カラー入力",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-colorinput\">\n        <label lwc:if={label} class=\"ui-colorinput__label\">{label}</label>\n        <div class=\"ui-colorinput__field\">\n            <input\n                type=\"color\"\n                class=\"ui-colorinput__swatch\"\n                value={value}\n                oninput={handleInput}\n            />\n            <span class=\"ui-colorinput__hex\">{value}</span>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiColorInput — 汎用カラー入力。\n * ネイティブのカラーピッカーと HEX 表示を組み合わせた入力。\n * 変更時に change イベント (detail.value) を発火する。\n */\nexport default class UiColorInput extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 値（HEX） */\n    @api value = '#0176d3';\n\n    handleInput(event) {\n        this.value = event.target.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-colorinput {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-colorinput__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-colorinput__field {\n    display: inline-flex;\n    align-items: center;\n    gap: 10px;\n    height: 34px;\n    padding: 0 12px 0 6px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    background: #ffffff;\n    width: fit-content;\n}\n\n.ui-colorinput__swatch {\n    width: 28px;\n    height: 24px;\n    border: none;\n    background: transparent;\n    padding: 0;\n    cursor: pointer;\n}\n.ui-colorinput__swatch::-webkit-color-swatch-wrapper {\n    padding: 0;\n}\n.ui-colorinput__swatch::-webkit-color-swatch {\n    border: 1px solid #c9c9c9;\n    border-radius: 4px;\n}\n\n.ui-colorinput__hex {\n    font-family: 'SFMono-Regular', Consolas, monospace;\n    font-size: 0.82rem;\n    color: #181818;\n    text-transform: uppercase;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Color Input</masterLabel>\n    <description>汎用カラー入力。カラーピッカー＋HEX表示で change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiTimeInput",
+      "title": "UI Time Input",
+      "icon": "⏰",
+      "category": "フォーム",
+      "demo": "timeinput",
+      "description": "ラベル付きの時刻入力。変更時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "''",
+          "desc": "値（HH:mm）"
+        },
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で無効化"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-time-input label=\"開始時刻\" onchange={handleChange}></c-ui-time-input>",
+      "ja": "時刻入力",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-timeinput\">\n        <label lwc:if={label} class=\"ui-timeinput__label\">{label}</label>\n        <input\n            type=\"time\"\n            class=\"ui-timeinput__field\"\n            value={value}\n            disabled={disabled}\n            onchange={handleChange}\n        />\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiTimeInput — 汎用時刻入力。\n * ラベル付きの時刻入力。変更時に change イベント (detail.value) を発火する。\n */\nexport default class UiTimeInput extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 値（HH:mm） */\n    @api value = '';\n    /** true で無効化 */\n    @api disabled = false;\n\n    handleChange(event) {\n        this.value = event.target.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-timeinput {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-timeinput__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-timeinput__field {\n    height: 34px;\n    padding: 0 12px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    font-size: 0.875rem;\n    color: #181818;\n    background: #ffffff;\n    font-family: inherit;\n    width: fit-content;\n}\n\n.ui-timeinput__field:focus {\n    outline: none;\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n\n.ui-timeinput__field:disabled {\n    background: #f3f3f3;\n    color: #969492;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Time Input</masterLabel>\n    <description>汎用時刻入力。ラベル付き時刻入力で change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiChatBubble",
+      "title": "UI Chat Bubble",
+      "icon": "💬",
+      "category": "表示",
+      "demo": "chatbubble",
+      "description": "text・author・time を吹き出しで表示。side=right で自分側（右・青）、left で相手側（左・グレー）。",
+      "props": [
+        {
+          "name": "text",
+          "type": "String",
+          "def": "—",
+          "desc": "本文"
+        },
+        {
+          "name": "author",
+          "type": "String",
+          "def": "—",
+          "desc": "送信者名"
+        },
+        {
+          "name": "time",
+          "type": "String",
+          "def": "—",
+          "desc": "時刻"
+        },
+        {
+          "name": "side",
+          "type": "String",
+          "def": "'left'",
+          "desc": "left | right"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-chat-bubble text=\"承知しました！\" author=\"自分\" time=\"10:24\" side=\"right\"></c-ui-chat-bubble>",
+      "ja": "チャットバブル",
+      "files": {
+        "html": "<template>\n    <div class={rootClass}>\n        <div class=\"ui-chat__bubble\">\n            <p class=\"ui-chat__text\">{text}</p>\n        </div>\n        <div lwc:if={hasMeta} class=\"ui-chat__meta\">\n            <span lwc:if={author} class=\"ui-chat__author\">{author}</span>\n            <span lwc:if={time} class=\"ui-chat__time\">{time}</span>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiChatBubble — 汎用チャットバブル。\n * text・author・time を吹き出しで表示する。side='right' で自分側（右寄せ・青）、\n * 'left' で相手側（左寄せ・グレー）になる。\n */\nexport default class UiChatBubble extends LightningElement {\n    /** 本文 */\n    @api text;\n    /** 送信者名 */\n    @api author;\n    /** 時刻 */\n    @api time;\n    /** 表示側: left | right */\n    @api side = 'left';\n\n    get rootClass() {\n        const side = this.side === 'right' ? 'right' : 'left';\n        return `ui-chat ui-chat_${side}`;\n    }\n\n    get hasMeta() {\n        return !!this.author || !!this.time;\n    }\n}\n",
+        "css": ".ui-chat {\n    display: flex;\n    flex-direction: column;\n    max-width: 78%;\n}\n\n.ui-chat_left {\n    align-items: flex-start;\n    margin-right: auto;\n}\n.ui-chat_right {\n    align-items: flex-end;\n    margin-left: auto;\n}\n\n.ui-chat__bubble {\n    padding: 9px 13px;\n    border-radius: 14px;\n    font-size: 0.875rem;\n    line-height: 1.5;\n}\n\n.ui-chat_left .ui-chat__bubble {\n    background: #f0f0f0;\n    color: #181818;\n    border-bottom-left-radius: 4px;\n}\n.ui-chat_right .ui-chat__bubble {\n    background: #0176d3;\n    color: #ffffff;\n    border-bottom-right-radius: 4px;\n}\n\n.ui-chat__text {\n    margin: 0;\n}\n\n.ui-chat__meta {\n    display: flex;\n    gap: 8px;\n    margin-top: 3px;\n    padding: 0 4px;\n    font-size: 0.7rem;\n    color: #969492;\n}\n\n.ui-chat__author {\n    font-weight: 600;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Chat Bubble</masterLabel>\n    <description>汎用チャットバブル。左右の吹き出しで会話を表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiMultiProgress",
+      "title": "UI Multi Progress",
+      "icon": "🧱",
+      "category": "フィードバック",
+      "demo": "multiprogress",
+      "description": "segments 配列 ([{ label, value, color }]) を 1 本のバーに積み上げ、凡例付きで構成比を表示。",
+      "props": [
+        {
+          "name": "segments",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value, color }] の配列"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-multi-progress segments={data}></c-ui-multi-progress>",
+      "ja": "多段プログレス",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-mprog\">\n        <div class=\"ui-mprog__track\">\n            <template for:each={bars} for:item=\"bar\">\n                <div key={bar.key} class=\"ui-mprog__seg\" style={bar.style}></div>\n            </template>\n        </div>\n        <ul class=\"ui-mprog__legend\">\n            <template for:each={legend} for:item=\"item\">\n                <li key={item.key} class=\"ui-mprog__item\">\n                    <span class=\"ui-mprog__sw\" style={item.swatchStyle}></span>\n                    <span class=\"ui-mprog__lbl\">{item.label}</span>\n                    <span class=\"ui-mprog__val\">{item.value}</span>\n                </li>\n            </template>\n        </ul>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiMultiProgress — 汎用多段プログレス。\n * segments 配列 ([{ label, value, color }]) を 1 本のバーに積み上げて表示し、\n * 凡例を併記する。構成比つきの進捗表現に使う。\n */\nexport default class UiMultiProgress extends LightningElement {\n    _segments = [];\n\n    /** [{ label, value, color }] の配列 */\n    @api\n    get segments() {\n        return this._segments;\n    }\n    set segments(value) {\n        this._segments = Array.isArray(value) ? value : [];\n    }\n\n    get total() {\n        return (\n            this._segments.reduce((a, s) => a + (Number(s.value) || 0), 0) || 1\n        );\n    }\n\n    get bars() {\n        return this._segments.map((s, i) => ({\n            key: i,\n            style: `width: ${((Number(s.value) || 0) / this.total) * 100}%; background: ${s.color};`\n        }));\n    }\n\n    get legend() {\n        return this._segments.map((s, i) => ({\n            key: i,\n            label: s.label,\n            value: Number(s.value) || 0,\n            swatchStyle: `background: ${s.color}`\n        }));\n    }\n}\n",
+        "css": ".ui-mprog {\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    gap: 10px;\n}\n\n.ui-mprog__track {\n    display: flex;\n    width: 100%;\n    height: 12px;\n    border-radius: 6px;\n    overflow: hidden;\n    background: #ececec;\n}\n\n.ui-mprog__seg {\n    height: 100%;\n    transition: width 0.3s ease;\n}\n\n.ui-mprog__legend {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n    display: flex;\n    flex-wrap: wrap;\n    gap: 6px 16px;\n}\n\n.ui-mprog__item {\n    display: flex;\n    align-items: center;\n    gap: 6px;\n    font-size: 0.78rem;\n}\n\n.ui-mprog__sw {\n    width: 10px;\n    height: 10px;\n    border-radius: 3px;\n    flex-shrink: 0;\n}\n\n.ui-mprog__lbl {\n    color: #444444;\n}\n\n.ui-mprog__val {\n    font-weight: 700;\n    color: #181818;\n    font-variant-numeric: tabular-nums;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Multi Progress</masterLabel>\n    <description>汎用多段プログレス。複数セグメントを1本のバーに積み上げ凡例付きで表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

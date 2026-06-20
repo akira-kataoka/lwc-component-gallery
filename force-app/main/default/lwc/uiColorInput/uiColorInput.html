@@ -1,0 +1,14 @@
+<template>
+    <div class="ui-colorinput">
+        <label lwc:if={label} class="ui-colorinput__label">{label}</label>
+        <div class="ui-colorinput__field">
+            <input
+                type="color"
+                class="ui-colorinput__swatch"
+                value={value}
+                oninput={handleInput}
+            />
+            <span class="ui-colorinput__hex">{value}</span>
+        </div>
+    </div>
+</template>

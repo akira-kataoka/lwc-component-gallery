@@ -1,0 +1,46 @@
+.ui-colorinput {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ui-colorinput__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-colorinput__field {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 34px;
+    padding: 0 12px 0 6px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    background: #ffffff;
+    width: fit-content;
+}
+
+.ui-colorinput__swatch {
+    width: 28px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+.ui-colorinput__swatch::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+.ui-colorinput__swatch::-webkit-color-swatch {
+    border: 1px solid #c9c9c9;
+    border-radius: 4px;
+}
+
+.ui-colorinput__hex {
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.82rem;
+    color: #181818;
+    text-transform: uppercase;
+}

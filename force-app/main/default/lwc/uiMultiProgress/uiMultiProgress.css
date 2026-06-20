@@ -1,0 +1,53 @@
+.ui-mprog {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ui-mprog__track {
+    display: flex;
+    width: 100%;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #ececec;
+}
+
+.ui-mprog__seg {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.ui-mprog__legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+}
+
+.ui-mprog__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+}
+
+.ui-mprog__sw {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.ui-mprog__lbl {
+    color: #444444;
+}
+
+.ui-mprog__val {
+    font-weight: 700;
+    color: #181818;
+    font-variant-numeric: tabular-nums;
+}

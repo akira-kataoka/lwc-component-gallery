@@ -3091,6 +3091,73 @@
             ]);
             replay.addEventListener('click', play);
             controls.appendChild(replay);
+        },
+
+        colorinput(box, controls) {
+            let value = '#0176d3';
+            const out = el('span', { class: 'demo__out', text: '色: #0176d3' });
+            const hex = el('span', { class: 'ui-colorinput__hex', text: value });
+            const sw = el('input', { type: 'color', class: 'ui-colorinput__swatch', value: value });
+            sw.addEventListener('input', () => {
+                value = sw.value;
+                hex.textContent = value;
+                out.textContent = '色: ' + value;
+            });
+            box.appendChild(el('div', { class: 'ui-colorinput' }, [
+                el('label', { class: 'ui-colorinput__label', text: 'テーマ色' }),
+                el('div', { class: 'ui-colorinput__field' }, [sw, hex])
+            ]));
+            controls.appendChild(out);
+        },
+
+        timeinput(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '時刻: 09:30' });
+            const input = el('input', { type: 'time', class: 'ui-timeinput__field', value: '09:30' });
+            input.addEventListener('change', () => {
+                out.textContent = '時刻: ' + (input.value || '未選択');
+            });
+            box.appendChild(el('div', { class: 'ui-timeinput' }, [
+                el('label', { class: 'ui-timeinput__label', text: '開始時刻' }),
+                input
+            ]));
+            controls.appendChild(out);
+        },
+
+        chatbubble(box) {
+            const msgs = [
+                ['left', 'こんにちは！ご注文の件でご連絡しました。', 'サポート', '10:21'],
+                ['right', 'ありがとうございます。確認します。', '自分', '10:22'],
+                ['left', 'よろしくお願いします😊', 'サポート', '10:23']
+            ];
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:8px;width:100%;max-width:420px' });
+            msgs.forEach((m) => {
+                col.appendChild(el('div', { class: 'ui-chat ui-chat_' + m[0] }, [
+                    el('div', { class: 'ui-chat__bubble' }, [el('p', { class: 'ui-chat__text', text: m[1] })]),
+                    el('div', { class: 'ui-chat__meta' }, [
+                        el('span', { class: 'ui-chat__author', text: m[2] }),
+                        el('span', { class: 'ui-chat__time', text: m[3] })
+                    ])
+                ]));
+            });
+            box.appendChild(col);
+        },
+
+        multiprogress(box) {
+            const segs = [['完了', 48, '#2e844a'], ['進行中', 26, '#0176d3'], ['未着手', 18, '#dd7a01'], ['保留', 8, '#969492']];
+            const total = segs.reduce((a, s) => a + s[1], 0);
+            const track = el('div', { class: 'ui-mprog__track' });
+            segs.forEach((s) => {
+                track.appendChild(el('div', { class: 'ui-mprog__seg', style: 'width:' + (s[1] / total * 100) + '%;background:' + s[2] }));
+            });
+            const legend = el('ul', { class: 'ui-mprog__legend' });
+            segs.forEach((s) => {
+                legend.appendChild(el('li', { class: 'ui-mprog__item' }, [
+                    el('span', { class: 'ui-mprog__sw', style: 'background:' + s[2] }),
+                    el('span', { class: 'ui-mprog__lbl', text: s[0] }),
+                    el('span', { class: 'ui-mprog__val', text: String(s[1]) })
+                ]));
+            });
+            box.appendChild(el('div', { class: 'ui-mprog', style: 'width:100%;max-width:420px' }, [track, legend]));
         }
     };
 

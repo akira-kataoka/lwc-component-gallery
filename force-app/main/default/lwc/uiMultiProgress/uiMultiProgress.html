@@ -1,0 +1,18 @@
+<template>
+    <div class="ui-mprog">
+        <div class="ui-mprog__track">
+            <template for:each={bars} for:item="bar">
+                <div key={bar.key} class="ui-mprog__seg" style={bar.style}></div>
+            </template>
+        </div>
+        <ul class="ui-mprog__legend">
+            <template for:each={legend} for:item="item">
+                <li key={item.key} class="ui-mprog__item">
+                    <span class="ui-mprog__sw" style={item.swatchStyle}></span>
+                    <span class="ui-mprog__lbl">{item.label}</span>
+                    <span class="ui-mprog__val">{item.value}</span>
+                </li>
+            </template>
+        </ul>
+    </div>
+</template>

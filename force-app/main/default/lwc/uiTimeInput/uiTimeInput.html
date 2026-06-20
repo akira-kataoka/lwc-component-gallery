@@ -1,0 +1,12 @@
+<template>
+    <div class="ui-timeinput">
+        <label lwc:if={label} class="ui-timeinput__label">{label}</label>
+        <input
+            type="time"
+            class="ui-timeinput__field"
+            value={value}
+            disabled={disabled}
+            onchange={handleChange}
+        />
+    </div>
+</template>
