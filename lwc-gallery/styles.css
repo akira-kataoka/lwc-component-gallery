@@ -538,7 +538,8 @@ html[data-theme='dark'] .demo__out {
 
 /* コードブロック内の <code> は素の表示（チップ背景を打ち消す） */
 .source__code code,
-.usage-code code {
+.usage-code code,
+.ui-codeblock__pre code {
     background: none;
     color: inherit;
     padding: 0;

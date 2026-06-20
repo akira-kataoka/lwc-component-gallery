@@ -2910,6 +2910,15 @@
     tab-size: 4;
 }
 
+/* 内側の <code> は素のまま（地の background/padding を打ち消す） */
+.ui-codeblock__pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font: inherit;
+}
+
 
 /* ===== uiVerticalSteps ===== */
 .ui-vsteps {
