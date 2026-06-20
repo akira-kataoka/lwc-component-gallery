@@ -1,0 +1,15 @@
+<template>
+    <div class="ui-currency">
+        <label lwc:if={label} class="ui-currency__label">{label}</label>
+        <div class="ui-currency__field">
+            <span class="ui-currency__symbol">{symbol}</span>
+            <input
+                class="ui-currency__input"
+                type="text"
+                inputmode="numeric"
+                value={display}
+                oninput={handleInput}
+            />
+        </div>
+    </div>
+</template>

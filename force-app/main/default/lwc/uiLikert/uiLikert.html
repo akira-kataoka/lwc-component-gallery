@@ -1,0 +1,20 @@
+<template>
+    <div class="ui-likert">
+        <span class="ui-likert__end">{leftLabel}</span>
+        <div class="ui-likert__scale">
+            <template for:each={points} for:item="pt">
+                <button
+                    key={pt.key}
+                    class={pt.cssClass}
+                    type="button"
+                    data-value={pt.value}
+                    onclick={handleSelect}
+                    aria-label={pt.value}
+                >
+                    {pt.value}
+                </button>
+            </template>
+        </div>
+        <span class="ui-likert__end">{rightLabel}</span>
+    </div>
+</template>

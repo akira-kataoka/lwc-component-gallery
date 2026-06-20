@@ -1,0 +1,40 @@
+.ui-likert {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ui-likert__end {
+    font-size: 0.78rem;
+    color: #706e6b;
+    white-space: nowrap;
+}
+
+.ui-likert__scale {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.ui-likert__pt {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid #c9c9c9;
+    background: #ffffff;
+    color: #706e6b;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.12s ease;
+}
+.ui-likert__pt:hover {
+    border-color: #0176d3;
+    color: #0176d3;
+}
+
+.ui-likert__pt_on {
+    background: #0176d3;
+    border-color: #0176d3;
+    color: #ffffff;
+}

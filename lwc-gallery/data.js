@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T07:13:56.592Z",
+  "generatedAt": "2026-06-20T07:20:48.168Z",
   "components": [
     {
       "id": "uiBadge",
@@ -2474,6 +2474,160 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiInlineEdit — 汎用インライン編集。\n * 表示テキストをクリックすると入力に切替わり、Enter／フォーカスアウトで確定、\n * Esc で取消す。確定時に change イベント (detail.value) を発火する。\n */\nexport default class UiInlineEdit extends LightningElement {\n    /** 値 */\n    @api value = '';\n    /** 未入力時のプレースホルダ */\n    @api placeholder = 'クリックして編集';\n\n    @track editing = false;\n    @track draft = '';\n\n    get isEmpty() {\n        return !this.value;\n    }\n\n    get displayValue() {\n        return this.value || this.placeholder;\n    }\n\n    get displayClass() {\n        return this.isEmpty\n            ? 'ui-inlineedit__text ui-inlineedit__text_empty'\n            : 'ui-inlineedit__text';\n    }\n\n    startEdit() {\n        this.draft = this.value;\n        this.editing = true;\n    }\n\n    renderedCallback() {\n        if (this.editing) {\n            const input = this.template.querySelector('input');\n            if (input && document.activeElement !== input) {\n                input.focus();\n                input.select();\n            }\n        }\n    }\n\n    handleInput(event) {\n        this.draft = event.target.value;\n    }\n\n    commit() {\n        if (!this.editing) {\n            return;\n        }\n        this.value = this.draft;\n        this.editing = false;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n\n    cancel() {\n        this.editing = false;\n    }\n\n    handleKeydown(event) {\n        if (event.key === 'Enter') {\n            this.commit();\n        } else if (event.key === 'Escape') {\n            this.cancel();\n        }\n    }\n}\n",
         "css": ".ui-inlineedit {\n    display: inline-block;\n}\n\n.ui-inlineedit__display {\n    display: inline-flex;\n    align-items: center;\n    gap: 8px;\n    border: 1px solid transparent;\n    background: transparent;\n    padding: 5px 8px;\n    border-radius: 6px;\n    cursor: text;\n    font-size: 0.875rem;\n    color: #181818;\n    font-family: inherit;\n}\n.ui-inlineedit__display:hover {\n    background: #f3f3f3;\n    border-color: #e5e5e5;\n}\n\n.ui-inlineedit__text_empty {\n    color: #969492;\n}\n\n.ui-inlineedit__icon {\n    opacity: 0;\n    font-size: 0.8rem;\n    transition: opacity 0.12s ease;\n}\n.ui-inlineedit__display:hover .ui-inlineedit__icon {\n    opacity: 0.6;\n}\n\n.ui-inlineedit__input {\n    padding: 5px 8px;\n    border: 1px solid #0176d3;\n    border-radius: 6px;\n    font-size: 0.875rem;\n    color: #181818;\n    font-family: inherit;\n    outline: none;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Inline Edit</masterLabel>\n    <description>汎用インライン編集。クリックで編集、Enter/blurで確定し change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiOtpInput",
+      "title": "UI OTP Input",
+      "icon": "🔢",
+      "category": "フォーム",
+      "demo": "otpinput",
+      "description": "length 桁の 1 文字マスに入力し自動フォーカス移動。全桁で complete、変更で change イベントを発火。",
+      "props": [
+        {
+          "name": "length",
+          "type": "Number",
+          "def": "6",
+          "desc": "桁数"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "入力ごとに発火（detail.value）"
+        },
+        {
+          "name": "complete",
+          "desc": "全桁入力で発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-otp-input length=\"6\" oncomplete={handleComplete}></c-ui-otp-input>",
+      "ja": "OTP入力",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-otp\">\n        <template for:each={boxes} for:item=\"box\">\n            <input\n                key={box.key}\n                class=\"ui-otp__box\"\n                type=\"text\"\n                inputmode=\"numeric\"\n                maxlength=\"1\"\n                value={box.value}\n                data-index={box.index}\n                oninput={handleInput}\n                onkeydown={handleKeydown}\n            />\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiOtpInput — 汎用 OTP（ワンタイムコード）入力。\n * length 桁の 1 文字ずつのマス目に入力し、自動で次のマスへフォーカス移動する。\n * 全桁そろうと complete イベント (detail.value)、変更ごとに change イベントを発火する。\n */\nexport default class UiOtpInput extends LightningElement {\n    /** 桁数 */\n    @api length = 6;\n\n    @track _digits = [];\n\n    connectedCallback() {\n        this._digits = Array.from({ length: Number(this.length) || 6 }, () => '');\n    }\n\n    get boxes() {\n        return this._digits.map((d, i) => ({ key: i, index: i, value: d }));\n    }\n\n    get value() {\n        return this._digits.join('');\n    }\n\n    handleInput(event) {\n        const i = Number(event.target.dataset.index);\n        const ch = (event.target.value || '').replace(/[^0-9]/g, '').slice(-1);\n        this._digits = this._digits.map((d, idx) => (idx === i ? ch : d));\n        event.target.value = ch;\n        if (ch && i < this._digits.length - 1) {\n            const next = this.template.querySelector(`input[data-index=\"${i + 1}\"]`);\n            if (next) {\n                next.focus();\n            }\n        }\n        this.dispatchEvent(new CustomEvent('change', { detail: { value: this.value } }));\n        if (this.value.length === this._digits.length && !this._digits.includes('')) {\n            this.dispatchEvent(new CustomEvent('complete', { detail: { value: this.value } }));\n        }\n    }\n\n    handleKeydown(event) {\n        const i = Number(event.target.dataset.index);\n        if (event.key === 'Backspace' && !event.target.value && i > 0) {\n            const prev = this.template.querySelector(`input[data-index=\"${i - 1}\"]`);\n            if (prev) {\n                prev.focus();\n            }\n        }\n    }\n}\n",
+        "css": ".ui-otp {\n    display: inline-flex;\n    gap: 8px;\n}\n\n.ui-otp__box {\n    width: 40px;\n    height: 48px;\n    border: 1px solid #c9c9c9;\n    border-radius: 8px;\n    text-align: center;\n    font-size: 1.25rem;\n    font-weight: 700;\n    color: #181818;\n    background: #ffffff;\n    font-family: inherit;\n}\n\n.ui-otp__box:focus {\n    outline: none;\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI OTP Input</masterLabel>\n    <description>汎用OTP入力。桁ごとのマスで自動フォーカス移動し complete を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCurrencyInput",
+      "title": "UI Currency Input",
+      "icon": "💴",
+      "category": "フォーム",
+      "demo": "currencyinput",
+      "description": "3 桁区切りで整形しながら金額を入力し、記号を前置する。変更時に change イベント (detail.value = 数値) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "0",
+          "desc": "数値の値"
+        },
+        {
+          "name": "symbol",
+          "type": "String",
+          "def": "'¥'",
+          "desc": "通貨記号"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-currency-input label=\"金額\" onchange={handleChange}></c-ui-currency-input>",
+      "ja": "通貨入力",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-currency\">\n        <label lwc:if={label} class=\"ui-currency__label\">{label}</label>\n        <div class=\"ui-currency__field\">\n            <span class=\"ui-currency__symbol\">{symbol}</span>\n            <input\n                class=\"ui-currency__input\"\n                type=\"text\"\n                inputmode=\"numeric\"\n                value={display}\n                oninput={handleInput}\n            />\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiCurrencyInput — 汎用通貨入力。\n * 数値を 3 桁区切りで整形しながら入力し、記号を前置する。\n * 変更時に change イベント (detail.value = 数値) を発火する。\n */\nexport default class UiCurrencyInput extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 数値の値 */\n    @api value = 0;\n    /** 通貨記号 */\n    @api symbol = '¥';\n\n    get display() {\n        return Number(this.value || 0).toLocaleString('ja-JP');\n    }\n\n    handleInput(event) {\n        const raw = (event.target.value || '').replace(/[^0-9]/g, '');\n        this.value = raw ? Number(raw) : 0;\n        event.target.value = this.value.toLocaleString('ja-JP');\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-currency {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-currency__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-currency__field {\n    display: flex;\n    align-items: center;\n    height: 34px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    background: #ffffff;\n    overflow: hidden;\n}\n.ui-currency__field:focus-within {\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n\n.ui-currency__symbol {\n    padding: 0 8px 0 12px;\n    color: #706e6b;\n    font-weight: 600;\n}\n\n.ui-currency__input {\n    flex: 1;\n    border: none;\n    outline: none;\n    height: 100%;\n    padding: 0 12px 0 0;\n    font-size: 0.875rem;\n    color: #181818;\n    text-align: right;\n    font-family: inherit;\n    font-variant-numeric: tabular-nums;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Currency Input</masterLabel>\n    <description>汎用通貨入力。3桁区切りで整形し change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiPhoneInput",
+      "title": "UI Phone Input",
+      "icon": "📞",
+      "category": "フォーム",
+      "demo": "phoneinput",
+      "description": "数字のみ受け付け 3-4-4 のハイフン区切りに自動整形する電話番号入力。変更時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "''",
+          "desc": "整形済みの値"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-phone-input label=\"電話番号\" onchange={handleChange}></c-ui-phone-input>",
+      "ja": "電話番号入力",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-phone\">\n        <label lwc:if={label} class=\"ui-phone__label\">{label}</label>\n        <input\n            class=\"ui-phone__input\"\n            type=\"tel\"\n            inputmode=\"numeric\"\n            placeholder=\"090-1234-5678\"\n            value={value}\n            oninput={handleInput}\n        />\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiPhoneInput — 汎用電話番号入力。\n * 数字のみ受け付け、3-4-4 のハイフン区切りに自動整形する（最大 11 桁）。\n * 変更時に change イベント (detail.value) を発火する。\n */\nexport default class UiPhoneInput extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 値（整形済みの文字列） */\n    @api value = '';\n\n    format(digits) {\n        const d = digits.slice(0, 11);\n        if (d.length > 7) {\n            return `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`;\n        }\n        if (d.length > 3) {\n            return `${d.slice(0, 3)}-${d.slice(3)}`;\n        }\n        return d;\n    }\n\n    handleInput(event) {\n        const digits = (event.target.value || '').replace(/[^0-9]/g, '');\n        this.value = this.format(digits);\n        event.target.value = this.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-phone {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-phone__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-phone__input {\n    height: 34px;\n    padding: 0 12px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    font-size: 0.875rem;\n    color: #181818;\n    background: #ffffff;\n    font-family: inherit;\n    letter-spacing: 0.03em;\n}\n\n.ui-phone__input:focus {\n    outline: none;\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Phone Input</masterLabel>\n    <description>汎用電話番号入力。3-4-4のハイフン区切りに自動整形し change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiLikert",
+      "title": "UI Likert",
+      "icon": "😊",
+      "category": "フォーム",
+      "demo": "likert",
+      "description": "1〜5 の選択肢を丸で表示し両端にラベルを置くリッカート尺度。選択時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "—",
+          "desc": "選択値（1〜5）"
+        },
+        {
+          "name": "left-label",
+          "type": "String",
+          "def": "'不満'",
+          "desc": "左端ラベル"
+        },
+        {
+          "name": "right-label",
+          "type": "String",
+          "def": "'満足'",
+          "desc": "右端ラベル"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-likert left-label=\"不満\" right-label=\"満足\" onchange={handleChange}></c-ui-likert>",
+      "ja": "リッカート尺度",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-likert\">\n        <span class=\"ui-likert__end\">{leftLabel}</span>\n        <div class=\"ui-likert__scale\">\n            <template for:each={points} for:item=\"pt\">\n                <button\n                    key={pt.key}\n                    class={pt.cssClass}\n                    type=\"button\"\n                    data-value={pt.value}\n                    onclick={handleSelect}\n                    aria-label={pt.value}\n                >\n                    {pt.value}\n                </button>\n            </template>\n        </div>\n        <span class=\"ui-likert__end\">{rightLabel}</span>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiLikert — 汎用リッカート尺度（5 段階）。\n * 1〜5 の選択肢を丸で表示し、両端にラベルを置く。\n * 選択時に change イベント (detail.value) を発火する。\n */\nexport default class UiLikert extends LightningElement {\n    /** 選択値（1〜5） */\n    @api value;\n    /** 左端ラベル */\n    @api leftLabel = '不満';\n    /** 右端ラベル */\n    @api rightLabel = '満足';\n\n    get points() {\n        return [1, 2, 3, 4, 5].map((n) => ({\n            key: n,\n            value: n,\n            cssClass:\n                Number(this.value) === n\n                    ? 'ui-likert__pt ui-likert__pt_on'\n                    : 'ui-likert__pt'\n        }));\n    }\n\n    handleSelect(event) {\n        this.value = Number(event.currentTarget.dataset.value);\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-likert {\n    display: inline-flex;\n    align-items: center;\n    gap: 12px;\n}\n\n.ui-likert__end {\n    font-size: 0.78rem;\n    color: #706e6b;\n    white-space: nowrap;\n}\n\n.ui-likert__scale {\n    display: inline-flex;\n    gap: 8px;\n}\n\n.ui-likert__pt {\n    width: 34px;\n    height: 34px;\n    border-radius: 50%;\n    border: 1px solid #c9c9c9;\n    background: #ffffff;\n    color: #706e6b;\n    font-size: 0.85rem;\n    font-weight: 700;\n    cursor: pointer;\n    font-family: inherit;\n    transition: all 0.12s ease;\n}\n.ui-likert__pt:hover {\n    border-color: #0176d3;\n    color: #0176d3;\n}\n\n.ui-likert__pt_on {\n    background: #0176d3;\n    border-color: #0176d3;\n    color: #ffffff;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Likert</masterLabel>\n    <description>汎用リッカート尺度（5段階）。両端ラベル付きで change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

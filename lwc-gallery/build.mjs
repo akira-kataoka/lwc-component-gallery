@@ -1483,6 +1483,70 @@ const COMPONENTS = [
         ],
         events: [{ name: 'change', desc: '確定時に発火（detail.value）' }],
         usage: `<c-ui-inline-edit value="タイトル" onchange={handleChange}></c-ui-inline-edit>`
+    },
+    {
+        id: 'uiOtpInput',
+        title: 'UI OTP Input',
+        icon: '🔢',
+        category: 'フォーム',
+        demo: 'otpinput',
+        description:
+            'length 桁の 1 文字マスに入力し自動フォーカス移動。全桁で complete、変更で change イベントを発火。',
+        props: [
+            { name: 'length', type: 'Number', def: '6', desc: '桁数' }
+        ],
+        events: [
+            { name: 'change', desc: '入力ごとに発火（detail.value）' },
+            { name: 'complete', desc: '全桁入力で発火（detail.value）' }
+        ],
+        usage: `<c-ui-otp-input length="6" oncomplete={handleComplete}></c-ui-otp-input>`
+    },
+    {
+        id: 'uiCurrencyInput',
+        title: 'UI Currency Input',
+        icon: '💴',
+        category: 'フォーム',
+        demo: 'currencyinput',
+        description:
+            '3 桁区切りで整形しながら金額を入力し、記号を前置する。変更時に change イベント (detail.value = 数値) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'Number', def: '0', desc: '数値の値' },
+            { name: 'symbol', type: 'String', def: "'¥'", desc: '通貨記号' }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.value）' }],
+        usage: `<c-ui-currency-input label="金額" onchange={handleChange}></c-ui-currency-input>`
+    },
+    {
+        id: 'uiPhoneInput',
+        title: 'UI Phone Input',
+        icon: '📞',
+        category: 'フォーム',
+        demo: 'phoneinput',
+        description:
+            '数字のみ受け付け 3-4-4 のハイフン区切りに自動整形する電話番号入力。変更時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'String', def: "''", desc: '整形済みの値' }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.value）' }],
+        usage: `<c-ui-phone-input label="電話番号" onchange={handleChange}></c-ui-phone-input>`
+    },
+    {
+        id: 'uiLikert',
+        title: 'UI Likert',
+        icon: '😊',
+        category: 'フォーム',
+        demo: 'likert',
+        description:
+            '1〜5 の選択肢を丸で表示し両端にラベルを置くリッカート尺度。選択時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'value', type: 'Number', def: '—', desc: '選択値（1〜5）' },
+            { name: 'left-label', type: 'String', def: "'不満'", desc: '左端ラベル' },
+            { name: 'right-label', type: 'String', def: "'満足'", desc: '右端ラベル' }
+        ],
+        events: [{ name: 'change', desc: '選択時に発火（detail.value）' }],
+        usage: `<c-ui-likert left-label="不満" right-label="満足" onchange={handleChange}></c-ui-likert>`
     }
 ];
 
@@ -1552,7 +1616,11 @@ const JA_NAMES = {
     uiSparkline: 'スパークライン',
     uiBarChart: '棒グラフ',
     uiChoiceChips: '選択チップ',
-    uiInlineEdit: 'インライン編集'
+    uiInlineEdit: 'インライン編集',
+    uiOtpInput: 'OTP入力',
+    uiCurrencyInput: '通貨入力',
+    uiPhoneInput: '電話番号入力',
+    uiLikert: 'リッカート尺度'
 };
 
 const FILE_KEYS = [

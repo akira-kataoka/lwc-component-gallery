@@ -1,0 +1,17 @@
+<template>
+    <div class="ui-otp">
+        <template for:each={boxes} for:item="box">
+            <input
+                key={box.key}
+                class="ui-otp__box"
+                type="text"
+                inputmode="numeric"
+                maxlength="1"
+                value={box.value}
+                data-index={box.index}
+                oninput={handleInput}
+                onkeydown={handleKeydown}
+            />
+        </template>
+    </div>
+</template>

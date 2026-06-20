@@ -1,0 +1,44 @@
+.ui-currency {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ui-currency__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-currency__field {
+    display: flex;
+    align-items: center;
+    height: 34px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    background: #ffffff;
+    overflow: hidden;
+}
+.ui-currency__field:focus-within {
+    border-color: #0176d3;
+    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);
+}
+
+.ui-currency__symbol {
+    padding: 0 8px 0 12px;
+    color: #706e6b;
+    font-weight: 600;
+}
+
+.ui-currency__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    height: 100%;
+    padding: 0 12px 0 0;
+    font-size: 0.875rem;
+    color: #181818;
+    text-align: right;
+    font-family: inherit;
+    font-variant-numeric: tabular-nums;
+}

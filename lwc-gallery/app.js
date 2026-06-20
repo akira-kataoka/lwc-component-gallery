@@ -2035,6 +2035,110 @@
             render();
             box.appendChild(host);
             controls.appendChild(out);
+        },
+
+        otpinput(box, controls) {
+            const len = 6;
+            const digits = Array(len).fill('');
+            const out = el('span', { class: 'demo__out', text: 'コード: ------' });
+            const wrap = el('div', { class: 'ui-otp' });
+            const inputs = [];
+            const refreshOut = () => {
+                out.textContent = 'コード: ' + digits.map((d) => d || '-').join('');
+            };
+            for (let i = 0; i < len; i += 1) {
+                const inp = el('input', { class: 'ui-otp__box', type: 'text', inputmode: 'numeric', maxlength: '1' });
+                inp.addEventListener('input', ((idx) => () => {
+                    const ch = inputs[idx].value.replace(/[^0-9]/g, '').slice(-1);
+                    inputs[idx].value = ch;
+                    digits[idx] = ch;
+                    if (ch && idx < len - 1) {
+                        inputs[idx + 1].focus();
+                    }
+                    refreshOut();
+                })(i));
+                inp.addEventListener('keydown', ((idx) => (e) => {
+                    if (e.key === 'Backspace' && !inputs[idx].value && idx > 0) {
+                        inputs[idx - 1].focus();
+                    }
+                })(i));
+                inputs.push(inp);
+                wrap.appendChild(inp);
+            }
+            box.appendChild(wrap);
+            controls.appendChild(out);
+        },
+
+        currencyinput(box, controls) {
+            let value = 12800;
+            const out = el('span', { class: 'demo__out', text: '値: 12800' });
+            const input = el('input', { class: 'ui-currency__input', type: 'text', inputmode: 'numeric', value: value.toLocaleString('ja-JP') });
+            input.addEventListener('input', () => {
+                const raw = input.value.replace(/[^0-9]/g, '');
+                value = raw ? Number(raw) : 0;
+                input.value = value.toLocaleString('ja-JP');
+                out.textContent = '値: ' + value;
+            });
+            box.appendChild(
+                el('div', { class: 'ui-currency', style: 'max-width:200px' }, [
+                    el('label', { class: 'ui-currency__label', text: '金額' }),
+                    el('div', { class: 'ui-currency__field' }, [
+                        el('span', { class: 'ui-currency__symbol', text: '¥' }),
+                        input
+                    ])
+                ])
+            );
+            controls.appendChild(out);
+        },
+
+        phoneinput(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '値: （空）' });
+            const fmt = (digits) => {
+                const d = digits.slice(0, 11);
+                if (d.length > 7) return d.slice(0, 3) + '-' + d.slice(3, 7) + '-' + d.slice(7);
+                if (d.length > 3) return d.slice(0, 3) + '-' + d.slice(3);
+                return d;
+            };
+            const input = el('input', { class: 'ui-phone__input', type: 'tel', inputmode: 'numeric', placeholder: '090-1234-5678' });
+            input.addEventListener('input', () => {
+                const d = input.value.replace(/[^0-9]/g, '');
+                input.value = fmt(d);
+                out.textContent = '値: ' + (input.value || '（空）');
+            });
+            box.appendChild(
+                el('div', { class: 'ui-phone', style: 'max-width:220px' }, [
+                    el('label', { class: 'ui-phone__label', text: '電話番号' }),
+                    input
+                ])
+            );
+            controls.appendChild(out);
+        },
+
+        likert(box, controls) {
+            let value = 4;
+            const out = el('span', { class: 'demo__out', text: '評価: 4' });
+            const scale = el('div', { class: 'ui-likert__scale' });
+            function render() {
+                scale.innerHTML = '';
+                [1, 2, 3, 4, 5].forEach((n) => {
+                    const b = el('button', { class: 'ui-likert__pt' + (n === value ? ' ui-likert__pt_on' : ''), type: 'button', text: String(n) });
+                    b.addEventListener('click', () => {
+                        value = n;
+                        out.textContent = '評価: ' + n;
+                        render();
+                    });
+                    scale.appendChild(b);
+                });
+            }
+            render();
+            box.appendChild(
+                el('div', { class: 'ui-likert' }, [
+                    el('span', { class: 'ui-likert__end', text: '不満' }),
+                    scale,
+                    el('span', { class: 'ui-likert__end', text: '満足' })
+                ])
+            );
+            controls.appendChild(out);
         }
     };
 
