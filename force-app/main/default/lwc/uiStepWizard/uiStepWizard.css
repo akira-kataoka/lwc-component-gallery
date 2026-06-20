@@ -1,0 +1,95 @@
+.ui-wizard {
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff;
+    width: 100%;
+}
+
+.ui-wizard__steps {
+    display: flex;
+    margin: 0;
+    padding: 14px 16px;
+    list-style: none;
+    border-bottom: 1px solid #ececec;
+    background: #fafaf9;
+}
+
+.ui-wizard__step {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex: 1;
+    font-size: 0.78rem;
+    color: #706e6b;
+}
+
+.ui-wizard__marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #dddbda;
+    background: #ffffff;
+    font-size: 0.74rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.ui-wizard__step_complete .ui-wizard__marker {
+    background: #2e844a;
+    border-color: #2e844a;
+    color: #ffffff;
+}
+.ui-wizard__step_current .ui-wizard__marker {
+    border-color: #0176d3;
+    color: #0176d3;
+}
+.ui-wizard__step_current {
+    color: #0176d3;
+    font-weight: 700;
+}
+
+.ui-wizard__content {
+    padding: 20px 18px;
+    min-height: 70px;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #444444;
+}
+
+.ui-wizard__footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-top: 1px solid #ececec;
+}
+
+.ui-wizard__btn {
+    height: 32px;
+    padding: 0 16px;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    border: 1px solid transparent;
+}
+.ui-wizard__btn_neutral {
+    background: #ffffff;
+    border-color: #c9c9c9;
+    color: #514f4d;
+}
+.ui-wizard__btn_neutral:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.ui-wizard__btn_brand {
+    background: #0176d3;
+    color: #ffffff;
+}
+.ui-wizard__btn_brand:hover {
+    background: #014486;
+}

@@ -1,0 +1,30 @@
+<template>
+    <div class="ui-wizard">
+        <ol class="ui-wizard__steps">
+            <template for:each={markers} for:item="m">
+                <li key={m.key} class={m.cssClass}>
+                    <span class="ui-wizard__marker">{m.marker}</span>
+                    <span class="ui-wizard__label">{m.label}</span>
+                </li>
+            </template>
+        </ol>
+        <div class="ui-wizard__content">{activeContent}</div>
+        <div class="ui-wizard__footer">
+            <button
+                class="ui-wizard__btn ui-wizard__btn_neutral"
+                type="button"
+                disabled={isFirst}
+                onclick={handlePrev}
+            >
+                戻る
+            </button>
+            <button
+                class="ui-wizard__btn ui-wizard__btn_brand"
+                type="button"
+                onclick={handleNext}
+            >
+                {nextLabel}
+            </button>
+        </div>
+    </div>
+</template>

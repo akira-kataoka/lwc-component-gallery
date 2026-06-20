@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T09:15:20.431Z",
+  "generatedAt": "2026-06-20T09:26:59.989Z",
   "components": [
     {
       "id": "uiBadge",
@@ -4211,6 +4211,184 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiMultiProgress — 汎用多段プログレス。\n * segments 配列 ([{ label, value, color }]) を 1 本のバーに積み上げて表示し、\n * 凡例を併記する。構成比つきの進捗表現に使う。\n */\nexport default class UiMultiProgress extends LightningElement {\n    _segments = [];\n\n    /** [{ label, value, color }] の配列 */\n    @api\n    get segments() {\n        return this._segments;\n    }\n    set segments(value) {\n        this._segments = Array.isArray(value) ? value : [];\n    }\n\n    get total() {\n        return (\n            this._segments.reduce((a, s) => a + (Number(s.value) || 0), 0) || 1\n        );\n    }\n\n    get bars() {\n        return this._segments.map((s, i) => ({\n            key: i,\n            style: `width: ${((Number(s.value) || 0) / this.total) * 100}%; background: ${s.color};`\n        }));\n    }\n\n    get legend() {\n        return this._segments.map((s, i) => ({\n            key: i,\n            label: s.label,\n            value: Number(s.value) || 0,\n            swatchStyle: `background: ${s.color}`\n        }));\n    }\n}\n",
         "css": ".ui-mprog {\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    gap: 10px;\n}\n\n.ui-mprog__track {\n    display: flex;\n    width: 100%;\n    height: 12px;\n    border-radius: 6px;\n    overflow: hidden;\n    background: #ececec;\n}\n\n.ui-mprog__seg {\n    height: 100%;\n    transition: width 0.3s ease;\n}\n\n.ui-mprog__legend {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n    display: flex;\n    flex-wrap: wrap;\n    gap: 6px 16px;\n}\n\n.ui-mprog__item {\n    display: flex;\n    align-items: center;\n    gap: 6px;\n    font-size: 0.78rem;\n}\n\n.ui-mprog__sw {\n    width: 10px;\n    height: 10px;\n    border-radius: 3px;\n    flex-shrink: 0;\n}\n\n.ui-mprog__lbl {\n    color: #444444;\n}\n\n.ui-mprog__val {\n    font-weight: 700;\n    color: #181818;\n    font-variant-numeric: tabular-nums;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Multi Progress</masterLabel>\n    <description>汎用多段プログレス。複数セグメントを1本のバーに積み上げ凡例付きで表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiContactCard",
+      "title": "UI Contact Card",
+      "icon": "👤",
+      "category": "表示",
+      "demo": "contactcard",
+      "description": "アバター（画像/イニシャル）・氏名・役職とメール／電話アクションを表示する連絡先カード。action イベント (detail.type) を発火。",
+      "props": [
+        {
+          "name": "name",
+          "type": "String",
+          "def": "''",
+          "desc": "氏名"
+        },
+        {
+          "name": "role",
+          "type": "String",
+          "def": "—",
+          "desc": "役職・所属"
+        },
+        {
+          "name": "avatar-url",
+          "type": "String",
+          "def": "—",
+          "desc": "アバター画像 URL"
+        }
+      ],
+      "events": [
+        {
+          "name": "action",
+          "desc": "メール/電話押下で発火（detail.type）"
+        }
+      ],
+      "usage": "<c-ui-contact-card name=\"田中 太郎\" role=\"営業部 課長\" onaction={handleAction}></c-ui-contact-card>",
+      "ja": "連絡先カード",
+      "files": {
+        "html": "<template>\n    <article class=\"ui-contact\">\n        <span class=\"ui-contact__avatar\">\n            <img\n                lwc:if={hasImage}\n                src={avatarUrl}\n                alt={name}\n                class=\"ui-contact__img\"\n            />\n            <span lwc:else class=\"ui-contact__initials\">{initials}</span>\n        </span>\n        <div class=\"ui-contact__body\">\n            <span class=\"ui-contact__name\">{name}</span>\n            <span lwc:if={role} class=\"ui-contact__role\">{role}</span>\n        </div>\n        <div class=\"ui-contact__actions\">\n            <button\n                class=\"ui-contact__act\"\n                type=\"button\"\n                title=\"メール\"\n                onclick={handleMail}\n            >\n                ✉️\n            </button>\n            <button\n                class=\"ui-contact__act\"\n                type=\"button\"\n                title=\"電話\"\n                onclick={handlePhone}\n            >\n                📞\n            </button>\n        </div>\n    </article>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiContactCard — 連絡先カード。\n * アバター（画像またはイニシャル）・氏名・役職と、メール／電話のアクションを表示する。\n * アクション押下で action イベント (detail.type) を発火する。\n */\nexport default class UiContactCard extends LightningElement {\n    /** 氏名 */\n    @api name = '';\n    /** 役職・所属 */\n    @api role;\n    /** アバター画像 URL（任意） */\n    @api avatarUrl;\n\n    get hasImage() {\n        return !!this.avatarUrl;\n    }\n\n    get initials() {\n        const t = (this.name || '').trim();\n        if (!t) {\n            return '?';\n        }\n        const p = t.split(/\\s+/);\n        return p.length === 1\n            ? p[0].slice(0, 2).toUpperCase()\n            : (p[0][0] + p[1][0]).toUpperCase();\n    }\n\n    handleMail() {\n        this.dispatchEvent(new CustomEvent('action', { detail: { type: 'mail' } }));\n    }\n\n    handlePhone() {\n        this.dispatchEvent(new CustomEvent('action', { detail: { type: 'phone' } }));\n    }\n}\n",
+        "css": ".ui-contact {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 12px 14px;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 10px;\n    min-width: 240px;\n}\n\n.ui-contact__avatar {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 44px;\n    height: 44px;\n    border-radius: 50%;\n    background: #0176d3;\n    color: #ffffff;\n    font-weight: 700;\n    overflow: hidden;\n    flex-shrink: 0;\n}\n\n.ui-contact__img {\n    width: 100%;\n    height: 100%;\n    object-fit: cover;\n}\n\n.ui-contact__body {\n    display: flex;\n    flex-direction: column;\n    min-width: 0;\n    flex: 1;\n}\n\n.ui-contact__name {\n    font-size: 0.9rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-contact__role {\n    font-size: 0.76rem;\n    color: #706e6b;\n}\n\n.ui-contact__actions {\n    display: flex;\n    gap: 4px;\n}\n\n.ui-contact__act {\n    width: 32px;\n    height: 32px;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    background: #fafaf9;\n    cursor: pointer;\n    font-size: 0.95rem;\n}\n.ui-contact__act:hover {\n    background: #eef4ff;\n    border-color: #0176d3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Contact Card</masterLabel>\n    <description>連絡先カード。アバター・氏名・役職とメール/電話アクションを表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiPriceCard",
+      "title": "UI Price Card",
+      "icon": "💳",
+      "category": "表示",
+      "demo": "pricecard",
+      "description": "プラン名・価格・期間・特長リスト・CTA を持つ料金プランカード。featured で強調し CTA で select を発火。",
+      "props": [
+        {
+          "name": "plan",
+          "type": "String",
+          "def": "—",
+          "desc": "プラン名"
+        },
+        {
+          "name": "price",
+          "type": "String",
+          "def": "—",
+          "desc": "価格（例: ¥1,980）"
+        },
+        {
+          "name": "period",
+          "type": "String",
+          "def": "'/月'",
+          "desc": "期間"
+        },
+        {
+          "name": "features",
+          "type": "Array",
+          "def": "[]",
+          "desc": "特長（文字列の配列）"
+        },
+        {
+          "name": "cta-label",
+          "type": "String",
+          "def": "'選択する'",
+          "desc": "CTA ラベル"
+        },
+        {
+          "name": "featured",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で強調"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "CTA 押下で発火"
+        }
+      ],
+      "usage": "<c-ui-price-card plan=\"プロ\" price=\"¥1,980\" features={list} featured onselect={handleSelect}></c-ui-price-card>",
+      "ja": "料金カード",
+      "files": {
+        "html": "<template>\n    <article class={cardClass}>\n        <span lwc:if={featured} class=\"ui-price__badge\">おすすめ</span>\n        <h3 class=\"ui-price__plan\">{plan}</h3>\n        <div class=\"ui-price__amount\">\n            <span class=\"ui-price__value\">{price}</span>\n            <span class=\"ui-price__period\">{period}</span>\n        </div>\n        <ul class=\"ui-price__features\">\n            <template for:each={featureList} for:item=\"f\">\n                <li key={f.key} class=\"ui-price__feature\">\n                    <span class=\"ui-price__check\">✓</span>{f.label}\n                </li>\n            </template>\n        </ul>\n        <button class={ctaClass} type=\"button\" onclick={handleSelect}>\n            {ctaLabel}\n        </button>\n    </article>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiPriceCard — 料金カード。\n * プラン名・価格・期間・特長リスト・CTA を持つ料金プランカード。\n * featured=true で強調表示し、CTA 押下で select イベントを発火する。\n */\nexport default class UiPriceCard extends LightningElement {\n    /** プラン名 */\n    @api plan;\n    /** 価格（例: ¥1,980） */\n    @api price;\n    /** 期間（例: /月） */\n    @api period = '/月';\n    /** CTA ボタンのラベル */\n    @api ctaLabel = '選択する';\n    /** true で強調 */\n    @api featured = false;\n\n    _features = [];\n\n    /** 特長（文字列の配列） */\n    @api\n    get features() {\n        return this._features;\n    }\n    set features(value) {\n        this._features = Array.isArray(value) ? value : [];\n    }\n\n    get cardClass() {\n        return this.featured ? 'ui-price ui-price_featured' : 'ui-price';\n    }\n\n    get ctaClass() {\n        return this.featured\n            ? 'ui-price__cta ui-price__cta_featured'\n            : 'ui-price__cta';\n    }\n\n    get featureList() {\n        return this._features.map((f, i) => ({ key: i, label: f }));\n    }\n\n    handleSelect() {\n        this.dispatchEvent(new CustomEvent('select'));\n    }\n}\n",
+        "css": ".ui-price {\n    position: relative;\n    display: flex;\n    flex-direction: column;\n    width: 220px;\n    padding: 22px 20px;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 12px;\n    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);\n}\n\n.ui-price_featured {\n    border: 2px solid #0176d3;\n    box-shadow: 0 8px 24px rgba(1, 118, 211, 0.18);\n}\n\n.ui-price__badge {\n    position: absolute;\n    top: -11px;\n    left: 50%;\n    transform: translateX(-50%);\n    background: #0176d3;\n    color: #ffffff;\n    font-size: 0.68rem;\n    font-weight: 700;\n    padding: 3px 12px;\n    border-radius: 11px;\n    white-space: nowrap;\n}\n\n.ui-price__plan {\n    margin: 0 0 6px;\n    font-size: 0.95rem;\n    font-weight: 700;\n    color: #514f4d;\n}\n\n.ui-price__amount {\n    display: flex;\n    align-items: baseline;\n    gap: 3px;\n    margin-bottom: 14px;\n}\n.ui-price__value {\n    font-size: 1.9rem;\n    font-weight: 800;\n    color: #181818;\n}\n.ui-price__period {\n    font-size: 0.8rem;\n    color: #706e6b;\n}\n\n.ui-price__features {\n    list-style: none;\n    margin: 0 0 18px;\n    padding: 0;\n    display: flex;\n    flex-direction: column;\n    gap: 8px;\n    flex: 1;\n}\n.ui-price__feature {\n    display: flex;\n    align-items: flex-start;\n    gap: 7px;\n    font-size: 0.82rem;\n    color: #444444;\n    line-height: 1.4;\n}\n.ui-price__check {\n    color: #2e844a;\n    font-weight: 700;\n    flex-shrink: 0;\n}\n\n.ui-price__cta {\n    height: 38px;\n    border: 1px solid #0176d3;\n    border-radius: 8px;\n    background: #ffffff;\n    color: #0176d3;\n    font-size: 0.85rem;\n    font-weight: 700;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-price__cta:hover {\n    background: #eef4ff;\n}\n.ui-price__cta_featured {\n    background: #0176d3;\n    color: #ffffff;\n}\n.ui-price__cta_featured:hover {\n    background: #014486;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Price Card</masterLabel>\n    <description>料金カード。プラン名・価格・特長・CTAを持ち featured で強調。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiStepWizard",
+      "title": "UI Step Wizard",
+      "icon": "🧙",
+      "category": "ナビゲーション",
+      "demo": "stepwizard",
+      "description": "steps 配列 ([{ label, content }]) を番号インジケータ＋本文＋戻る/次へで進める。change / complete イベントを発火。",
+      "props": [
+        {
+          "name": "steps",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, content }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "ステップ変更で発火（detail.index）"
+        },
+        {
+          "name": "complete",
+          "desc": "最終ステップの完了で発火"
+        }
+      ],
+      "usage": "<c-ui-step-wizard steps={steps} onchange={handleChange} oncomplete={handleDone}></c-ui-step-wizard>",
+      "ja": "ステップウィザード",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-wizard\">\n        <ol class=\"ui-wizard__steps\">\n            <template for:each={markers} for:item=\"m\">\n                <li key={m.key} class={m.cssClass}>\n                    <span class=\"ui-wizard__marker\">{m.marker}</span>\n                    <span class=\"ui-wizard__label\">{m.label}</span>\n                </li>\n            </template>\n        </ol>\n        <div class=\"ui-wizard__content\">{activeContent}</div>\n        <div class=\"ui-wizard__footer\">\n            <button\n                class=\"ui-wizard__btn ui-wizard__btn_neutral\"\n                type=\"button\"\n                disabled={isFirst}\n                onclick={handlePrev}\n            >\n                戻る\n            </button>\n            <button\n                class=\"ui-wizard__btn ui-wizard__btn_brand\"\n                type=\"button\"\n                onclick={handleNext}\n            >\n                {nextLabel}\n            </button>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiStepWizard — ステップウィザード。\n * steps 配列 ([{ label, content }]) を番号インジケータ＋本文＋戻る/次へで進める。\n * ステップ変更で change、最終ステップの完了で complete イベントを発火する。\n */\nexport default class UiStepWizard extends LightningElement {\n    @track _steps = [];\n    @track index = 0;\n\n    /** [{ label, content }] の配列 */\n    @api\n    get steps() {\n        return this._steps;\n    }\n    set steps(value) {\n        this._steps = Array.isArray(value) ? value : [];\n    }\n\n    get markers() {\n        return this._steps.map((s, i) => {\n            let state = 'upcoming';\n            if (i < this.index) {\n                state = 'complete';\n            } else if (i === this.index) {\n                state = 'current';\n            }\n            return {\n                key: i,\n                label: s.label,\n                marker: i < this.index ? '✓' : String(i + 1),\n                cssClass: `ui-wizard__step ui-wizard__step_${state}`\n            };\n        });\n    }\n\n    get activeContent() {\n        const s = this._steps[this.index];\n        return s ? s.content : '';\n    }\n\n    get isFirst() {\n        return this.index === 0;\n    }\n\n    get isLast() {\n        return this.index >= this._steps.length - 1;\n    }\n\n    get nextLabel() {\n        return this.isLast ? '完了' : '次へ';\n    }\n\n    handlePrev() {\n        if (this.index > 0) {\n            this.index -= 1;\n            this.emitChange();\n        }\n    }\n\n    handleNext() {\n        if (this.isLast) {\n            this.dispatchEvent(new CustomEvent('complete'));\n            return;\n        }\n        this.index += 1;\n        this.emitChange();\n    }\n\n    emitChange() {\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { index: this.index } })\n        );\n    }\n}\n",
+        "css": ".ui-wizard {\n    border: 1px solid #e5e5e5;\n    border-radius: 10px;\n    overflow: hidden;\n    background: #ffffff;\n    width: 100%;\n}\n\n.ui-wizard__steps {\n    display: flex;\n    margin: 0;\n    padding: 14px 16px;\n    list-style: none;\n    border-bottom: 1px solid #ececec;\n    background: #fafaf9;\n}\n\n.ui-wizard__step {\n    display: flex;\n    align-items: center;\n    gap: 7px;\n    flex: 1;\n    font-size: 0.78rem;\n    color: #706e6b;\n}\n\n.ui-wizard__marker {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 24px;\n    height: 24px;\n    border-radius: 50%;\n    border: 2px solid #dddbda;\n    background: #ffffff;\n    font-size: 0.74rem;\n    font-weight: 700;\n    flex-shrink: 0;\n}\n\n.ui-wizard__step_complete .ui-wizard__marker {\n    background: #2e844a;\n    border-color: #2e844a;\n    color: #ffffff;\n}\n.ui-wizard__step_current .ui-wizard__marker {\n    border-color: #0176d3;\n    color: #0176d3;\n}\n.ui-wizard__step_current {\n    color: #0176d3;\n    font-weight: 700;\n}\n\n.ui-wizard__content {\n    padding: 20px 18px;\n    min-height: 70px;\n    font-size: 0.875rem;\n    line-height: 1.6;\n    color: #444444;\n}\n\n.ui-wizard__footer {\n    display: flex;\n    justify-content: space-between;\n    padding: 12px 16px;\n    border-top: 1px solid #ececec;\n}\n\n.ui-wizard__btn {\n    height: 32px;\n    padding: 0 16px;\n    border-radius: 6px;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n    border: 1px solid transparent;\n}\n.ui-wizard__btn_neutral {\n    background: #ffffff;\n    border-color: #c9c9c9;\n    color: #514f4d;\n}\n.ui-wizard__btn_neutral:disabled {\n    opacity: 0.4;\n    cursor: not-allowed;\n}\n.ui-wizard__btn_brand {\n    background: #0176d3;\n    color: #ffffff;\n}\n.ui-wizard__btn_brand:hover {\n    background: #014486;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Step Wizard</masterLabel>\n    <description>ステップウィザード。番号インジケータ＋本文＋戻る/次へで進行。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiAttachmentItem",
+      "title": "UI Attachment Item",
+      "icon": "📎",
+      "category": "表示",
+      "demo": "attachmentitem",
+      "description": "種別アイコン・ファイル名・サイズとダウンロードボタンを表示する添付ファイル行。download イベント (detail.name) を発火。",
+      "props": [
+        {
+          "name": "name",
+          "type": "String",
+          "def": "—",
+          "desc": "ファイル名"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "def": "—",
+          "desc": "サイズ表記（例: 2.4 MB）"
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "def": "'file'",
+          "desc": "pdf | doc | xls | ppt | img | zip | txt | file"
+        }
+      ],
+      "events": [
+        {
+          "name": "download",
+          "desc": "ダウンロード押下で発火（detail.name）"
+        }
+      ],
+      "usage": "<c-ui-attachment-item name=\"提案書.pdf\" size=\"2.4 MB\" type=\"pdf\" ondownload={handleDownload}></c-ui-attachment-item>",
+      "ja": "添付ファイル",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-attach\">\n        <span class=\"ui-attach__icon\">{iconChar}</span>\n        <div class=\"ui-attach__body\">\n            <span class=\"ui-attach__name\">{name}</span>\n            <span lwc:if={size} class=\"ui-attach__size\">{size}</span>\n        </div>\n        <button\n            class=\"ui-attach__download\"\n            type=\"button\"\n            title=\"ダウンロード\"\n            onclick={handleDownload}\n        >\n            ⬇\n        </button>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst ICONS = {\n    pdf: '📕',\n    doc: '📘',\n    xls: '📗',\n    ppt: '📙',\n    img: '🖼️',\n    zip: '🗜️',\n    txt: '📄',\n    file: '📎'\n};\n\n/**\n * uiAttachmentItem — 添付ファイル行。\n * 種別アイコン・ファイル名・サイズと、ダウンロードボタンを表示する。\n * ダウンロード押下で download イベント (detail.name) を発火する。\n */\nexport default class UiAttachmentItem extends LightningElement {\n    /** ファイル名 */\n    @api name;\n    /** サイズ表記（例: 2.4 MB） */\n    @api size;\n    /** 種別: pdf | doc | xls | ppt | img | zip | txt | file */\n    @api type = 'file';\n\n    get iconChar() {\n        return ICONS[this.type] || ICONS.file;\n    }\n\n    handleDownload() {\n        this.dispatchEvent(\n            new CustomEvent('download', { detail: { name: this.name } })\n        );\n    }\n}\n",
+        "css": ".ui-attach {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    padding: 8px 10px;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    background: #ffffff;\n    min-width: 240px;\n}\n\n.ui-attach__icon {\n    font-size: 1.3rem;\n    flex-shrink: 0;\n}\n\n.ui-attach__body {\n    display: flex;\n    flex-direction: column;\n    min-width: 0;\n    flex: 1;\n}\n\n.ui-attach__name {\n    font-size: 0.85rem;\n    color: #181818;\n    font-weight: 600;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n\n.ui-attach__size {\n    font-size: 0.72rem;\n    color: #969492;\n}\n\n.ui-attach__download {\n    width: 30px;\n    height: 30px;\n    border: 1px solid #e5e5e5;\n    border-radius: 7px;\n    background: #fafaf9;\n    color: #514f4d;\n    cursor: pointer;\n    font-size: 0.9rem;\n    flex-shrink: 0;\n}\n.ui-attach__download:hover {\n    background: #eef4ff;\n    border-color: #0176d3;\n    color: #0176d3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Attachment Item</masterLabel>\n    <description>添付ファイル行。種別アイコン・名前・サイズ・DLボタンを表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

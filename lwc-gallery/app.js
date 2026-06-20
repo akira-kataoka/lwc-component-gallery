@@ -3158,6 +3158,110 @@
                 ]));
             });
             box.appendChild(el('div', { class: 'ui-mprog', style: 'width:100%;max-width:420px' }, [track, legend]));
+        },
+
+        contactcard(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'アクションをクリック' });
+            const people = [['田中 太郎', '営業部 課長', 'TT'], ['佐藤 花子', 'カスタマーサクセス', 'SH']];
+            const col = el('div', { style: 'display:flex;flex-wrap:wrap;gap:12px' });
+            people.forEach((p) => {
+                const mail = el('button', { class: 'ui-contact__act', type: 'button', title: 'メール', text: '✉️' });
+                const phone = el('button', { class: 'ui-contact__act', type: 'button', title: '電話', text: '📞' });
+                mail.addEventListener('click', () => { out.textContent = p[0] + ' にメール'; });
+                phone.addEventListener('click', () => { out.textContent = p[0] + ' に電話'; });
+                col.appendChild(el('article', { class: 'ui-contact' }, [
+                    el('span', { class: 'ui-contact__avatar' }, [el('span', { class: 'ui-contact__initials', text: p[2] })]),
+                    el('div', { class: 'ui-contact__body' }, [
+                        el('span', { class: 'ui-contact__name', text: p[0] }),
+                        el('span', { class: 'ui-contact__role', text: p[1] })
+                    ]),
+                    el('div', { class: 'ui-contact__actions' }, [mail, phone])
+                ]));
+            });
+            box.appendChild(col);
+            controls.appendChild(out);
+        },
+
+        pricecard(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'プランを選択' });
+            const plans = [
+                ['ベーシック', '¥980', ['ユーザー5名', '10GBストレージ', 'メールサポート'], false],
+                ['プロ', '¥1,980', ['ユーザー50名', '100GBストレージ', '優先サポート', 'API連携'], true],
+                ['エンタープライズ', '¥4,980', ['ユーザー無制限', '1TBストレージ', '専任担当', 'SLA保証'], false]
+            ];
+            const row = el('div', { style: 'display:flex;flex-wrap:wrap;gap:16px;padding-top:8px' });
+            plans.forEach((p) => {
+                const feats = el('ul', { class: 'ui-price__features' });
+                p[2].forEach((f) => feats.appendChild(el('li', { class: 'ui-price__feature' }, [el('span', { class: 'ui-price__check', text: '✓' }), f])));
+                const cta = el('button', { class: 'ui-price__cta' + (p[3] ? ' ui-price__cta_featured' : ''), type: 'button', text: '選択する' });
+                cta.addEventListener('click', () => { out.textContent = '選択: ' + p[0]; });
+                const card = el('article', { class: 'ui-price' + (p[3] ? ' ui-price_featured' : '') });
+                if (p[3]) card.appendChild(el('span', { class: 'ui-price__badge', text: 'おすすめ' }));
+                card.appendChild(el('h3', { class: 'ui-price__plan', text: p[0] }));
+                card.appendChild(el('div', { class: 'ui-price__amount' }, [
+                    el('span', { class: 'ui-price__value', text: p[1] }),
+                    el('span', { class: 'ui-price__period', text: '/月' })
+                ]));
+                card.appendChild(feats);
+                card.appendChild(cta);
+                row.appendChild(card);
+            });
+            box.appendChild(row);
+            controls.appendChild(out);
+        },
+
+        stepwizard(box) {
+            const steps = [
+                ['情報入力', 'お名前・連絡先を入力してください。'],
+                ['確認', '入力内容をご確認ください。'],
+                ['支払い', 'お支払い方法を選択してください。'],
+                ['完了', 'お申し込みが完了しました。']
+            ];
+            let index = 0;
+            const stepsEl = el('ol', { class: 'ui-wizard__steps' });
+            const content = el('div', { class: 'ui-wizard__content' });
+            const prev = el('button', { class: 'ui-wizard__btn ui-wizard__btn_neutral', type: 'button', text: '戻る' });
+            const next = el('button', { class: 'ui-wizard__btn ui-wizard__btn_brand', type: 'button', text: '次へ' });
+            function render() {
+                stepsEl.innerHTML = '';
+                steps.forEach((s, i) => {
+                    const state = i < index ? 'complete' : i === index ? 'current' : 'upcoming';
+                    stepsEl.appendChild(el('li', { class: 'ui-wizard__step ui-wizard__step_' + state }, [
+                        el('span', { class: 'ui-wizard__marker', text: i < index ? '✓' : String(i + 1) }),
+                        el('span', { class: 'ui-wizard__label', text: s[0] })
+                    ]));
+                });
+                content.textContent = steps[index][1];
+                prev.disabled = index === 0;
+                next.textContent = index >= steps.length - 1 ? '完了' : '次へ';
+            }
+            prev.addEventListener('click', () => { if (index > 0) { index -= 1; render(); } });
+            next.addEventListener('click', () => { if (index < steps.length - 1) { index += 1; render(); } });
+            render();
+            box.appendChild(el('div', { class: 'ui-wizard', style: 'width:100%;max-width:480px' }, [
+                stepsEl, content, el('div', { class: 'ui-wizard__footer' }, [prev, next])
+            ]));
+        },
+
+        attachmentitem(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '⬇ でダウンロード' });
+            const icons = { pdf: '📕', doc: '📘', xls: '📗', img: '🖼️', zip: '🗜️' };
+            const files = [['提案書_2026.pdf', '2.4 MB', 'pdf'], ['見積書.xlsx', '86 KB', 'xls'], ['ロゴ素材.zip', '12.8 MB', 'zip'], ['議事録.docx', '320 KB', 'doc']];
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:8px;width:100%;max-width:340px' });
+            files.forEach((f) => {
+                const dl = el('button', { class: 'ui-attach__download', type: 'button', title: 'ダウンロード', text: '⬇' });
+                dl.addEventListener('click', () => { out.textContent = 'DL: ' + f[0]; });
+                col.appendChild(el('div', { class: 'ui-attach' }, [
+                    el('span', { class: 'ui-attach__icon', text: icons[f[2]] || '📎' }),
+                    el('div', { class: 'ui-attach__body' }, [
+                        el('span', { class: 'ui-attach__name', text: f[0] }),
+                        el('span', { class: 'ui-attach__size', text: f[1] })
+                    ]),
+                    dl
+                ]));
+            });
+            box.appendChild(col);
+            controls.appendChild(out);
         }
     };
 

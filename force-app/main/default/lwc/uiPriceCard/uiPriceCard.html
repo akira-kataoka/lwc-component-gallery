@@ -1,0 +1,20 @@
+<template>
+    <article class={cardClass}>
+        <span lwc:if={featured} class="ui-price__badge">おすすめ</span>
+        <h3 class="ui-price__plan">{plan}</h3>
+        <div class="ui-price__amount">
+            <span class="ui-price__value">{price}</span>
+            <span class="ui-price__period">{period}</span>
+        </div>
+        <ul class="ui-price__features">
+            <template for:each={featureList} for:item="f">
+                <li key={f.key} class="ui-price__feature">
+                    <span class="ui-price__check">✓</span>{f.label}
+                </li>
+            </template>
+        </ul>
+        <button class={ctaClass} type="button" onclick={handleSelect}>
+            {ctaLabel}
+        </button>
+    </article>
+</template>

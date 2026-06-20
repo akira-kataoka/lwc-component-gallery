@@ -1,0 +1,35 @@
+<template>
+    <article class="ui-contact">
+        <span class="ui-contact__avatar">
+            <img
+                lwc:if={hasImage}
+                src={avatarUrl}
+                alt={name}
+                class="ui-contact__img"
+            />
+            <span lwc:else class="ui-contact__initials">{initials}</span>
+        </span>
+        <div class="ui-contact__body">
+            <span class="ui-contact__name">{name}</span>
+            <span lwc:if={role} class="ui-contact__role">{role}</span>
+        </div>
+        <div class="ui-contact__actions">
+            <button
+                class="ui-contact__act"
+                type="button"
+                title="メール"
+                onclick={handleMail}
+            >
+                ✉️
+            </button>
+            <button
+                class="ui-contact__act"
+                type="button"
+                title="電話"
+                onclick={handlePhone}
+            >
+                📞
+            </button>
+        </div>
+    </article>
+</template>

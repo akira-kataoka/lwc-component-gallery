@@ -2345,6 +2345,89 @@ const COMPONENTS = [
         ],
         events: [],
         usage: `<c-ui-multi-progress segments={data}></c-ui-multi-progress>`
+    },
+    {
+        id: 'uiContactCard',
+        title: 'UI Contact Card',
+        icon: '👤',
+        category: '表示',
+        demo: 'contactcard',
+        description:
+            'アバター（画像/イニシャル）・氏名・役職とメール／電話アクションを表示する連絡先カード。action イベント (detail.type) を発火。',
+        props: [
+            { name: 'name', type: 'String', def: "''", desc: '氏名' },
+            { name: 'role', type: 'String', def: '—', desc: '役職・所属' },
+            { name: 'avatar-url', type: 'String', def: '—', desc: 'アバター画像 URL' }
+        ],
+        events: [{ name: 'action', desc: 'メール/電話押下で発火（detail.type）' }],
+        usage: `<c-ui-contact-card name="田中 太郎" role="営業部 課長" onaction={handleAction}></c-ui-contact-card>`
+    },
+    {
+        id: 'uiPriceCard',
+        title: 'UI Price Card',
+        icon: '💳',
+        category: '表示',
+        demo: 'pricecard',
+        description:
+            'プラン名・価格・期間・特長リスト・CTA を持つ料金プランカード。featured で強調し CTA で select を発火。',
+        props: [
+            { name: 'plan', type: 'String', def: '—', desc: 'プラン名' },
+            { name: 'price', type: 'String', def: '—', desc: '価格（例: ¥1,980）' },
+            { name: 'period', type: 'String', def: "'/月'", desc: '期間' },
+            {
+                name: 'features',
+                type: 'Array',
+                def: '[]',
+                desc: '特長（文字列の配列）'
+            },
+            { name: 'cta-label', type: 'String', def: "'選択する'", desc: 'CTA ラベル' },
+            { name: 'featured', type: 'Boolean', def: 'false', desc: 'true で強調' }
+        ],
+        events: [{ name: 'select', desc: 'CTA 押下で発火' }],
+        usage: `<c-ui-price-card plan="プロ" price="¥1,980" features={list} featured onselect={handleSelect}></c-ui-price-card>`
+    },
+    {
+        id: 'uiStepWizard',
+        title: 'UI Step Wizard',
+        icon: '🧙',
+        category: 'ナビゲーション',
+        demo: 'stepwizard',
+        description:
+            'steps 配列 ([{ label, content }]) を番号インジケータ＋本文＋戻る/次へで進める。change / complete イベントを発火。',
+        props: [
+            {
+                name: 'steps',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, content }] の配列'
+            }
+        ],
+        events: [
+            { name: 'change', desc: 'ステップ変更で発火（detail.index）' },
+            { name: 'complete', desc: '最終ステップの完了で発火' }
+        ],
+        usage: `<c-ui-step-wizard steps={steps} onchange={handleChange} oncomplete={handleDone}></c-ui-step-wizard>`
+    },
+    {
+        id: 'uiAttachmentItem',
+        title: 'UI Attachment Item',
+        icon: '📎',
+        category: '表示',
+        demo: 'attachmentitem',
+        description:
+            '種別アイコン・ファイル名・サイズとダウンロードボタンを表示する添付ファイル行。download イベント (detail.name) を発火。',
+        props: [
+            { name: 'name', type: 'String', def: '—', desc: 'ファイル名' },
+            { name: 'size', type: 'String', def: '—', desc: 'サイズ表記（例: 2.4 MB）' },
+            {
+                name: 'type',
+                type: 'String',
+                def: "'file'",
+                desc: 'pdf | doc | xls | ppt | img | zip | txt | file'
+            }
+        ],
+        events: [{ name: 'download', desc: 'ダウンロード押下で発火（detail.name）' }],
+        usage: `<c-ui-attachment-item name="提案書.pdf" size="2.4 MB" type="pdf" ondownload={handleDownload}></c-ui-attachment-item>`
     }
 ];
 
@@ -2458,7 +2541,11 @@ const JA_NAMES = {
     uiColorInput: 'カラー入力',
     uiTimeInput: '時刻入力',
     uiChatBubble: 'チャットバブル',
-    uiMultiProgress: '多段プログレス'
+    uiMultiProgress: '多段プログレス',
+    uiContactCard: '連絡先カード',
+    uiPriceCard: '料金カード',
+    uiStepWizard: 'ステップウィザード',
+    uiAttachmentItem: '添付ファイル'
 };
 
 const FILE_KEYS = [

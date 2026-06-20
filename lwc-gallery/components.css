@@ -5411,3 +5411,328 @@
     color: #181818;
     font-variant-numeric: tabular-nums;
 }
+
+
+/* ===== uiContactCard ===== */
+.ui-contact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    min-width: 240px;
+}
+
+.ui-contact__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #0176d3;
+    color: #ffffff;
+    font-weight: 700;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.ui-contact__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ui-contact__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.ui-contact__name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-contact__role {
+    font-size: 0.76rem;
+    color: #706e6b;
+}
+
+.ui-contact__actions {
+    display: flex;
+    gap: 4px;
+}
+
+.ui-contact__act {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    background: #fafaf9;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+.ui-contact__act:hover {
+    background: #eef4ff;
+    border-color: #0176d3;
+}
+
+
+/* ===== uiPriceCard ===== */
+.ui-price {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    padding: 22px 20px;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.ui-price_featured {
+    border: 2px solid #0176d3;
+    box-shadow: 0 8px 24px rgba(1, 118, 211, 0.18);
+}
+
+.ui-price__badge {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0176d3;
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 11px;
+    white-space: nowrap;
+}
+
+.ui-price__plan {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #514f4d;
+}
+
+.ui-price__amount {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    margin-bottom: 14px;
+}
+.ui-price__value {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #181818;
+}
+.ui-price__period {
+    font-size: 0.8rem;
+    color: #706e6b;
+}
+
+.ui-price__features {
+    list-style: none;
+    margin: 0 0 18px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+.ui-price__feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 0.82rem;
+    color: #444444;
+    line-height: 1.4;
+}
+.ui-price__check {
+    color: #2e844a;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.ui-price__cta {
+    height: 38px;
+    border: 1px solid #0176d3;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #0176d3;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-price__cta:hover {
+    background: #eef4ff;
+}
+.ui-price__cta_featured {
+    background: #0176d3;
+    color: #ffffff;
+}
+.ui-price__cta_featured:hover {
+    background: #014486;
+}
+
+
+/* ===== uiStepWizard ===== */
+.ui-wizard {
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff;
+    width: 100%;
+}
+
+.ui-wizard__steps {
+    display: flex;
+    margin: 0;
+    padding: 14px 16px;
+    list-style: none;
+    border-bottom: 1px solid #ececec;
+    background: #fafaf9;
+}
+
+.ui-wizard__step {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex: 1;
+    font-size: 0.78rem;
+    color: #706e6b;
+}
+
+.ui-wizard__marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #dddbda;
+    background: #ffffff;
+    font-size: 0.74rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.ui-wizard__step_complete .ui-wizard__marker {
+    background: #2e844a;
+    border-color: #2e844a;
+    color: #ffffff;
+}
+.ui-wizard__step_current .ui-wizard__marker {
+    border-color: #0176d3;
+    color: #0176d3;
+}
+.ui-wizard__step_current {
+    color: #0176d3;
+    font-weight: 700;
+}
+
+.ui-wizard__content {
+    padding: 20px 18px;
+    min-height: 70px;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #444444;
+}
+
+.ui-wizard__footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-top: 1px solid #ececec;
+}
+
+.ui-wizard__btn {
+    height: 32px;
+    padding: 0 16px;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    border: 1px solid transparent;
+}
+.ui-wizard__btn_neutral {
+    background: #ffffff;
+    border-color: #c9c9c9;
+    color: #514f4d;
+}
+.ui-wizard__btn_neutral:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.ui-wizard__btn_brand {
+    background: #0176d3;
+    color: #ffffff;
+}
+.ui-wizard__btn_brand:hover {
+    background: #014486;
+}
+
+
+/* ===== uiAttachmentItem ===== */
+.ui-attach {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    background: #ffffff;
+    min-width: 240px;
+}
+
+.ui-attach__icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.ui-attach__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.ui-attach__name {
+    font-size: 0.85rem;
+    color: #181818;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ui-attach__size {
+    font-size: 0.72rem;
+    color: #969492;
+}
+
+.ui-attach__download {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #e5e5e5;
+    border-radius: 7px;
+    background: #fafaf9;
+    color: #514f4d;
+    cursor: pointer;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+.ui-attach__download:hover {
+    background: #eef4ff;
+    border-color: #0176d3;
+    color: #0176d3;
+}

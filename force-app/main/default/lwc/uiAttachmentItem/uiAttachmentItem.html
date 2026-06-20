@@ -1,0 +1,17 @@
+<template>
+    <div class="ui-attach">
+        <span class="ui-attach__icon">{iconChar}</span>
+        <div class="ui-attach__body">
+            <span class="ui-attach__name">{name}</span>
+            <span lwc:if={size} class="ui-attach__size">{size}</span>
+        </div>
+        <button
+            class="ui-attach__download"
+            type="button"
+            title="ダウンロード"
+            onclick={handleDownload}
+        >
+            ⬇
+        </button>
+    </div>
+</template>
