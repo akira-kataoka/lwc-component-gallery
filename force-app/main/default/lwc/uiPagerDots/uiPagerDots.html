@@ -1,0 +1,14 @@
+<template>
+    <div class="ui-pagerdots" role="tablist">
+        <template for:each={dots} for:item="dot">
+            <button
+                key={dot.key}
+                class={dot.cssClass}
+                type="button"
+                data-index={dot.index}
+                aria-label={dot.index}
+                onclick={handleClick}
+            ></button>
+        </template>
+    </div>
+</template>

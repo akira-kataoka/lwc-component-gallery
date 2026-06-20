@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T07:37:57.486Z",
+  "generatedAt": "2026-06-20T07:49:05.293Z",
   "components": [
     {
       "id": "uiBadge",
@@ -2937,6 +2937,147 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiMediaObject — 汎用メディアオブジェクト。\n * 先頭にアイコン（絵文字）、右にタイトルと本文を並べる定番レイアウト。\n * 本文は text プロパティまたは default スロットで指定できる。\n */\nexport default class UiMediaObject extends LightningElement {\n    /** 先頭アイコン（絵文字可） */\n    @api icon;\n    /** タイトル */\n    @api title;\n    /** 本文（スロット未使用時） */\n    @api text;\n}\n",
         "css": ".ui-media {\n    display: flex;\n    gap: 12px;\n    align-items: flex-start;\n}\n\n.ui-media__figure {\n    flex-shrink: 0;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 42px;\n    height: 42px;\n    border-radius: 10px;\n    background: #eef4ff;\n    font-size: 1.3rem;\n}\n\n.ui-media__body {\n    flex: 1;\n    min-width: 0;\n}\n\n.ui-media__title {\n    font-size: 0.9rem;\n    font-weight: 700;\n    color: #181818;\n    margin-bottom: 2px;\n}\n\n.ui-media__text {\n    font-size: 0.82rem;\n    color: #514f4d;\n    line-height: 1.5;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Media Object</masterLabel>\n    <description>汎用メディアオブジェクト。アイコン＋タイトル・本文の定番レイアウト。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiGauge",
+      "title": "UI Gauge",
+      "icon": "🎚️",
+      "category": "表示",
+      "demo": "gauge",
+      "description": "0〜100 の値を半円アーク（SVG）で表示し中央に数値を出す半円ゲージ。",
+      "props": [
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "0",
+          "desc": "値 0〜100"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "unit",
+          "type": "String",
+          "def": "'%'",
+          "desc": "単位"
+        },
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'brand'",
+          "desc": "brand | success | warning | error"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-gauge value=\"68\" label=\"達成率\"></c-ui-gauge>",
+      "ja": "ゲージ",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-gauge\">\n        <svg class=\"ui-gauge__svg\" viewBox=\"0 0 100 58\">\n            <path\n                class=\"ui-gauge__track\"\n                d=\"M10 50 A40 40 0 0 1 90 50\"\n            ></path>\n            <path\n                class={barClass}\n                d=\"M10 50 A40 40 0 0 1 90 50\"\n                stroke-dasharray={dash}\n            ></path>\n        </svg>\n        <div class=\"ui-gauge__value\">{valueText}</div>\n        <div lwc:if={label} class=\"ui-gauge__label\">{label}</div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst RADIUS = 40;\nconst ARC_LEN = Math.PI * RADIUS;\nconst VARIANTS = ['brand', 'success', 'warning', 'error'];\n\n/**\n * uiGauge — 汎用半円ゲージ。\n * 0〜100 の値を半円アーク（SVG）で表示し、中央に数値を出す。\n */\nexport default class UiGauge extends LightningElement {\n    /** 値 0〜100 */\n    @api value = 0;\n    /** ラベル */\n    @api label;\n    /** 単位（既定は %） */\n    @api unit = '%';\n    /** 色: brand | success | warning | error */\n    @api variant = 'brand';\n\n    get clamped() {\n        const n = Number(this.value);\n        if (Number.isNaN(n)) {\n            return 0;\n        }\n        return Math.min(100, Math.max(0, n));\n    }\n\n    get dash() {\n        const filled = (this.clamped / 100) * ARC_LEN;\n        return `${filled.toFixed(2)} ${ARC_LEN.toFixed(2)}`;\n    }\n\n    get barClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        return `ui-gauge__bar ui-gauge__bar_${variant}`;\n    }\n\n    get valueText() {\n        return `${Math.round(this.clamped)}${this.unit}`;\n    }\n}\n",
+        "css": ".ui-gauge {\n    display: inline-flex;\n    flex-direction: column;\n    align-items: center;\n    width: 140px;\n}\n\n.ui-gauge__svg {\n    width: 100%;\n    overflow: visible;\n}\n\n.ui-gauge__track {\n    fill: none;\n    stroke: #e5e5e5;\n    stroke-width: 8;\n    stroke-linecap: round;\n}\n\n.ui-gauge__bar {\n    fill: none;\n    stroke-width: 8;\n    stroke-linecap: round;\n    transition: stroke-dasharray 0.4s ease;\n}\n\n.ui-gauge__bar_brand {\n    stroke: #0176d3;\n}\n.ui-gauge__bar_success {\n    stroke: #2e844a;\n}\n.ui-gauge__bar_warning {\n    stroke: #dd7a01;\n}\n.ui-gauge__bar_error {\n    stroke: #ba0517;\n}\n\n.ui-gauge__value {\n    margin-top: -18px;\n    font-size: 1.3rem;\n    font-weight: 800;\n    color: #181818;\n}\n\n.ui-gauge__label {\n    font-size: 0.75rem;\n    color: #706e6b;\n    margin-top: 2px;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Gauge</masterLabel>\n    <description>汎用半円ゲージ。0〜100をSVGアークで表示し中央に数値。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiTrendBadge",
+      "title": "UI Trend Badge",
+      "icon": "📈",
+      "category": "表示",
+      "demo": "trendbadge",
+      "description": "増減（trend）に応じた色・矢印で値（例: +12.5%）をコンパクトに表示するバッジ。",
+      "props": [
+        {
+          "name": "value",
+          "type": "String",
+          "def": "—",
+          "desc": "表示テキスト（例: +12.5%）"
+        },
+        {
+          "name": "trend",
+          "type": "String",
+          "def": "'up'",
+          "desc": "up | down | flat"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-trend-badge value=\"+12.5%\" trend=\"up\"></c-ui-trend-badge>",
+      "ja": "トレンドバッジ",
+      "files": {
+        "html": "<template>\n    <span class={badgeClass}>\n        <span class=\"ui-trend__icon\">{iconChar}</span>\n        <span class=\"ui-trend__value\">{value}</span>\n    </span>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst TRENDS = {\n    up: { icon: '▲', cls: 'up' },\n    down: { icon: '▼', cls: 'down' },\n    flat: { icon: '▬', cls: 'flat' }\n};\n\n/**\n * uiTrendBadge — 汎用トレンドバッジ。\n * 増減（trend）に応じた色・矢印で値（例: +12.5%）をコンパクトに表示する。\n */\nexport default class UiTrendBadge extends LightningElement {\n    /** 表示テキスト（例: +12.5%） */\n    @api value;\n    /** 増減: up | down | flat */\n    @api trend = 'up';\n\n    get badgeClass() {\n        const cls = (TRENDS[this.trend] || TRENDS.flat).cls;\n        return `ui-trend ui-trend_${cls}`;\n    }\n\n    get iconChar() {\n        return (TRENDS[this.trend] || TRENDS.flat).icon;\n    }\n}\n",
+        "css": ".ui-trend {\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n    padding: 2px 8px;\n    border-radius: 5px;\n    font-size: 0.75rem;\n    font-weight: 700;\n    line-height: 1.5;\n}\n\n.ui-trend__icon {\n    font-size: 0.6rem;\n}\n\n.ui-trend_up {\n    background: #e6f4ea;\n    color: #1d7a3f;\n}\n.ui-trend_down {\n    background: #fdecea;\n    color: #b3261e;\n}\n.ui-trend_flat {\n    background: #ecebea;\n    color: #514f4d;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Trend Badge</masterLabel>\n    <description>汎用トレンドバッジ。増減に応じた色・矢印で値を表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiPagerDots",
+      "title": "UI Pager Dots",
+      "icon": "⚪",
+      "category": "ナビゲーション",
+      "demo": "pagerdots",
+      "description": "total 個のドットを並べ current を強調するドットページャー。クリックで change イベント (detail.index) を発火。",
+      "props": [
+        {
+          "name": "total",
+          "type": "Number",
+          "def": "3",
+          "desc": "ドット総数"
+        },
+        {
+          "name": "current",
+          "type": "Number",
+          "def": "1",
+          "desc": "現在の位置（1 始まり）"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "ドット選択時に発火（detail.index）"
+        }
+      ],
+      "usage": "<c-ui-pager-dots total=\"5\" current=\"1\" onchange={handleChange}></c-ui-pager-dots>",
+      "ja": "ドットページャー",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-pagerdots\" role=\"tablist\">\n        <template for:each={dots} for:item=\"dot\">\n            <button\n                key={dot.key}\n                class={dot.cssClass}\n                type=\"button\"\n                data-index={dot.index}\n                aria-label={dot.index}\n                onclick={handleClick}\n            ></button>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiPagerDots — 汎用ドットページャー。\n * total 個のドットを並べ、current（1 始まり）を強調する。\n * ドットクリックで change イベント (detail.index) を発火する。\n */\nexport default class UiPagerDots extends LightningElement {\n    /** ドット総数 */\n    @api total = 3;\n    /** 現在の位置（1 始まり） */\n    @api current = 1;\n\n    get dots() {\n        const total = Math.max(1, Number(this.total) || 1);\n        const cur = Number(this.current) || 1;\n        const list = [];\n        for (let i = 1; i <= total; i += 1) {\n            list.push({\n                key: i,\n                index: i,\n                cssClass:\n                    i === cur\n                        ? 'ui-pagerdots__dot ui-pagerdots__dot_active'\n                        : 'ui-pagerdots__dot'\n            });\n        }\n        return list;\n    }\n\n    handleClick(event) {\n        const index = Number(event.currentTarget.dataset.index);\n        this.current = index;\n        this.dispatchEvent(new CustomEvent('change', { detail: { index } }));\n    }\n}\n",
+        "css": ".ui-pagerdots {\n    display: inline-flex;\n    align-items: center;\n    gap: 8px;\n}\n\n.ui-pagerdots__dot {\n    width: 9px;\n    height: 9px;\n    border-radius: 50%;\n    border: none;\n    background: #c9c9c9;\n    cursor: pointer;\n    padding: 0;\n    transition: width 0.18s ease, background 0.18s ease;\n}\n.ui-pagerdots__dot:hover {\n    background: #a0a0a0;\n}\n\n.ui-pagerdots__dot_active {\n    width: 22px;\n    border-radius: 5px;\n    background: #0176d3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Pager Dots</masterLabel>\n    <description>汎用ドットページャー。ドットクリックで change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiLoadingDots",
+      "title": "UI Loading Dots",
+      "icon": "⏺️",
+      "category": "フィードバック",
+      "demo": "loadingdots",
+      "description": "3 つのドットが順に弾む控えめなローディング表現。スピナーより軽い読み込み中表示。",
+      "props": [
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'brand'",
+          "desc": "brand | neutral"
+        },
+        {
+          "name": "alternative-text",
+          "type": "String",
+          "def": "'読み込み中'",
+          "desc": "スクリーンリーダー向けテキスト"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-loading-dots></c-ui-loading-dots>",
+      "ja": "ローディングドット",
+      "files": {
+        "html": "<template>\n    <span class={rootClass} role=\"status\">\n        <span class=\"ui-dots__dot\"></span>\n        <span class=\"ui-dots__dot\"></span>\n        <span class=\"ui-dots__dot\"></span>\n        <span class=\"ui-dots__assistive\">{alternativeText}</span>\n    </span>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['brand', 'neutral'];\n\n/**\n * uiLoadingDots — 汎用ローディングドット。\n * 3 つのドットが順に弾むローディング表現。スピナーより控えめな読み込み中表示。\n */\nexport default class UiLoadingDots extends LightningElement {\n    /** 色: brand | neutral */\n    @api variant = 'brand';\n    /** スクリーンリーダー向けテキスト */\n    @api alternativeText = '読み込み中';\n\n    get rootClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        return `ui-dots ui-dots_${variant}`;\n    }\n}\n",
+        "css": ".ui-dots {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n}\n\n.ui-dots__dot {\n    width: 9px;\n    height: 9px;\n    border-radius: 50%;\n    background: #0176d3;\n    animation: ui-dots-bounce 1.2s ease-in-out infinite;\n}\n\n.ui-dots_neutral .ui-dots__dot {\n    background: #969492;\n}\n\n.ui-dots__dot:nth-child(2) {\n    animation-delay: 0.18s;\n}\n.ui-dots__dot:nth-child(3) {\n    animation-delay: 0.36s;\n}\n\n.ui-dots__assistive {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    overflow: hidden;\n    clip: rect(0 0 0 0);\n    white-space: nowrap;\n}\n\n@keyframes ui-dots-bounce {\n    0%,\n    80%,\n    100% {\n        transform: translateY(0);\n        opacity: 0.5;\n    }\n    40% {\n        transform: translateY(-7px);\n        opacity: 1;\n    }\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Loading Dots</masterLabel>\n    <description>汎用ローディングドット。3つのドットが順に弾む控えめな読み込み表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

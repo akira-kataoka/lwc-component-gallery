@@ -1,0 +1,27 @@
+.ui-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.ui-trend__icon {
+    font-size: 0.6rem;
+}
+
+.ui-trend_up {
+    background: #e6f4ea;
+    color: #1d7a3f;
+}
+.ui-trend_down {
+    background: #fdecea;
+    color: #b3261e;
+}
+.ui-trend_flat {
+    background: #ecebea;
+    color: #514f4d;
+}

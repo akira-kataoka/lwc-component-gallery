@@ -2330,6 +2330,90 @@
                 );
             });
             box.appendChild(col);
+        },
+
+        gauge(box, controls) {
+            const ns = 'http://www.w3.org/2000/svg';
+            const R = 40;
+            const LEN = Math.PI * R;
+            const variants = [['brand', 68, '達成率'], ['warning', 45, '進捗'], ['success', 92, '稼働率']];
+            variants.forEach((v) => {
+                const svg = document.createElementNS(ns, 'svg');
+                svg.setAttribute('viewBox', '0 0 100 58');
+                svg.setAttribute('class', 'ui-gauge__svg');
+                const track = document.createElementNS(ns, 'path');
+                track.setAttribute('class', 'ui-gauge__track');
+                track.setAttribute('d', 'M10 50 A40 40 0 0 1 90 50');
+                const bar = document.createElementNS(ns, 'path');
+                bar.setAttribute('class', 'ui-gauge__bar ui-gauge__bar_' + v[0]);
+                bar.setAttribute('d', 'M10 50 A40 40 0 0 1 90 50');
+                bar.setAttribute('stroke-dasharray', (v[1] / 100 * LEN).toFixed(2) + ' ' + LEN.toFixed(2));
+                svg.appendChild(track);
+                svg.appendChild(bar);
+                box.appendChild(
+                    el('div', { class: 'ui-gauge' }, [
+                        svg,
+                        el('div', { class: 'ui-gauge__value', text: v[1] + '%' }),
+                        el('div', { class: 'ui-gauge__label', text: v[2] })
+                    ])
+                );
+            });
+            const firstBar = box.querySelector('.ui-gauge__bar');
+            const firstVal = box.querySelector('.ui-gauge__value');
+            const range = el('input', { type: 'range', min: '0', max: '100', value: '68' });
+            range.addEventListener('input', () => {
+                const v = Number(range.value);
+                firstBar.setAttribute('stroke-dasharray', (v / 100 * LEN).toFixed(2) + ' ' + LEN.toFixed(2));
+                firstVal.textContent = v + '%';
+            });
+            controls.appendChild(el('span', { text: '達成率:' }));
+            controls.appendChild(range);
+        },
+
+        trendbadge(box) {
+            const icons = { up: '▲', down: '▼', flat: '▬' };
+            [['+12.5%', 'up'], ['-3.2%', 'down'], ['±0.0%', 'flat'], ['+128 件', 'up']].forEach((t) => {
+                box.appendChild(
+                    el('span', { class: 'ui-trend ui-trend_' + t[1] }, [
+                        el('span', { class: 'ui-trend__icon', text: icons[t[1]] }),
+                        el('span', { class: 'ui-trend__value', text: t[0] })
+                    ])
+                );
+            });
+        },
+
+        pagerdots(box, controls) {
+            const total = 5;
+            let current = 1;
+            const out = el('span', { class: 'demo__out', text: '1 / 5' });
+            const wrap = el('div', { class: 'ui-pagerdots' });
+            function render() {
+                wrap.innerHTML = '';
+                for (let i = 1; i <= total; i += 1) {
+                    const b = el('button', { class: 'ui-pagerdots__dot' + (i === current ? ' ui-pagerdots__dot_active' : ''), type: 'button' });
+                    b.addEventListener('click', ((n) => () => {
+                        current = n;
+                        out.textContent = current + ' / ' + total;
+                        render();
+                    })(i));
+                    wrap.appendChild(b);
+                }
+            }
+            render();
+            box.appendChild(wrap);
+            controls.appendChild(out);
+        },
+
+        loadingdots(box) {
+            [['brand'], ['neutral']].forEach((v) => {
+                box.appendChild(
+                    el('span', { class: 'ui-dots ui-dots_' + v[0] }, [
+                        el('span', { class: 'ui-dots__dot' }),
+                        el('span', { class: 'ui-dots__dot' }),
+                        el('span', { class: 'ui-dots__dot' })
+                    ])
+                );
+            });
         }
     };
 

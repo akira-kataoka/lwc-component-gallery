@@ -1,0 +1,17 @@
+<template>
+    <div class="ui-gauge">
+        <svg class="ui-gauge__svg" viewBox="0 0 100 58">
+            <path
+                class="ui-gauge__track"
+                d="M10 50 A40 40 0 0 1 90 50"
+            ></path>
+            <path
+                class={barClass}
+                d="M10 50 A40 40 0 0 1 90 50"
+                stroke-dasharray={dash}
+            ></path>
+        </svg>
+        <div class="ui-gauge__value">{valueText}</div>
+        <div lwc:if={label} class="ui-gauge__label">{label}</div>
+    </div>
+</template>

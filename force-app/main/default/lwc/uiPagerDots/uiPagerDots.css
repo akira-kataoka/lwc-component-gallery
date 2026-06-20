@@ -1,0 +1,25 @@
+.ui-pagerdots {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ui-pagerdots__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: none;
+    background: #c9c9c9;
+    cursor: pointer;
+    padding: 0;
+    transition: width 0.18s ease, background 0.18s ease;
+}
+.ui-pagerdots__dot:hover {
+    background: #a0a0a0;
+}
+
+.ui-pagerdots__dot_active {
+    width: 22px;
+    border-radius: 5px;
+    background: #0176d3;
+}

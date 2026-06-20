@@ -1697,6 +1697,88 @@ const COMPONENTS = [
         slots: [{ name: '(default)', desc: '本文（text 未指定時）' }],
         events: [],
         usage: `<c-ui-media-object icon="📦" title="出荷" text="本日12件を発送しました"></c-ui-media-object>`
+    },
+    {
+        id: 'uiGauge',
+        title: 'UI Gauge',
+        icon: '🎚️',
+        category: '表示',
+        demo: 'gauge',
+        description:
+            '0〜100 の値を半円アーク（SVG）で表示し中央に数値を出す半円ゲージ。',
+        props: [
+            { name: 'value', type: 'Number', def: '0', desc: '値 0〜100' },
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'unit', type: 'String', def: "'%'", desc: '単位' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | success | warning | error'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-gauge value="68" label="達成率"></c-ui-gauge>`
+    },
+    {
+        id: 'uiTrendBadge',
+        title: 'UI Trend Badge',
+        icon: '📈',
+        category: '表示',
+        demo: 'trendbadge',
+        description:
+            '増減（trend）に応じた色・矢印で値（例: +12.5%）をコンパクトに表示するバッジ。',
+        props: [
+            { name: 'value', type: 'String', def: '—', desc: '表示テキスト（例: +12.5%）' },
+            {
+                name: 'trend',
+                type: 'String',
+                def: "'up'",
+                desc: 'up | down | flat'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-trend-badge value="+12.5%" trend="up"></c-ui-trend-badge>`
+    },
+    {
+        id: 'uiPagerDots',
+        title: 'UI Pager Dots',
+        icon: '⚪',
+        category: 'ナビゲーション',
+        demo: 'pagerdots',
+        description:
+            'total 個のドットを並べ current を強調するドットページャー。クリックで change イベント (detail.index) を発火。',
+        props: [
+            { name: 'total', type: 'Number', def: '3', desc: 'ドット総数' },
+            { name: 'current', type: 'Number', def: '1', desc: '現在の位置（1 始まり）' }
+        ],
+        events: [{ name: 'change', desc: 'ドット選択時に発火（detail.index）' }],
+        usage: `<c-ui-pager-dots total="5" current="1" onchange={handleChange}></c-ui-pager-dots>`
+    },
+    {
+        id: 'uiLoadingDots',
+        title: 'UI Loading Dots',
+        icon: '⏺️',
+        category: 'フィードバック',
+        demo: 'loadingdots',
+        description:
+            '3 つのドットが順に弾む控えめなローディング表現。スピナーより軽い読み込み中表示。',
+        props: [
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | neutral'
+            },
+            {
+                name: 'alternative-text',
+                type: 'String',
+                def: "'読み込み中'",
+                desc: 'スクリーンリーダー向けテキスト'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-loading-dots></c-ui-loading-dots>`
     }
 ];
 
@@ -1778,7 +1860,11 @@ const JA_NAMES = {
     uiFab: 'フローティングボタン',
     uiButtonToggle: 'トグルボタン',
     uiKeyValue: '定義リスト',
-    uiMediaObject: 'メディアオブジェクト'
+    uiMediaObject: 'メディアオブジェクト',
+    uiGauge: 'ゲージ',
+    uiTrendBadge: 'トレンドバッジ',
+    uiPagerDots: 'ドットページャー',
+    uiLoadingDots: 'ローディングドット'
 };
 
 const FILE_KEYS = [

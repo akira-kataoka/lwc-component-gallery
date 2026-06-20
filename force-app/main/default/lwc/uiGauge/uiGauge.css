@@ -1,0 +1,51 @@
+.ui-gauge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 140px;
+}
+
+.ui-gauge__svg {
+    width: 100%;
+    overflow: visible;
+}
+
+.ui-gauge__track {
+    fill: none;
+    stroke: #e5e5e5;
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.ui-gauge__bar {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dasharray 0.4s ease;
+}
+
+.ui-gauge__bar_brand {
+    stroke: #0176d3;
+}
+.ui-gauge__bar_success {
+    stroke: #2e844a;
+}
+.ui-gauge__bar_warning {
+    stroke: #dd7a01;
+}
+.ui-gauge__bar_error {
+    stroke: #ba0517;
+}
+
+.ui-gauge__value {
+    margin-top: -18px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #181818;
+}
+
+.ui-gauge__label {
+    font-size: 0.75rem;
+    color: #706e6b;
+    margin-top: 2px;
+}
