@@ -1,0 +1,10 @@
+<template>
+    <dl class="ui-kv">
+        <template for:each={rows} for:item="row">
+            <div key={row.key} class="ui-kv__row">
+                <dt class="ui-kv__label">{row.label}</dt>
+                <dd class="ui-kv__value">{row.value}</dd>
+            </div>
+        </template>
+    </dl>
+</template>

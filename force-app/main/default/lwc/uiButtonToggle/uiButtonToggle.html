@@ -1,0 +1,11 @@
+<template>
+    <button
+        class={buttonClass}
+        type="button"
+        aria-pressed={pressed}
+        onclick={handleClick}
+    >
+        <span lwc:if={icon} class="ui-btntoggle__icon">{icon}</span>
+        <span class="ui-btntoggle__label">{label}</span>
+    </button>
+</template>

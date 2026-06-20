@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T07:28:52.337Z",
+  "generatedAt": "2026-06-20T07:37:57.486Z",
   "components": [
     {
       "id": "uiBadge",
@@ -2785,6 +2785,158 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiToolbar — 汎用ツールバー。\n * 左にタイトル、右にアクション（default スロット）を配置する横長のバー。\n */\nexport default class UiToolbar extends LightningElement {\n    /** 左側のタイトル */\n    @api title;\n}\n",
         "css": ".ui-toolbar {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 8px 12px;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n}\n\n.ui-toolbar__title {\n    font-size: 0.9rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-toolbar__actions {\n    margin-left: auto;\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    flex-wrap: wrap;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Toolbar</masterLabel>\n    <description>汎用ツールバー。左にタイトル、右にアクションを配置するバー。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiFab",
+      "title": "UI Fab",
+      "icon": "➕",
+      "category": "アクション",
+      "demo": "fab",
+      "description": "アイコンの丸ボタン。label を指定すると横長の拡張 FAB になる。click を発火。",
+      "props": [
+        {
+          "name": "icon",
+          "type": "String",
+          "def": "'＋'",
+          "desc": "アイコン文字（絵文字可）"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル（指定で拡張 FAB）"
+        },
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'brand'",
+          "desc": "brand | neutral | success"
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "desc": "ボタン押下時に発火"
+        }
+      ],
+      "usage": "<c-ui-fab icon=\"＋\" label=\"新規\" onclick={handleAdd}></c-ui-fab>",
+      "ja": "フローティングボタン",
+      "files": {
+        "html": "<template>\n    <button class={fabClass} type=\"button\" title={label} onclick={handleClick}>\n        <span class=\"ui-fab__icon\">{icon}</span>\n        <span lwc:if={hasLabel} class=\"ui-fab__label\">{label}</span>\n    </button>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['brand', 'neutral', 'success'];\n\n/**\n * uiFab — 汎用フローティングアクションボタン。\n * アイコンの丸ボタン。label を指定すると横長の拡張 FAB になる。click を発火する。\n */\nexport default class UiFab extends LightningElement {\n    /** アイコン文字（絵文字可） */\n    @api icon = '＋';\n    /** ラベル（指定で拡張 FAB） */\n    @api label;\n    /** バリアント: brand | neutral | success */\n    @api variant = 'brand';\n\n    get hasLabel() {\n        return !!this.label;\n    }\n\n    get fabClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        const ext = this.hasLabel ? ' ui-fab_extended' : '';\n        return `ui-fab ui-fab_${variant}${ext}`;\n    }\n\n    handleClick() {\n        this.dispatchEvent(new CustomEvent('click'));\n    }\n}\n",
+        "css": ".ui-fab {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: 8px;\n    width: 52px;\n    height: 52px;\n    border: none;\n    border-radius: 50%;\n    cursor: pointer;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);\n    color: #ffffff;\n    transition: transform 0.12s ease, box-shadow 0.12s ease;\n}\n.ui-fab:hover {\n    transform: translateY(-1px);\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);\n}\n.ui-fab:active {\n    transform: translateY(0);\n}\n\n.ui-fab_extended {\n    width: auto;\n    border-radius: 26px;\n    padding: 0 20px;\n    height: 48px;\n}\n\n.ui-fab__icon {\n    font-size: 1.3rem;\n    line-height: 1;\n}\n\n.ui-fab__label {\n    font-size: 0.875rem;\n    font-weight: 700;\n}\n\n.ui-fab_brand {\n    background: #0176d3;\n}\n.ui-fab_brand:hover {\n    background: #014486;\n}\n.ui-fab_neutral {\n    background: #514f4d;\n}\n.ui-fab_neutral:hover {\n    background: #3a3937;\n}\n.ui-fab_success {\n    background: #2e844a;\n}\n.ui-fab_success:hover {\n    background: #1f6135;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Fab</masterLabel>\n    <description>汎用フローティングアクションボタン。丸/拡張FABで click を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiButtonToggle",
+      "title": "UI Button Toggle",
+      "icon": "🔛",
+      "category": "アクション",
+      "demo": "buttontoggle",
+      "description": "押下状態（pressed）を保持するボタン。切替時に change イベント (detail.pressed) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "icon",
+          "type": "String",
+          "def": "—",
+          "desc": "アイコン文字（任意）"
+        },
+        {
+          "name": "pressed",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "押下状態"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "切替時に発火（detail.pressed）"
+        }
+      ],
+      "usage": "<c-ui-button-toggle label=\"太字\" icon=\"B\" onchange={handleToggle}></c-ui-button-toggle>",
+      "ja": "トグルボタン",
+      "files": {
+        "html": "<template>\n    <button\n        class={buttonClass}\n        type=\"button\"\n        aria-pressed={pressed}\n        onclick={handleClick}\n    >\n        <span lwc:if={icon} class=\"ui-btntoggle__icon\">{icon}</span>\n        <span class=\"ui-btntoggle__label\">{label}</span>\n    </button>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiButtonToggle — 汎用トグルボタン。\n * 押下状態（pressed）を保持するボタン。切替時に change イベント\n * (detail.pressed) を発火する。\n */\nexport default class UiButtonToggle extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** アイコン文字（任意） */\n    @api icon;\n    /** 押下状態 */\n    @api pressed = false;\n\n    get buttonClass() {\n        return this.pressed\n            ? 'ui-btntoggle ui-btntoggle_on'\n            : 'ui-btntoggle';\n    }\n\n    handleClick() {\n        this.pressed = !this.pressed;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { pressed: this.pressed } })\n        );\n    }\n}\n",
+        "css": ".ui-btntoggle {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n    height: 32px;\n    padding: 0 14px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    background: #ffffff;\n    color: #514f4d;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;\n}\n.ui-btntoggle:hover {\n    background: #f3f3f3;\n}\n\n.ui-btntoggle_on {\n    background: #eef4ff;\n    border-color: #0176d3;\n    color: #0176d3;\n    box-shadow: inset 0 0 0 1px #0176d3;\n}\n\n.ui-btntoggle__icon {\n    font-size: 0.95rem;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Button Toggle</masterLabel>\n    <description>汎用トグルボタン。押下状態を保持し change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiKeyValue",
+      "title": "UI Key Value",
+      "icon": "🗂️",
+      "category": "表示",
+      "demo": "keyvalue",
+      "description": "items 配列 ([{ label, value }]) をラベルと値のペアで整列表示する定義リスト。",
+      "props": [
+        {
+          "name": "items",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-key-value items={details}></c-ui-key-value>",
+      "ja": "定義リスト",
+      "files": {
+        "html": "<template>\n    <dl class=\"ui-kv\">\n        <template for:each={rows} for:item=\"row\">\n            <div key={row.key} class=\"ui-kv__row\">\n                <dt class=\"ui-kv__label\">{row.label}</dt>\n                <dd class=\"ui-kv__value\">{row.value}</dd>\n            </div>\n        </template>\n    </dl>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiKeyValue — 汎用定義リスト（キー・バリュー）。\n * items 配列 ([{ label, value }]) をラベルと値のペアで整列表示する。\n */\nexport default class UiKeyValue extends LightningElement {\n    _items = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    get rows() {\n        return this._items.map((it, i) => ({\n            key: i,\n            label: it.label,\n            value: it.value\n        }));\n    }\n}\n",
+        "css": ".ui-kv {\n    margin: 0;\n    display: flex;\n    flex-direction: column;\n    gap: 1px;\n    background: #ececec;\n    border: 1px solid #ececec;\n    border-radius: 8px;\n    overflow: hidden;\n}\n\n.ui-kv__row {\n    display: grid;\n    grid-template-columns: 120px 1fr;\n    background: #ffffff;\n}\n\n.ui-kv__label {\n    margin: 0;\n    padding: 9px 12px;\n    background: #fafaf9;\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #706e6b;\n}\n\n.ui-kv__value {\n    margin: 0;\n    padding: 9px 12px;\n    font-size: 0.82rem;\n    color: #181818;\n}\n\n@media (max-width: 420px) {\n    .ui-kv__row {\n        grid-template-columns: 1fr;\n    }\n    .ui-kv__value {\n        padding-top: 0;\n    }\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Key Value</masterLabel>\n    <description>汎用定義リスト。ラベルと値のペアを整列表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiMediaObject",
+      "title": "UI Media Object",
+      "icon": "🖼️",
+      "category": "レイアウト",
+      "demo": "mediaobject",
+      "description": "先頭にアイコン、右にタイトルと本文を並べる定番レイアウト。本文は text か default スロット。",
+      "props": [
+        {
+          "name": "icon",
+          "type": "String",
+          "def": "—",
+          "desc": "先頭アイコン（絵文字可）"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "タイトル"
+        },
+        {
+          "name": "text",
+          "type": "String",
+          "def": "—",
+          "desc": "本文（スロット未使用時）"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "本文（text 未指定時）"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-media-object icon=\"📦\" title=\"出荷\" text=\"本日12件を発送しました\"></c-ui-media-object>",
+      "ja": "メディアオブジェクト",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-media\">\n        <span lwc:if={icon} class=\"ui-media__figure\">{icon}</span>\n        <div class=\"ui-media__body\">\n            <div lwc:if={title} class=\"ui-media__title\">{title}</div>\n            <div class=\"ui-media__text\">\n                <template lwc:if={text}>{text}</template>\n                <slot></slot>\n            </div>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiMediaObject — 汎用メディアオブジェクト。\n * 先頭にアイコン（絵文字）、右にタイトルと本文を並べる定番レイアウト。\n * 本文は text プロパティまたは default スロットで指定できる。\n */\nexport default class UiMediaObject extends LightningElement {\n    /** 先頭アイコン（絵文字可） */\n    @api icon;\n    /** タイトル */\n    @api title;\n    /** 本文（スロット未使用時） */\n    @api text;\n}\n",
+        "css": ".ui-media {\n    display: flex;\n    gap: 12px;\n    align-items: flex-start;\n}\n\n.ui-media__figure {\n    flex-shrink: 0;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 42px;\n    height: 42px;\n    border-radius: 10px;\n    background: #eef4ff;\n    font-size: 1.3rem;\n}\n\n.ui-media__body {\n    flex: 1;\n    min-width: 0;\n}\n\n.ui-media__title {\n    font-size: 0.9rem;\n    font-weight: 700;\n    color: #181818;\n    margin-bottom: 2px;\n}\n\n.ui-media__text {\n    font-size: 0.82rem;\n    color: #514f4d;\n    line-height: 1.5;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Media Object</masterLabel>\n    <description>汎用メディアオブジェクト。アイコン＋タイトル・本文の定番レイアウト。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

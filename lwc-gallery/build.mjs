@@ -1624,6 +1624,79 @@ const COMPONENTS = [
         slots: [{ name: '(default)', desc: '右側のアクション' }],
         events: [],
         usage: `<c-ui-toolbar title="一覧">\n    <c-ui-button label="追加"></c-ui-button>\n</c-ui-toolbar>`
+    },
+    {
+        id: 'uiFab',
+        title: 'UI Fab',
+        icon: '➕',
+        category: 'アクション',
+        demo: 'fab',
+        description:
+            'アイコンの丸ボタン。label を指定すると横長の拡張 FAB になる。click を発火。',
+        props: [
+            { name: 'icon', type: 'String', def: "'＋'", desc: 'アイコン文字（絵文字可）' },
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル（指定で拡張 FAB）' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | neutral | success'
+            }
+        ],
+        events: [{ name: 'click', desc: 'ボタン押下時に発火' }],
+        usage: `<c-ui-fab icon="＋" label="新規" onclick={handleAdd}></c-ui-fab>`
+    },
+    {
+        id: 'uiButtonToggle',
+        title: 'UI Button Toggle',
+        icon: '🔛',
+        category: 'アクション',
+        demo: 'buttontoggle',
+        description:
+            '押下状態（pressed）を保持するボタン。切替時に change イベント (detail.pressed) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'icon', type: 'String', def: '—', desc: 'アイコン文字（任意）' },
+            { name: 'pressed', type: 'Boolean', def: 'false', desc: '押下状態' }
+        ],
+        events: [{ name: 'change', desc: '切替時に発火（detail.pressed）' }],
+        usage: `<c-ui-button-toggle label="太字" icon="B" onchange={handleToggle}></c-ui-button-toggle>`
+    },
+    {
+        id: 'uiKeyValue',
+        title: 'UI Key Value',
+        icon: '🗂️',
+        category: '表示',
+        demo: 'keyvalue',
+        description:
+            'items 配列 ([{ label, value }]) をラベルと値のペアで整列表示する定義リスト。',
+        props: [
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-key-value items={details}></c-ui-key-value>`
+    },
+    {
+        id: 'uiMediaObject',
+        title: 'UI Media Object',
+        icon: '🖼️',
+        category: 'レイアウト',
+        demo: 'mediaobject',
+        description:
+            '先頭にアイコン、右にタイトルと本文を並べる定番レイアウト。本文は text か default スロット。',
+        props: [
+            { name: 'icon', type: 'String', def: '—', desc: '先頭アイコン（絵文字可）' },
+            { name: 'title', type: 'String', def: '—', desc: 'タイトル' },
+            { name: 'text', type: 'String', def: '—', desc: '本文（スロット未使用時）' }
+        ],
+        slots: [{ name: '(default)', desc: '本文（text 未指定時）' }],
+        events: [],
+        usage: `<c-ui-media-object icon="📦" title="出荷" text="本日12件を発送しました"></c-ui-media-object>`
     }
 ];
 
@@ -1701,7 +1774,11 @@ const JA_NAMES = {
     uiDrawer: 'ドロワー',
     uiCallout: 'コールアウト',
     uiRatingSummary: '評価サマリー',
-    uiToolbar: 'ツールバー'
+    uiToolbar: 'ツールバー',
+    uiFab: 'フローティングボタン',
+    uiButtonToggle: 'トグルボタン',
+    uiKeyValue: '定義リスト',
+    uiMediaObject: 'メディアオブジェクト'
 };
 
 const FILE_KEYS = [

@@ -1,0 +1,41 @@
+.ui-kv {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: #ececec;
+    border: 1px solid #ececec;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ui-kv__row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    background: #ffffff;
+}
+
+.ui-kv__label {
+    margin: 0;
+    padding: 9px 12px;
+    background: #fafaf9;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #706e6b;
+}
+
+.ui-kv__value {
+    margin: 0;
+    padding: 9px 12px;
+    font-size: 0.82rem;
+    color: #181818;
+}
+
+@media (max-width: 420px) {
+    .ui-kv__row {
+        grid-template-columns: 1fr;
+    }
+    .ui-kv__value {
+        padding-top: 0;
+    }
+}

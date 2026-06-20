@@ -1,0 +1,6 @@
+<template>
+    <button class={fabClass} type="button" title={label} onclick={handleClick}>
+        <span class="ui-fab__icon">{icon}</span>
+        <span lwc:if={hasLabel} class="ui-fab__label">{label}</span>
+    </button>
+</template>

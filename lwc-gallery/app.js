@@ -2251,6 +2251,85 @@
                     el('div', { class: 'ui-toolbar__actions' }, [search, filterBtn, addBtn])
                 ])
             );
+        },
+
+        fab(box, controls) {
+            let n = 0;
+            const out = el('span', { class: 'demo__out', text: 'クリック: 0' });
+            const round = el('button', { class: 'ui-fab ui-fab_brand', type: 'button', title: '追加' }, [
+                el('span', { class: 'ui-fab__icon', text: '＋' })
+            ]);
+            const ext = el('button', { class: 'ui-fab ui-fab_success ui-fab_extended', type: 'button' }, [
+                el('span', { class: 'ui-fab__icon', text: '✎' }),
+                el('span', { class: 'ui-fab__label', text: '作成' })
+            ]);
+            [round, ext].forEach((b) => b.addEventListener('click', () => {
+                n += 1;
+                out.textContent = 'クリック: ' + n;
+            }));
+            box.appendChild(round);
+            box.appendChild(ext);
+            controls.appendChild(out);
+        },
+
+        buttontoggle(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'ON: （なし）' });
+            const state = { B: false, I: false, U: false };
+            [['B', '太字'], ['I', '斜体'], ['U', '下線']].forEach((t) => {
+                const b = el('button', { class: 'ui-btntoggle', type: 'button' }, [
+                    el('span', { class: 'ui-btntoggle__icon', text: t[0] }),
+                    el('span', { class: 'ui-btntoggle__label', text: t[1] })
+                ]);
+                b.addEventListener('click', () => {
+                    state[t[0]] = !state[t[0]];
+                    b.className = state[t[0]] ? 'ui-btntoggle ui-btntoggle_on' : 'ui-btntoggle';
+                    const on = Object.keys(state).filter((k) => state[k]);
+                    out.textContent = 'ON: ' + (on.join(',') || '（なし）');
+                });
+                box.appendChild(b);
+            });
+            controls.appendChild(out);
+        },
+
+        keyvalue(box) {
+            const items = [
+                ['会社名', '株式会社サンプル'],
+                ['業種', '製造業'],
+                ['従業員数', '1,200名'],
+                ['所在地', '東京都千代田区'],
+                ['電話', '03-1234-5678']
+            ];
+            const dl = el('dl', { class: 'ui-kv', style: 'width:100%;max-width:340px' });
+            items.forEach((it) => {
+                dl.appendChild(
+                    el('div', { class: 'ui-kv__row' }, [
+                        el('dt', { class: 'ui-kv__label', text: it[0] }),
+                        el('dd', { class: 'ui-kv__value', text: it[1] })
+                    ])
+                );
+            });
+            box.appendChild(dl);
+        },
+
+        mediaobject(box) {
+            const data = [
+                ['📦', '出荷完了', '本日12件を発送しました。追跡番号を顧客へ通知済みです。'],
+                ['💬', '新着メッセージ', '佐藤さんからの問い合わせに未返信です。'],
+                ['⭐', 'レビュー', '新しい★5レビューが3件届きました。']
+            ];
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:14px;width:100%;max-width:380px' });
+            data.forEach((d) => {
+                col.appendChild(
+                    el('div', { class: 'ui-media' }, [
+                        el('span', { class: 'ui-media__figure', text: d[0] }),
+                        el('div', { class: 'ui-media__body' }, [
+                            el('div', { class: 'ui-media__title', text: d[1] }),
+                            el('div', { class: 'ui-media__text', text: d[2] })
+                        ])
+                    ])
+                );
+            });
+            box.appendChild(col);
         }
     };
 

@@ -1,0 +1,12 @@
+<template>
+    <div class="ui-media">
+        <span lwc:if={icon} class="ui-media__figure">{icon}</span>
+        <div class="ui-media__body">
+            <div lwc:if={title} class="ui-media__title">{title}</div>
+            <div class="ui-media__text">
+                <template lwc:if={text}>{text}</template>
+                <slot></slot>
+            </div>
+        </div>
+    </div>
+</template>
