@@ -1,0 +1,38 @@
+.ui-tabs {
+    width: 100%;
+}
+
+.ui-tabs__nav {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid #dddbda;
+}
+
+.ui-tab {
+    border: none;
+    background: transparent;
+    padding: 10px 16px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #706e6b;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-family: inherit;
+}
+
+.ui-tab:hover {
+    color: #0176d3;
+}
+
+.ui-tab_active {
+    color: #0176d3;
+    border-bottom-color: #0176d3;
+}
+
+.ui-tabs__panel {
+    padding: 16px 4px;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #444444;
+}

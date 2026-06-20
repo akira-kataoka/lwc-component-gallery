@@ -1,0 +1,36 @@
+.ui-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 11px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.ui-badge__icon {
+    --slds-c-icon-color-foreground-default: currentColor;
+}
+
+.ui-badge_neutral {
+    background: #ecebea;
+    color: #444444;
+}
+.ui-badge_info {
+    background: #eef4ff;
+    color: #0b5cab;
+}
+.ui-badge_success {
+    background: #e6f4ea;
+    color: #1d7a3f;
+}
+.ui-badge_warning {
+    background: #fef5e7;
+    color: #a86403;
+}
+.ui-badge_error {
+    background: #fdecea;
+    color: #b3261e;
+}

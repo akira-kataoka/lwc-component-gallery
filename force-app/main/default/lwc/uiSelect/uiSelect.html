@@ -1,0 +1,17 @@
+<template>
+    <div class="ui-select">
+        <label lwc:if={label} class="ui-select__label">{label}</label>
+        <select
+            class="ui-select__field"
+            disabled={disabled}
+            onchange={handleChange}
+        >
+            <option value="" selected={placeholderSelected}>{placeholder}</option>
+            <template for:each={computedOptions} for:item="opt">
+                <option key={opt.value} value={opt.value} selected={opt.selected}>
+                    {opt.label}
+                </option>
+            </template>
+        </select>
+    </div>
+</template>

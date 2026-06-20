@@ -1,0 +1,15 @@
+<template>
+    <button
+        class="ui-toggle"
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        disabled={disabled}
+        onclick={handleClick}
+    >
+        <span class={trackClass}>
+            <span class="ui-toggle__thumb"></span>
+        </span>
+        <span lwc:if={label} class="ui-toggle__label">{label}</span>
+    </button>
+</template>

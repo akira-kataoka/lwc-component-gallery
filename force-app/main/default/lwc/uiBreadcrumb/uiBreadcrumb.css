@@ -1,0 +1,33 @@
+.ui-breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ui-breadcrumb__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+}
+
+.ui-breadcrumb__link {
+    color: #0176d3;
+    text-decoration: none;
+}
+.ui-breadcrumb__link:hover {
+    text-decoration: underline;
+}
+
+.ui-breadcrumb__current {
+    color: #706e6b;
+    font-weight: 600;
+}
+
+.ui-breadcrumb__sep {
+    color: #c9c9c9;
+}

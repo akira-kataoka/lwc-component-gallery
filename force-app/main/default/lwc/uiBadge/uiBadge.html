@@ -1,0 +1,11 @@
+<template>
+    <span class={computedClass}>
+        <lightning-icon
+            lwc:if={iconName}
+            icon-name={iconName}
+            size="xx-small"
+            class="ui-badge__icon"
+        ></lightning-icon>
+        <span class="ui-badge__label">{label}</span>
+    </span>
+</template>

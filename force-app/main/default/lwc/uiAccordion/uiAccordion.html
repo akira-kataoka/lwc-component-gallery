@@ -1,0 +1,21 @@
+<template>
+    <div class="ui-accordion">
+        <template for:each={computedSections} for:item="section">
+            <div key={section.value} class={section.cssClass}>
+                <button
+                    class="ui-accordion__header"
+                    type="button"
+                    aria-expanded={section.isOpen}
+                    data-value={section.value}
+                    onclick={handleToggle}
+                >
+                    <span class="ui-accordion__icon">{section.iconChar}</span>
+                    <span class="ui-accordion__label">{section.label}</span>
+                </button>
+                <div lwc:if={section.isOpen} class="ui-accordion__body">
+                    {section.content}
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

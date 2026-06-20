@@ -1,0 +1,16 @@
+<template>
+    <div class="ui-input">
+        <label lwc:if={label} class="ui-input__label">
+            {label}
+            <abbr lwc:if={required} class="ui-input__req" title="必須">*</abbr>
+        </label>
+        <input
+            class="ui-input__field"
+            type={type}
+            value={value}
+            placeholder={placeholder}
+            disabled={disabled}
+            oninput={handleInput}
+        />
+    </div>
+</template>

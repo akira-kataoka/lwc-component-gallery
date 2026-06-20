@@ -1,0 +1,14 @@
+<template>
+    <div class="ui-progress">
+        <div
+            class="ui-progress__track"
+            role="progressbar"
+            aria-valuenow={clampedValue}
+            aria-valuemin="0"
+            aria-valuemax="100"
+        >
+            <div class={fillClass} style={barStyle}></div>
+        </div>
+        <span lwc:if={showLabel} class="ui-progress__label">{labelText}</span>
+    </div>
+</template>

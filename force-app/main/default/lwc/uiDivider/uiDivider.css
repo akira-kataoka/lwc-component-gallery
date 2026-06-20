@@ -1,0 +1,33 @@
+.ui-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.ui-divider_small {
+    margin: 8px 0;
+}
+.ui-divider_medium {
+    margin: 16px 0;
+}
+.ui-divider_large {
+    margin: 28px 0;
+}
+
+.ui-divider__line {
+    flex: 1;
+    height: 1px;
+    background: #e5e5e5;
+}
+
+.ui-divider__line_full {
+    width: 100%;
+}
+
+.ui-divider__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #706e6b;
+    white-space: nowrap;
+}

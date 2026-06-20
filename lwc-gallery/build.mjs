@@ -1,0 +1,799 @@
+#!/usr/bin/env node
+/**
+ * build.mjs — LWC ギャラリー（配布ページ）のデータ生成スクリプト。
+ *
+ * force-app/main/default/lwc 配下の実 LWC ソースを読み取り、
+ *   - data.js        : 各コンポーネントのメタ情報 + ソース文字列
+ *   - components.css : 全コンポーネント CSS の連結（ライブデモ用）
+ * を生成する。これによりカタログのソース表示・ライブデモは
+ * 常に実 LWC と同期する（二重管理しない）。
+ *
+ * 使い方:  node build.mjs
+ */
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const LWC_DIR = join(__dirname, '..', 'force-app', 'main', 'default', 'lwc');
+
+/**
+ * コンポーネント定義（フォルダ名・ドキュメント・デモ種別）。
+ * ソース本文はビルド時に実ファイルから読み込むためここには持たない。
+ */
+const COMPONENTS = [
+    {
+        id: 'uiBadge',
+        title: 'UI Badge',
+        icon: '🏷️',
+        category: '表示',
+        demo: 'badge',
+        description:
+            'ラベル・色バリアント・アイコンを表示する純粋なステータスバッジ。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: '表示テキスト' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'neutral'",
+                desc: 'neutral | info | success | warning | error'
+            },
+            {
+                name: 'icon-name',
+                type: 'String',
+                def: '—',
+                desc: '任意の lightning-icon 名（例: utility:check）'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-badge label="承認済み" variant="success"></c-ui-badge>`
+    },
+    {
+        id: 'uiButton',
+        title: 'UI Button',
+        icon: '🔘',
+        category: 'アクション',
+        demo: 'button',
+        description:
+            '色バリアント・アイコン・無効化に対応した汎用ボタン。click イベントを発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ボタンラベル' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | neutral | outline | success | destructive'
+            },
+            {
+                name: 'icon-name',
+                type: 'String',
+                def: '—',
+                desc: '任意の lightning-icon 名'
+            },
+            {
+                name: 'disabled',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で無効化'
+            },
+            {
+                name: 'stretch',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で横幅いっぱい'
+            }
+        ],
+        events: [{ name: 'click', desc: 'ボタン押下時に発火' }],
+        usage: `<c-ui-button label="保存" variant="brand" onclick={handleSave}></c-ui-button>`
+    },
+    {
+        id: 'uiCard',
+        title: 'UI Card',
+        icon: '🗂️',
+        category: 'レイアウト',
+        demo: 'card',
+        description:
+            'ヘッダ（タイトル・アイコン）、本文、アクション、フッタのスロットを持つ汎用カード。',
+        props: [
+            { name: 'title', type: 'String', def: '—', desc: 'ヘッダタイトル' },
+            {
+                name: 'icon-name',
+                type: 'String',
+                def: '—',
+                desc: '任意の lightning-icon 名（例: standard:account）'
+            }
+        ],
+        slots: [
+            { name: '(default)', desc: '本文' },
+            { name: 'actions', desc: 'ヘッダ右のアクション領域' },
+            { name: 'footer', desc: 'フッタ（空なら自動的に非表示）' }
+        ],
+        events: [],
+        usage: `<c-ui-card title="取引先" icon-name="standard:account">\n    本文をここに記述\n    <div slot="footer">フッタ</div>\n</c-ui-card>`
+    },
+    {
+        id: 'uiModal',
+        title: 'UI Modal',
+        icon: '🪟',
+        category: 'オーバーレイ',
+        demo: 'modal',
+        description:
+            'open プロパティで表示制御するモーダル。背景・×・Esc で close イベントを発火。',
+        props: [
+            { name: 'header', type: 'String', def: '—', desc: 'ヘッダタイトル' },
+            {
+                name: 'open',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で表示'
+            },
+            {
+                name: 'size',
+                type: 'String',
+                def: "'medium'",
+                desc: 'small | medium | large'
+            }
+        ],
+        slots: [
+            { name: '(default)', desc: '本文' },
+            { name: 'footer', desc: 'フッタ（ボタン等）' }
+        ],
+        events: [{ name: 'close', desc: '閉じる操作時に発火' }],
+        usage: `<c-ui-modal header="確認" open={isOpen} onclose={handleClose}>\n    本当に削除しますか？\n    <div slot="footer">\n        <c-ui-button label="OK"></c-ui-button>\n    </div>\n</c-ui-modal>`
+    },
+    {
+        id: 'uiTabs',
+        title: 'UI Tabs',
+        icon: '📑',
+        category: 'ナビゲーション',
+        demo: 'tabs',
+        description:
+            'tabs 配列でヘッダと本文を切替える汎用タブ。select イベントで選択値を通知。',
+        props: [
+            {
+                name: 'tabs',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value, content }] の配列'
+            }
+        ],
+        events: [
+            { name: 'select', desc: 'タブ選択時に発火（detail.value）' }
+        ],
+        usage: `<c-ui-tabs tabs={tabs} onselect={handleSelect}></c-ui-tabs>`
+    },
+    {
+        id: 'uiAccordion',
+        title: 'UI Accordion',
+        icon: '📂',
+        category: 'レイアウト',
+        demo: 'accordion',
+        description:
+            'sections 配列を折りたたみ表示。allowMultiple で複数同時オープンを制御。',
+        props: [
+            {
+                name: 'sections',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value, content }] の配列'
+            },
+            {
+                name: 'allow-multiple',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で複数同時オープン'
+            }
+        ],
+        events: [
+            { name: 'toggle', desc: '開閉時に発火（detail.open: 開いている value 配列）' }
+        ],
+        usage: `<c-ui-accordion sections={sections}></c-ui-accordion>`
+    },
+    {
+        id: 'uiDataTable',
+        title: 'UI Data Table',
+        icon: '📊',
+        category: '表示',
+        demo: 'datatable',
+        description:
+            '列ソート（昇順⇄降順）と行クリック（rowselect）に対応した汎用データテーブル。',
+        props: [
+            {
+                name: 'columns',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, fieldName, sortable }] の配列'
+            },
+            {
+                name: 'data',
+                type: 'Array',
+                def: '[]',
+                desc: '表示するレコード（オブジェクト配列）'
+            }
+        ],
+        events: [
+            { name: 'rowselect', desc: '行クリック時に発火（detail.row）' }
+        ],
+        usage: `<c-ui-data-table columns={columns} data={rows} onrowselect={handleRow}></c-ui-data-table>`
+    },
+    {
+        id: 'uiProgressBar',
+        title: 'UI Progress Bar',
+        icon: '📶',
+        category: '表示',
+        demo: 'progress',
+        description:
+            '0〜100 の進捗を色付きバーで表示。任意でパーセント数値を併記。',
+        props: [
+            { name: 'value', type: 'Number', def: '0', desc: '進捗率 0〜100' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | success | warning | error'
+            },
+            {
+                name: 'show-label',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true でパーセント表示'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-progress-bar value="65" variant="success" show-label></c-ui-progress-bar>`
+    },
+    {
+        id: 'uiInput',
+        title: 'UI Input',
+        icon: '⌨️',
+        category: 'フォーム',
+        demo: 'input',
+        description:
+            'ラベル・プレースホルダ・必須表示に対応したテキスト入力。change イベントを発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'String', def: "''", desc: '入力値' },
+            {
+                name: 'placeholder',
+                type: 'String',
+                def: "''",
+                desc: 'プレースホルダ'
+            },
+            {
+                name: 'type',
+                type: 'String',
+                def: "'text'",
+                desc: 'text | email | number | password 等'
+            },
+            {
+                name: 'required',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で必須マーク'
+            },
+            {
+                name: 'disabled',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で無効化'
+            }
+        ],
+        events: [
+            { name: 'change', desc: '入力時に発火（detail.value）' }
+        ],
+        usage: `<c-ui-input label="氏名" required onchange={handleChange}></c-ui-input>`
+    },
+    {
+        id: 'uiToggle',
+        title: 'UI Toggle',
+        icon: '🔀',
+        category: 'フォーム',
+        demo: 'toggle',
+        description:
+            'ON/OFF を切替える汎用スイッチ。change イベント (detail.checked) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            {
+                name: 'checked',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'ON 状態'
+            },
+            {
+                name: 'disabled',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で無効化'
+            }
+        ],
+        events: [
+            { name: 'change', desc: '切替時に発火（detail.checked）' }
+        ],
+        usage: `<c-ui-toggle label="通知を受け取る" checked onchange={handleToggle}></c-ui-toggle>`
+    },
+    {
+        id: 'uiAvatar',
+        title: 'UI Avatar',
+        icon: '👤',
+        category: '表示',
+        demo: 'avatar',
+        description:
+            '画像があれば画像、なければ名前のイニシャルを表示するアバター。',
+        props: [
+            {
+                name: 'name',
+                type: 'String',
+                def: "''",
+                desc: 'イニシャル生成に使う名前'
+            },
+            {
+                name: 'src',
+                type: 'String',
+                def: '—',
+                desc: '画像 URL（指定時は画像表示）'
+            },
+            {
+                name: 'size',
+                type: 'String',
+                def: "'medium'",
+                desc: 'small | medium | large'
+            },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'circle'",
+                desc: 'circle | square'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-avatar name="田中 太郎" size="large"></c-ui-avatar>`
+    },
+    {
+        id: 'uiPill',
+        title: 'UI Pill',
+        icon: '🟦',
+        category: '表示',
+        demo: 'pill',
+        description:
+            'ラベルを表示する汎用ピル（タグ）。removable で×ボタンと remove イベントを有効化。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: '表示テキスト' },
+            {
+                name: 'removable',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で削除ボタン表示'
+            }
+        ],
+        events: [
+            { name: 'remove', desc: '×ボタン押下時に発火' }
+        ],
+        usage: `<c-ui-pill label="重要" removable onremove={handleRemove}></c-ui-pill>`
+    },
+    {
+        id: 'uiAlert',
+        title: 'UI Alert',
+        icon: '📢',
+        category: 'フィードバック',
+        demo: 'alert',
+        description:
+            'バリアントに応じた色・アイコンでメッセージを表示するインラインアラート。',
+        props: [
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'info'",
+                desc: 'info | success | warning | error'
+            },
+            { name: 'title', type: 'String', def: '—', desc: '見出し（任意）' },
+            {
+                name: 'closable',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で閉じるボタン表示'
+            }
+        ],
+        slots: [{ name: '(default)', desc: 'メッセージ本文' }],
+        events: [{ name: 'close', desc: '閉じる操作時に発火' }],
+        usage: `<c-ui-alert variant="success" title="保存しました" closable>\n    変更内容が保存されました。\n</c-ui-alert>`
+    },
+    {
+        id: 'uiSpinner',
+        title: 'UI Spinner',
+        icon: '⏳',
+        category: 'フィードバック',
+        demo: 'spinner',
+        description:
+            'サイズ・色バリアントに対応した CSS アニメーションのローディングスピナー。',
+        props: [
+            {
+                name: 'size',
+                type: 'String',
+                def: "'medium'",
+                desc: 'small | medium | large'
+            },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | inverse'
+            },
+            {
+                name: 'alternative-text',
+                type: 'String',
+                def: "'読み込み中'",
+                desc: 'スクリーンリーダー向け代替テキスト'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-spinner size="large"></c-ui-spinner>`
+    },
+    {
+        id: 'uiToast',
+        title: 'UI Toast',
+        icon: '🔔',
+        category: 'フィードバック',
+        demo: 'toast',
+        description:
+            'show(message, variant) で表示し一定時間後に自動で閉じるトースト通知。',
+        props: [
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'info'",
+                desc: '既定バリアント info | success | warning | error'
+            },
+            {
+                name: 'duration',
+                type: 'Number',
+                def: '3000',
+                desc: '自動クローズまでの ms（0 で無効）'
+            }
+        ],
+        events: [{ name: 'close', desc: '閉じた時に発火' }],
+        methods: [
+            { name: 'show(message, variant)', desc: 'トーストを表示' },
+            { name: 'close()', desc: 'トーストを閉じる' }
+        ],
+        usage: `// 親コンポーネントから\nthis.template.querySelector('c-ui-toast').show('保存しました', 'success');`
+    },
+    {
+        id: 'uiPagination',
+        title: 'UI Pagination',
+        icon: '⏬',
+        category: 'ナビゲーション',
+        demo: 'pagination',
+        description:
+            'totalPages / currentPage を受け取りページ番号を表示。change イベントで遷移先を通知。',
+        props: [
+            {
+                name: 'total-pages',
+                type: 'Number',
+                def: '1',
+                desc: '総ページ数'
+            },
+            {
+                name: 'current-page',
+                type: 'Number',
+                def: '1',
+                desc: '現在ページ（1 始まり）'
+            }
+        ],
+        events: [
+            { name: 'change', desc: 'ページ変更時に発火（detail.page）' }
+        ],
+        usage: `<c-ui-pagination total-pages="8" current-page="1" onchange={handlePage}></c-ui-pagination>`
+    },
+    {
+        id: 'uiSelect',
+        title: 'UI Select',
+        icon: '🔽',
+        category: 'フォーム',
+        demo: 'select',
+        description:
+            'options 配列を表示するドロップダウン。選択時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            {
+                name: 'options',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            },
+            { name: 'value', type: 'String', def: "''", desc: '選択値' },
+            {
+                name: 'placeholder',
+                type: 'String',
+                def: "'選択してください'",
+                desc: '未選択時の表示'
+            },
+            {
+                name: 'disabled',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で無効化'
+            }
+        ],
+        events: [{ name: 'change', desc: '選択時に発火（detail.value）' }],
+        usage: `<c-ui-select label="部署" options={options} onchange={handleChange}></c-ui-select>`
+    },
+    {
+        id: 'uiCheckbox',
+        title: 'UI Checkbox',
+        icon: '☑️',
+        category: 'フォーム',
+        demo: 'checkbox',
+        description:
+            'ラベル付きチェックボックス。変更時に change イベント (detail.checked) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            {
+                name: 'checked',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'チェック状態'
+            },
+            {
+                name: 'disabled',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で無効化'
+            }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.checked）' }],
+        usage: `<c-ui-checkbox label="利用規約に同意" onchange={handleChange}></c-ui-checkbox>`
+    },
+    {
+        id: 'uiTextarea',
+        title: 'UI Textarea',
+        icon: '📝',
+        category: 'フォーム',
+        demo: 'textarea',
+        description:
+            'ラベル・行数に対応した複数行入力。入力時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'String', def: "''", desc: '入力値' },
+            {
+                name: 'placeholder',
+                type: 'String',
+                def: "''",
+                desc: 'プレースホルダ'
+            },
+            { name: 'rows', type: 'Number', def: '4', desc: '表示行数' },
+            {
+                name: 'disabled',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で無効化'
+            }
+        ],
+        events: [{ name: 'change', desc: '入力時に発火（detail.value）' }],
+        usage: `<c-ui-textarea label="備考" rows="5" onchange={handleChange}></c-ui-textarea>`
+    },
+    {
+        id: 'uiBreadcrumb',
+        title: 'UI Breadcrumb',
+        icon: '🧭',
+        category: 'ナビゲーション',
+        demo: 'breadcrumb',
+        description:
+            'items 配列をパンくず表示。末尾以外のリンククリックで navigate イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            }
+        ],
+        events: [
+            { name: 'navigate', desc: 'リンク押下時に発火（detail.value）' }
+        ],
+        usage: `<c-ui-breadcrumb items={items} onnavigate={handleNavigate}></c-ui-breadcrumb>`
+    },
+    {
+        id: 'uiSteps',
+        title: 'UI Steps',
+        icon: '🪜',
+        category: 'ナビゲーション',
+        demo: 'steps',
+        description:
+            'steps 配列と current から、完了/現在/未到達を色分け表示するステップインジケータ。',
+        props: [
+            {
+                name: 'steps',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label }] の配列'
+            },
+            {
+                name: 'current',
+                type: 'Number',
+                def: '1',
+                desc: '現在ステップ（1 始まり）'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-steps steps={steps} current="2"></c-ui-steps>`
+    },
+    {
+        id: 'uiRating',
+        title: 'UI Rating',
+        icon: '⭐',
+        category: '表示',
+        demo: 'rating',
+        description:
+            'スター評価。クリックで値を変更し change イベント (detail.value) を発火。read-only で閲覧専用。',
+        props: [
+            { name: 'value', type: 'Number', def: '0', desc: '現在の評価値' },
+            { name: 'max', type: 'Number', def: '5', desc: '星の数' },
+            {
+                name: 'read-only',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で閲覧専用'
+            }
+        ],
+        events: [{ name: 'change', desc: '評価変更時に発火（detail.value）' }],
+        usage: `<c-ui-rating value="3" onchange={handleRate}></c-ui-rating>`
+    },
+    {
+        id: 'uiStat',
+        title: 'UI Stat',
+        icon: '🔢',
+        category: '表示',
+        demo: 'stat',
+        description:
+            'ラベル・大きな値・前期比（delta）を表示する KPI タイル。trend で増減色を切替え。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: '指標ラベル' },
+            { name: 'value', type: 'String', def: '—', desc: '主要な値' },
+            { name: 'delta', type: 'String', def: '—', desc: '差分テキスト' },
+            {
+                name: 'trend',
+                type: 'String',
+                def: "'flat'",
+                desc: 'up | down | flat'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-stat label="今月の売上" value="¥1,250,000" delta="+12.5%" trend="up"></c-ui-stat>`
+    },
+    {
+        id: 'uiDivider',
+        title: 'UI Divider',
+        icon: '➖',
+        category: 'レイアウト',
+        demo: 'divider',
+        description:
+            'ラベル付き／水平線の区切り。spacing で上下余白を調整する。',
+        props: [
+            {
+                name: 'label',
+                type: 'String',
+                def: '—',
+                desc: '中央ラベル（任意）'
+            },
+            {
+                name: 'spacing',
+                type: 'String',
+                def: "'medium'",
+                desc: 'small | medium | large'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-divider label="または"></c-ui-divider>`
+    },
+    {
+        id: 'uiTooltip',
+        title: 'UI Tooltip',
+        icon: '💬',
+        category: 'オーバーレイ',
+        demo: 'tooltip',
+        description:
+            'スロット要素にホバー／フォーカスすると content を吹き出し表示する。',
+        props: [
+            { name: 'content', type: 'String', def: '—', desc: '吹き出しテキスト' },
+            {
+                name: 'position',
+                type: 'String',
+                def: "'top'",
+                desc: 'top | bottom | left | right'
+            }
+        ],
+        slots: [{ name: '(default)', desc: 'ホバー対象の要素' }],
+        events: [],
+        usage: `<c-ui-tooltip content="詳細はこちら">\n    <c-ui-button label="?"></c-ui-button>\n</c-ui-tooltip>`
+    },
+    {
+        id: 'uiEmptyState',
+        title: 'UI Empty State',
+        icon: '🗒️',
+        category: 'フィードバック',
+        demo: 'emptystate',
+        description:
+            'データ未登録・検索0件時のプレースホルダ。アイコン・見出し・アクションを中央表示。',
+        props: [
+            { name: 'heading', type: 'String', def: '—', desc: '見出し' },
+            {
+                name: 'message',
+                type: 'String',
+                def: '—',
+                desc: '補足メッセージ（任意）'
+            },
+            {
+                name: 'icon',
+                type: 'String',
+                def: "'📭'",
+                desc: 'アイコン文字（絵文字可）'
+            }
+        ],
+        slots: [{ name: '(default)', desc: 'アクション（ボタン等）' }],
+        events: [],
+        usage: `<c-ui-empty-state heading="データがありません" message="新規作成してください">\n    <c-ui-button label="新規作成"></c-ui-button>\n</c-ui-empty-state>`
+    }
+];
+
+const FILE_KEYS = [
+    { key: 'html', ext: '.html' },
+    { key: 'js', ext: '.js' },
+    { key: 'css', ext: '.css' },
+    { key: 'meta', ext: '.js-meta.xml' }
+];
+
+function readComponentFiles(id) {
+    const files = {};
+    const cssParts = [];
+    for (const { key, ext } of FILE_KEYS) {
+        const path = join(LWC_DIR, id, `${id}${ext}`);
+        if (existsSync(path)) {
+            const content = readFileSync(path, 'utf8');
+            files[key] = content;
+            if (key === 'css') {
+                cssParts.push(`/* ===== ${id} ===== */\n${content}`);
+            }
+        }
+    }
+    return { files, css: cssParts.join('\n') };
+}
+
+const out = [];
+const cssAll = [];
+let count = 0;
+
+for (const comp of COMPONENTS) {
+    const { files, css } = readComponentFiles(comp.id);
+    if (!files.js) {
+        console.warn(`⚠ ${comp.id}: .js が見つかりません（スキップ）`);
+        continue;
+    }
+    out.push({ ...comp, files });
+    if (css) {
+        cssAll.push(css);
+    }
+    count += 1;
+}
+
+const data = {
+    generatedAt: new Date().toISOString(),
+    components: out
+};
+
+const dataJs =
+    '/* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */\n' +
+    'window.GALLERY_DATA = ' +
+    JSON.stringify(data, null, 2) +
+    ';\n';
+
+writeFileSync(join(__dirname, 'data.js'), dataJs, 'utf8');
+writeFileSync(
+    join(__dirname, 'components.css'),
+    '/* 自動生成ファイル — 実 LWC の CSS を連結（ライブデモ用）。 */\n' +
+        cssAll.join('\n\n'),
+    'utf8'
+);
+
+console.log(`✅ ${count} コンポーネントを生成しました`);
+console.log('   → data.js');
+console.log('   → components.css');

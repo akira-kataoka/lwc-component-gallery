@@ -1,0 +1,41 @@
+.ui-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.ui-progress__track {
+    flex: 1;
+    height: 8px;
+    border-radius: 5px;
+    background: #e5e5e5;
+    overflow: hidden;
+}
+
+.ui-progress__fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.ui-progress__fill_brand {
+    background: #0176d3;
+}
+.ui-progress__fill_success {
+    background: #2e844a;
+}
+.ui-progress__fill_warning {
+    background: #dd7a01;
+}
+.ui-progress__fill_error {
+    background: #ba0517;
+}
+
+.ui-progress__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #444444;
+    min-width: 36px;
+    text-align: right;
+}

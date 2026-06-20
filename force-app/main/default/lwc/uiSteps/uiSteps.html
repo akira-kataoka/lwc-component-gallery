@@ -1,0 +1,10 @@
+<template>
+    <ol class="ui-steps">
+        <template for:each={computedSteps} for:item="step">
+            <li key={step.label} class={step.cssClass}>
+                <span class="ui-steps__marker">{step.marker}</span>
+                <span class="ui-steps__label">{step.label}</span>
+            </li>
+        </template>
+    </ol>
+</template>

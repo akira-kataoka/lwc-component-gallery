@@ -1,0 +1,12 @@
+<template>
+    <div class="ui-textarea">
+        <label lwc:if={label} class="ui-textarea__label">{label}</label>
+        <textarea
+            class="ui-textarea__field"
+            rows={rows}
+            placeholder={placeholder}
+            disabled={disabled}
+            oninput={handleInput}
+        >{value}</textarea>
+    </div>
+</template>

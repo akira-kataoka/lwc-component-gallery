@@ -1,0 +1,10 @@
+<template>
+    <div class="ui-empty">
+        <div class="ui-empty__icon">{icon}</div>
+        <h3 class="ui-empty__heading">{heading}</h3>
+        <p lwc:if={message} class="ui-empty__message">{message}</p>
+        <div class="ui-empty__action">
+            <slot></slot>
+        </div>
+    </div>
+</template>

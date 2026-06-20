@@ -1,0 +1,35 @@
+<template>
+    <template lwc:if={open}>
+        <div
+            class="ui-modal-backdrop"
+            onclick={handleClose}
+            onkeydown={handleBackdropKeydown}
+        >
+            <section
+                class={modalClass}
+                role="dialog"
+                aria-modal="true"
+                aria-label={header}
+                onclick={stopPropagation}
+            >
+                <header class="ui-modal__header">
+                    <h2 class="ui-modal__title">{header}</h2>
+                    <button
+                        class="ui-modal__close"
+                        type="button"
+                        title="閉じる"
+                        onclick={handleClose}
+                    >
+                        &times;
+                    </button>
+                </header>
+                <div class="ui-modal__body">
+                    <slot></slot>
+                </div>
+                <footer class="ui-modal__footer">
+                    <slot name="footer"></slot>
+                </footer>
+            </section>
+        </div>
+    </template>
+</template>

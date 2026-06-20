@@ -1,0 +1,35 @@
+.ui-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 32px 20px;
+}
+
+.ui-empty__icon {
+    font-size: 2.6rem;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.ui-empty__heading {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-empty__message {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #706e6b;
+    max-width: 320px;
+}
+
+.ui-empty__action {
+    margin-top: 10px;
+}
+.ui-empty__action:empty {
+    display: none;
+}

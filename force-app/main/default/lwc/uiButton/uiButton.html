@@ -1,0 +1,16 @@
+<template>
+    <button
+        class={computedClass}
+        type={type}
+        disabled={disabled}
+        onclick={handleClick}
+    >
+        <lightning-icon
+            lwc:if={iconName}
+            icon-name={iconName}
+            size="xx-small"
+            class="ui-button__icon"
+        ></lightning-icon>
+        <span class="ui-button__label">{label}</span>
+    </button>
+</template>

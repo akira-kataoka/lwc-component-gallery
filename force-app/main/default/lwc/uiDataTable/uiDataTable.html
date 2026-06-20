@@ -1,0 +1,33 @@
+<template>
+    <table class="ui-dt">
+        <thead>
+            <tr>
+                <template for:each={computedColumns} for:item="col">
+                    <th
+                        key={col.fieldName}
+                        class={col.cssClass}
+                        data-field={col.fieldName}
+                        onclick={handleSort}
+                        scope="col"
+                    >
+                        {col.headerLabel}
+                    </th>
+                </template>
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={computedRows} for:item="row" for:index="idx">
+                <tr
+                    key={row.key}
+                    class="ui-dt__row"
+                    data-index={idx}
+                    onclick={handleRowClick}
+                >
+                    <template for:each={row.cells} for:item="cell">
+                        <td key={cell.key} class="ui-dt__td">{cell.value}</td>
+                    </template>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+</template>

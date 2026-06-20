@@ -1,0 +1,12 @@
+<template>
+    <div class={rootClass} role="separator">
+        <template lwc:if={label}>
+            <span class="ui-divider__line"></span>
+            <span class="ui-divider__label">{label}</span>
+            <span class="ui-divider__line"></span>
+        </template>
+        <template lwc:else>
+            <span class="ui-divider__line ui-divider__line_full"></span>
+        </template>
+    </div>
+</template>

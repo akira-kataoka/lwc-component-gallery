@@ -1,0 +1,13 @@
+<template>
+    <label class="ui-checkbox">
+        <input
+            type="checkbox"
+            class="ui-checkbox__input"
+            checked={checked}
+            disabled={disabled}
+            onchange={handleChange}
+        />
+        <span class="ui-checkbox__box"></span>
+        <span lwc:if={label} class="ui-checkbox__label">{label}</span>
+    </label>
+</template>

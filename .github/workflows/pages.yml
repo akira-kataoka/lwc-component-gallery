@@ -1,0 +1,54 @@
+name: Deploy LWC Gallery to GitHub Pages
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'lwc-gallery/**'
+      - 'force-app/main/default/lwc/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build gallery data (実 LWC から data.js / components.css を生成)
+        run: node build.mjs
+        working-directory: lwc-gallery
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact (lwc-gallery をサイトとして公開)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: lwc-gallery
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

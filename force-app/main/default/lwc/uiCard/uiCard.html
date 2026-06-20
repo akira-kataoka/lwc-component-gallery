@@ -1,0 +1,22 @@
+<template>
+    <article class="ui-card">
+        <header lwc:if={hasHeader} class="ui-card__header">
+            <lightning-icon
+                lwc:if={iconName}
+                icon-name={iconName}
+                size="small"
+                class="ui-card__icon"
+            ></lightning-icon>
+            <h2 class="ui-card__title">{title}</h2>
+            <div class="ui-card__actions">
+                <slot name="actions"></slot>
+            </div>
+        </header>
+        <div class="ui-card__body">
+            <slot></slot>
+        </div>
+        <footer class={footerClass}>
+            <slot name="footer" onslotchange={handleFooterSlotChange}></slot>
+        </footer>
+    </article>
+</template>

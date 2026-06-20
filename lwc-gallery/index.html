@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LWC コンポーネント</title>
+    <!-- 実 LWC の CSS（ライブデモ用・build.mjs が生成） -->
+    <link rel="stylesheet" href="components.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar__brand">
+            <span class="topbar__logo">⚡</span>
+            <div>
+                <h1 class="topbar__title">LWC コンポーネント</h1>
+            </div>
+        </div>
+        <div class="topbar__meta">
+            <span id="comp-count" class="topbar__count"></span>
+            <button id="theme-toggle" class="icon-btn" title="テーマ切替">🌙</button>
+        </div>
+    </header>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <input
+                id="search"
+                class="sidebar__search"
+                type="search"
+                placeholder="コンポーネントを検索…"
+                autocomplete="off"
+            />
+            <nav id="nav" class="sidebar__nav"></nav>
+            <div class="sidebar__footer">
+                <p id="generated-at"></p>
+                <p>各コンポーネントは <code>force-app/main/default/lwc</code> 配下の実 LWC です。</p>
+            </div>
+        </aside>
+
+        <main id="main" class="content">
+            <section class="intro">
+                <h2 class="intro__title">使い方</h2>
+                <ol class="intro__steps">
+                    <li><strong>プレビュー</strong>で見た目と動きを確認</li>
+                    <li><strong>プロパティ／イベント</strong>でAPIを確認</li>
+                    <li><strong>ソース</strong>タブからコピー、または各ファイルをダウンロードして <code>lwc/</code> に配置</li>
+                </ol>
+            </section>
+            <div id="components"></div>
+        </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<template>
+    <div lwc:if={isVisible} class={toastClass} role="status" aria-live="polite">
+        <span class="ui-toast__icon">{iconChar}</span>
+        <span class="ui-toast__message">{message}</span>
+        <button
+            class="ui-toast__close"
+            type="button"
+            title="閉じる"
+            onclick={close}
+        >
+            &times;
+        </button>
+    </div>
+</template>

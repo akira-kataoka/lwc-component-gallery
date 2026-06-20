@@ -1,0 +1,18 @@
+<template>
+    <div lwc:if={isVisible} class={alertClass} role="alert">
+        <span class="ui-alert__icon">{iconChar}</span>
+        <div class="ui-alert__content">
+            <strong lwc:if={title} class="ui-alert__title">{title}</strong>
+            <div class="ui-alert__message"><slot></slot></div>
+        </div>
+        <button
+            lwc:if={closable}
+            class="ui-alert__close"
+            type="button"
+            title="閉じる"
+            onclick={handleClose}
+        >
+            &times;
+        </button>
+    </div>
+</template>

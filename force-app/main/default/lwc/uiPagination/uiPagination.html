@@ -1,0 +1,33 @@
+<template>
+    <nav class="ui-pagination" aria-label="ページネーション">
+        <button
+            class="ui-pagination__nav"
+            type="button"
+            disabled={isFirst}
+            title="前へ"
+            onclick={handlePrev}
+        >
+            ‹
+        </button>
+        <template for:each={pages} for:item="page">
+            <button
+                key={page.num}
+                class={page.cssClass}
+                type="button"
+                data-page={page.num}
+                onclick={handlePage}
+            >
+                {page.num}
+            </button>
+        </template>
+        <button
+            class="ui-pagination__nav"
+            type="button"
+            disabled={isLast}
+            title="次へ"
+            onclick={handleNext}
+        >
+            ›
+        </button>
+    </nav>
+</template>

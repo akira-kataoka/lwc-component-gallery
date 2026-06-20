@@ -1,0 +1,11 @@
+<template>
+    <span class={avatarClass}>
+        <img
+            lwc:if={hasImage}
+            src={src}
+            alt={name}
+            class="ui-avatar__img"
+        />
+        <span lwc:else class="ui-avatar__initials">{initials}</span>
+    </span>
+</template>

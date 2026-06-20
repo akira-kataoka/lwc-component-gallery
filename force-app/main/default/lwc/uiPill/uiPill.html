@@ -1,0 +1,14 @@
+<template>
+    <span class="ui-pill">
+        <span class="ui-pill__label">{label}</span>
+        <button
+            lwc:if={removable}
+            class="ui-pill__remove"
+            type="button"
+            title="削除"
+            onclick={handleRemove}
+        >
+            &times;
+        </button>
+    </span>
+</template>

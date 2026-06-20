@@ -1,0 +1,39 @@
+.ui-dt {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    background: #ffffff;
+}
+
+.ui-dt__th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #fafaf9;
+    border-bottom: 1px solid #dddbda;
+    font-weight: 700;
+    color: #514f4d;
+    white-space: nowrap;
+}
+
+.ui-dt__th_sortable {
+    cursor: pointer;
+    user-select: none;
+}
+.ui-dt__th_sortable:hover {
+    background: #f3f2f2;
+    color: #0176d3;
+}
+
+.ui-dt__row {
+    cursor: pointer;
+    transition: background 0.1s ease;
+}
+.ui-dt__row:hover {
+    background: #f3f9ff;
+}
+
+.ui-dt__td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ececec;
+    color: #444444;
+}

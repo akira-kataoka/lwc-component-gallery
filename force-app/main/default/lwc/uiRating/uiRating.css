@@ -1,0 +1,27 @@
+.ui-rating {
+    display: inline-flex;
+    gap: 2px;
+}
+
+.ui-rating__star {
+    border: none;
+    background: transparent;
+    padding: 0 1px;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: #c9c9c9;
+    cursor: pointer;
+    transition: color 0.1s ease, transform 0.1s ease;
+}
+
+.ui-rating__star_on {
+    color: #f5a623;
+}
+
+.ui-rating:not(.ui-rating_readonly) .ui-rating__star:hover {
+    transform: scale(1.15);
+}
+
+.ui-rating_readonly .ui-rating__star {
+    cursor: default;
+}

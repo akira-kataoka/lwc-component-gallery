@@ -1,0 +1,45 @@
+.ui-stat {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 18px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    background: #ffffff;
+    min-width: 160px;
+}
+
+.ui-stat__label {
+    font-size: 0.75rem;
+    color: #706e6b;
+    font-weight: 600;
+}
+
+.ui-stat__value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #181818;
+    line-height: 1.1;
+}
+
+.ui-stat__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.ui-stat__delta_up {
+    color: #2e844a;
+}
+.ui-stat__delta_down {
+    color: #ba0517;
+}
+.ui-stat__delta_flat {
+    color: #706e6b;
+}
+
+.ui-stat__trend {
+    font-size: 0.7rem;
+}

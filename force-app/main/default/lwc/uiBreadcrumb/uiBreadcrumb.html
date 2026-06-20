@@ -1,0 +1,23 @@
+<template>
+    <nav class="ui-breadcrumb" aria-label="パンくず">
+        <ol class="ui-breadcrumb__list">
+            <template for:each={computedItems} for:item="item">
+                <li key={item.label} class="ui-breadcrumb__item">
+                    <a
+                        lwc:if={item.clickable}
+                        class="ui-breadcrumb__link"
+                        href="#"
+                        data-value={item.value}
+                        onclick={handleClick}
+                    >
+                        {item.label}
+                    </a>
+                    <span lwc:else class="ui-breadcrumb__current" aria-current="page">
+                        {item.label}
+                    </span>
+                    <span lwc:if={item.showSep} class="ui-breadcrumb__sep">/</span>
+                </li>
+            </template>
+        </ol>
+    </nav>
+</template>

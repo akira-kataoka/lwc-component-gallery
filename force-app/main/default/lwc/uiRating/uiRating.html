@@ -1,0 +1,17 @@
+<template>
+    <div class={rootClass} onmouseleave={handleLeave}>
+        <template for:each={stars} for:item="star">
+            <button
+                key={star.index}
+                class={star.cssClass}
+                type="button"
+                data-index={star.index}
+                onclick={handleClick}
+                onmouseenter={handleEnter}
+                aria-label={star.index}
+            >
+                {star.char}
+            </button>
+        </template>
+    </div>
+</template>

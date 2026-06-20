@@ -1,0 +1,10 @@
+<template>
+    <div class="ui-stat">
+        <span class="ui-stat__label">{label}</span>
+        <span class="ui-stat__value">{value}</span>
+        <span lwc:if={hasDelta} class={deltaClass}>
+            <span class="ui-stat__trend">{trendIcon}</span>
+            {delta}
+        </span>
+    </div>
+</template>
