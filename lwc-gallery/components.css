@@ -2629,3 +2629,194 @@
 .ui-segprog__seg_error {
     background: #ba0517;
 }
+
+
+/* ===== uiTree ===== */
+.ui-tree {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.85rem;
+}
+
+.ui-tree__children {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 22px;
+}
+
+.ui-tree__node {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    color: #181818;
+    font-family: inherit;
+    font-size: inherit;
+}
+.ui-tree__node:hover {
+    background: #f3f9ff;
+    color: #0176d3;
+}
+
+.ui-tree__node_child {
+    color: #514f4d;
+}
+
+.ui-tree__caret {
+    display: inline-flex;
+    justify-content: center;
+    width: 14px;
+    font-size: 0.7rem;
+    color: #706e6b;
+}
+.ui-tree__caret_leaf {
+    color: #c9c9c9;
+}
+
+.ui-tree__label {
+    flex: 1;
+}
+
+
+/* ===== uiCalendar ===== */
+.ui-cal {
+    display: inline-block;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 12px;
+    background: #ffffff;
+    width: 280px;
+}
+
+.ui-cal__header {
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #181818;
+    margin-bottom: 10px;
+}
+
+.ui-cal__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.ui-cal__wd {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #706e6b;
+    padding: 4px 0;
+}
+
+.ui-cal__blank {
+    aspect-ratio: 1;
+}
+
+.ui-cal__day {
+    aspect-ratio: 1;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: #181818;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-cal__day:hover {
+    background: #f3f9ff;
+    color: #0176d3;
+}
+
+.ui-cal__day_selected {
+    background: #0176d3;
+    color: #ffffff;
+    font-weight: 700;
+}
+.ui-cal__day_selected:hover {
+    background: #014486;
+    color: #ffffff;
+}
+
+
+/* ===== uiCarousel ===== */
+.ui-carousel {
+    width: 100%;
+    max-width: 420px;
+}
+
+.ui-carousel__frame {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.ui-carousel__nav {
+    width: 40px;
+    border: none;
+    background: #fafaf9;
+    color: #514f4d;
+    font-size: 1.4rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.ui-carousel__nav:hover {
+    background: #eef4ff;
+    color: #0176d3;
+}
+
+.ui-carousel__slide {
+    flex: 1;
+    padding: 24px 18px;
+    text-align: center;
+    min-height: 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.ui-carousel__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-carousel__text {
+    font-size: 0.85rem;
+    color: #514f4d;
+    line-height: 1.5;
+}
+
+.ui-carousel__dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.ui-carousel__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: #c9c9c9;
+    cursor: pointer;
+    padding: 0;
+}
+.ui-carousel__dot_active {
+    background: #0176d3;
+    width: 20px;
+    border-radius: 4px;
+}

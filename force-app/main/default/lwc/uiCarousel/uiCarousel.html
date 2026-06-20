@@ -1,0 +1,37 @@
+<template>
+    <div lwc:if={hasSlides} class="ui-carousel">
+        <div class="ui-carousel__frame">
+            <button
+                class="ui-carousel__nav ui-carousel__nav_prev"
+                type="button"
+                title="前へ"
+                onclick={handlePrev}
+            >
+                ‹
+            </button>
+            <div class="ui-carousel__slide">
+                <div class="ui-carousel__title">{current.title}</div>
+                <div class="ui-carousel__text">{current.text}</div>
+            </div>
+            <button
+                class="ui-carousel__nav ui-carousel__nav_next"
+                type="button"
+                title="次へ"
+                onclick={handleNext}
+            >
+                ›
+            </button>
+        </div>
+        <div class="ui-carousel__dots">
+            <template for:each={dots} for:item="dot">
+                <button
+                    key={dot.key}
+                    class={dot.cssClass}
+                    type="button"
+                    data-idx={dot.idx}
+                    onclick={handleDot}
+                ></button>
+            </template>
+        </div>
+    </div>
+</template>

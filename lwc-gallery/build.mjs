@@ -1265,6 +1265,62 @@ const COMPONENTS = [
         ],
         events: [],
         usage: `<c-ui-segmented-progress total="5" current="3"></c-ui-segmented-progress>`
+    },
+    {
+        id: 'uiTree',
+        title: 'UI Tree',
+        icon: '🌳',
+        category: 'ナビゲーション',
+        demo: 'tree',
+        description:
+            'nodes 配列（親に children を持つ 2 階層）を折りたたみ表示。ノード選択で select イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'nodes',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value, children: [{ label, value }] }] の配列'
+            }
+        ],
+        events: [{ name: 'select', desc: 'ノード選択時に発火（detail.value）' }],
+        usage: `<c-ui-tree nodes={tree} onselect={handleSelect}></c-ui-tree>`
+    },
+    {
+        id: 'uiCalendar',
+        title: 'UI Calendar',
+        icon: '🗓️',
+        category: '表示',
+        demo: 'calendar',
+        description:
+            'year / month の月間カレンダー。日付クリックで select イベント (detail.{year,month,day}) を発火。省略時は今月。',
+        props: [
+            { name: 'year', type: 'Number', def: '今年', desc: '表示する年' },
+            { name: 'month', type: 'Number', def: '今月', desc: '表示する月（1〜12）' },
+            { name: 'selected', type: 'Number', def: '—', desc: '選択中の日' }
+        ],
+        events: [
+            { name: 'select', desc: '日付クリックで発火（detail.{year,month,day}）' }
+        ],
+        usage: `<c-ui-calendar year="2026" month="6" onselect={handleSelect}></c-ui-calendar>`
+    },
+    {
+        id: 'uiCarousel',
+        title: 'UI Carousel',
+        icon: '🎠',
+        category: '表示',
+        demo: 'carousel',
+        description:
+            'slides 配列 ([{ title, text }]) を 1 枚ずつ表示。前後ボタン／ドットで切替え、change イベント (detail.index) を発火。',
+        props: [
+            {
+                name: 'slides',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ title, text }] の配列'
+            }
+        ],
+        events: [{ name: 'change', desc: '切替時に発火（detail.index）' }],
+        usage: `<c-ui-carousel slides={slides} onchange={handleChange}></c-ui-carousel>`
     }
 ];
 
@@ -1323,7 +1379,10 @@ const JA_NAMES = {
     uiSplitButton: '分割ボタン',
     uiRibbon: 'リボン',
     uiDateField: '日付フィールド',
-    uiSegmentedProgress: 'セグメント進捗'
+    uiSegmentedProgress: 'セグメント進捗',
+    uiTree: 'ツリー',
+    uiCalendar: 'カレンダー',
+    uiCarousel: 'カルーセル'
 };
 
 const FILE_KEYS = [

@@ -1,0 +1,72 @@
+.ui-carousel {
+    width: 100%;
+    max-width: 420px;
+}
+
+.ui-carousel__frame {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.ui-carousel__nav {
+    width: 40px;
+    border: none;
+    background: #fafaf9;
+    color: #514f4d;
+    font-size: 1.4rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.ui-carousel__nav:hover {
+    background: #eef4ff;
+    color: #0176d3;
+}
+
+.ui-carousel__slide {
+    flex: 1;
+    padding: 24px 18px;
+    text-align: center;
+    min-height: 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.ui-carousel__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-carousel__text {
+    font-size: 0.85rem;
+    color: #514f4d;
+    line-height: 1.5;
+}
+
+.ui-carousel__dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.ui-carousel__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: #c9c9c9;
+    cursor: pointer;
+    padding: 0;
+}
+.ui-carousel__dot_active {
+    background: #0176d3;
+    width: 20px;
+    border-radius: 4px;
+}

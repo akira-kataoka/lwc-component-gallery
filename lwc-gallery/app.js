@@ -1618,6 +1618,137 @@
             });
             controls.appendChild(dec);
             controls.appendChild(inc);
+        },
+
+        tree(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'クリックで選択' });
+            const nodes = [
+                { label: '営業部', value: 'sales', children: [{ label: '第1課', value: 'sales1' }, { label: '第2課', value: 'sales2' }] },
+                { label: '開発部', value: 'dev', children: [{ label: 'フロントエンド', value: 'fe' }, { label: 'バックエンド', value: 'be' }] },
+                { label: '管理部', value: 'admin', children: [] }
+            ];
+            let expanded = ['sales'];
+            const ul = el('ul', { class: 'ui-tree', style: 'min-width:200px' });
+            function render() {
+                ul.innerHTML = '';
+                nodes.forEach((n) => {
+                    const has = n.children && n.children.length > 0;
+                    const open = expanded.includes(n.value);
+                    const node = el('button', { class: 'ui-tree__node', type: 'button' }, [
+                        el('span', { class: 'ui-tree__caret' + (has ? '' : ' ui-tree__caret_leaf'), text: has ? (open ? '▾' : '▸') : '•' }),
+                        el('span', { class: 'ui-tree__label', text: n.label })
+                    ]);
+                    node.addEventListener('click', () => {
+                        if (has) {
+                            expanded = open ? expanded.filter((v) => v !== n.value) : [...expanded, n.value];
+                        }
+                        out.textContent = '選択: ' + n.label;
+                        render();
+                    });
+                    const li = el('li', { class: 'ui-tree__item' }, [node]);
+                    if (open && has) {
+                        const cul = el('ul', { class: 'ui-tree__children' });
+                        n.children.forEach((c) => {
+                            const cb = el('button', { class: 'ui-tree__node ui-tree__node_child', type: 'button' }, [
+                                el('span', { class: 'ui-tree__label', text: c.label })
+                            ]);
+                            cb.addEventListener('click', () => {
+                                out.textContent = '選択: ' + c.label;
+                            });
+                            cul.appendChild(el('li', { class: 'ui-tree__item' }, [cb]));
+                        });
+                        li.appendChild(cul);
+                    }
+                    ul.appendChild(li);
+                });
+            }
+            render();
+            box.appendChild(ul);
+            controls.appendChild(out);
+        },
+
+        calendar(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '日付を選択' });
+            const wd = ['日', '月', '火', '水', '木', '金', '土'];
+            const y = 2026;
+            const m = 6;
+            let selected = 15;
+            const cal = el('div', { class: 'ui-cal' });
+            function render() {
+                cal.innerHTML = '';
+                cal.appendChild(el('div', { class: 'ui-cal__header', text: y + '年 ' + m + '月' }));
+                const wdrow = el('div', { class: 'ui-cal__grid' });
+                wd.forEach((d) => wdrow.appendChild(el('span', { class: 'ui-cal__wd', text: d })));
+                cal.appendChild(wdrow);
+                const startDow = new Date(y, m - 1, 1).getDay();
+                const dim = new Date(y, m, 0).getDate();
+                const cells = [];
+                for (let i = 0; i < startDow; i += 1) cells.push(null);
+                for (let d = 1; d <= dim; d += 1) cells.push(d);
+                while (cells.length % 7 !== 0) cells.push(null);
+                for (let i = 0; i < cells.length; i += 7) {
+                    const row = el('div', { class: 'ui-cal__grid' });
+                    cells.slice(i, i + 7).forEach((d) => {
+                        if (d === null) {
+                            row.appendChild(el('span', { class: 'ui-cal__blank' }));
+                        } else {
+                            const b = el('button', { class: 'ui-cal__day' + (d === selected ? ' ui-cal__day_selected' : ''), type: 'button', text: String(d) });
+                            b.addEventListener('click', () => {
+                                selected = d;
+                                out.textContent = '選択: ' + y + '/' + m + '/' + d;
+                                render();
+                            });
+                            row.appendChild(b);
+                        }
+                    });
+                    cal.appendChild(row);
+                }
+            }
+            render();
+            box.appendChild(cal);
+            controls.appendChild(out);
+        },
+
+        carousel(box) {
+            const slides = [
+                { title: 'ようこそ', text: 'このカルーセルは前後ボタンとドットで切替えできます。' },
+                { title: '機能ハイライト', text: 'スライドごとにタイトルと本文を表示します。' },
+                { title: 'はじめましょう', text: '下のドットからも直接ジャンプできます。' }
+            ];
+            let index = 0;
+            const title = el('div', { class: 'ui-carousel__title' });
+            const text = el('div', { class: 'ui-carousel__text' });
+            const dots = el('div', { class: 'ui-carousel__dots' });
+            function render() {
+                title.textContent = slides[index].title;
+                text.textContent = slides[index].text;
+                dots.innerHTML = '';
+                slides.forEach((s, i) => {
+                    const d = el('button', { class: 'ui-carousel__dot' + (i === index ? ' ui-carousel__dot_active' : ''), type: 'button' });
+                    d.addEventListener('click', () => {
+                        index = i;
+                        render();
+                    });
+                    dots.appendChild(d);
+                });
+            }
+            const prev = el('button', { class: 'ui-carousel__nav ui-carousel__nav_prev', type: 'button', text: '‹' });
+            const next = el('button', { class: 'ui-carousel__nav ui-carousel__nav_next', type: 'button', text: '›' });
+            prev.addEventListener('click', () => {
+                index = (index - 1 + slides.length) % slides.length;
+                render();
+            });
+            next.addEventListener('click', () => {
+                index = (index + 1) % slides.length;
+                render();
+            });
+            const frame = el('div', { class: 'ui-carousel__frame' }, [
+                prev,
+                el('div', { class: 'ui-carousel__slide' }, [title, text]),
+                next
+            ]);
+            render();
+            box.appendChild(el('div', { class: 'ui-carousel' }, [frame, dots]));
         }
     };
 

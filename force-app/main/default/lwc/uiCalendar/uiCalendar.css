@@ -1,0 +1,59 @@
+.ui-cal {
+    display: inline-block;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 12px;
+    background: #ffffff;
+    width: 280px;
+}
+
+.ui-cal__header {
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #181818;
+    margin-bottom: 10px;
+}
+
+.ui-cal__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.ui-cal__wd {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #706e6b;
+    padding: 4px 0;
+}
+
+.ui-cal__blank {
+    aspect-ratio: 1;
+}
+
+.ui-cal__day {
+    aspect-ratio: 1;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: #181818;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-cal__day:hover {
+    background: #f3f9ff;
+    color: #0176d3;
+}
+
+.ui-cal__day_selected {
+    background: #0176d3;
+    color: #ffffff;
+    font-weight: 700;
+}
+.ui-cal__day_selected:hover {
+    background: #014486;
+    color: #ffffff;
+}

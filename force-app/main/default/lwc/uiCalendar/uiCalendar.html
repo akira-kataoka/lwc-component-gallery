@@ -1,0 +1,27 @@
+<template>
+    <div class="ui-cal">
+        <div class="ui-cal__header">{title}</div>
+        <div class="ui-cal__grid">
+            <template for:each={weekdays} for:item="wd">
+                <span key={wd.key} class="ui-cal__wd">{wd.label}</span>
+            </template>
+        </div>
+        <template for:each={weeks} for:item="week">
+            <div key={week.key} class="ui-cal__grid">
+                <template for:each={week.days} for:item="cell">
+                    <span lwc:if={cell.blank} key={cell.key} class="ui-cal__blank"></span>
+                    <button
+                        lwc:else
+                        key={cell.key}
+                        class={cell.cssClass}
+                        type="button"
+                        data-day={cell.day}
+                        onclick={handleDay}
+                    >
+                        {cell.day}
+                    </button>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T06:52:19.614Z",
+  "generatedAt": "2026-06-20T06:58:21.832Z",
   "components": [
     {
       "id": "uiBadge",
@@ -2092,6 +2092,108 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['brand', 'success', 'warning', 'error'];\n\n/**\n * uiSegmentedProgress — 汎用セグメント進捗。\n * total 個のセグメントのうち current 個を塗りつぶして段階的な進捗を表す。\n */\nexport default class UiSegmentedProgress extends LightningElement {\n    /** セグメント総数 */\n    @api total = 5;\n    /** 塗りつぶす数 */\n    @api current = 0;\n    /** 色: brand | success | warning | error */\n    @api variant = 'brand';\n\n    get segments() {\n        const total = Math.max(1, Number(this.total) || 1);\n        const cur = Math.max(0, Number(this.current) || 0);\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        const list = [];\n        for (let i = 0; i < total; i += 1) {\n            const filled = i < cur;\n            list.push({\n                key: i,\n                cssClass: filled\n                    ? `ui-segprog__seg ui-segprog__seg_filled ui-segprog__seg_${variant}`\n                    : 'ui-segprog__seg'\n            });\n        }\n        return list;\n    }\n}\n",
         "css": ".ui-segprog {\n    display: flex;\n    gap: 5px;\n    width: 100%;\n}\n.ui-segprog__seg {\n    flex: 1;\n    height: 8px;\n    border-radius: 4px;\n    background: #e5e5e5;\n    transition: background 0.2s ease;\n}\n.ui-segprog__seg_brand {\n    background: #0176d3;\n}\n.ui-segprog__seg_success {\n    background: #2e844a;\n}\n.ui-segprog__seg_warning {\n    background: #dd7a01;\n}\n.ui-segprog__seg_error {\n    background: #ba0517;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Segmented Progress</masterLabel>\n    <description>汎用セグメント進捗。total中current個を塗りつぶし段階を表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiTree",
+      "title": "UI Tree",
+      "icon": "🌳",
+      "category": "ナビゲーション",
+      "demo": "tree",
+      "description": "nodes 配列（親に children を持つ 2 階層）を折りたたみ表示。ノード選択で select イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "nodes",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value, children: [{ label, value }] }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "ノード選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-tree nodes={tree} onselect={handleSelect}></c-ui-tree>",
+      "ja": "ツリー",
+      "files": {
+        "html": "<template>\n    <ul class=\"ui-tree\">\n        <template for:each={computedNodes} for:item=\"node\">\n            <li key={node.key} class=\"ui-tree__item\">\n                <button\n                    class=\"ui-tree__node\"\n                    type=\"button\"\n                    data-value={node.value}\n                    onclick={handleParent}\n                >\n                    <span lwc:if={node.hasChildren} class=\"ui-tree__caret\">{node.caret}</span>\n                    <span lwc:else class=\"ui-tree__caret ui-tree__caret_leaf\">•</span>\n                    <span class=\"ui-tree__label\">{node.label}</span>\n                </button>\n                <ul lwc:if={node.isOpen} class=\"ui-tree__children\">\n                    <template for:each={node.children} for:item=\"child\">\n                        <li key={child.value} class=\"ui-tree__item\">\n                            <button\n                                class=\"ui-tree__node ui-tree__node_child\"\n                                type=\"button\"\n                                data-value={child.value}\n                                onclick={handleChild}\n                            >\n                                <span class=\"ui-tree__label\">{child.label}</span>\n                            </button>\n                        </li>\n                    </template>\n                </ul>\n            </li>\n        </template>\n    </ul>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiTree — 汎用ツリー（2 階層）。\n * nodes 配列 ([{ label, value, children: [{ label, value }] }]) を\n * 折りたたみ可能なツリーで表示し、ノード選択時に select イベント\n * (detail.value) を発火する。\n */\nexport default class UiTree extends LightningElement {\n    _nodes = [];\n\n    /** [{ label, value, children }] の配列 */\n    @api\n    get nodes() {\n        return this._nodes;\n    }\n    set nodes(value) {\n        this._nodes = Array.isArray(value) ? value : [];\n    }\n\n    @track expanded = [];\n\n    get computedNodes() {\n        return this._nodes.map((n, i) => {\n            const hasChildren = Array.isArray(n.children) && n.children.length > 0;\n            const isOpen = this.expanded.includes(n.value);\n            return {\n                key: i,\n                label: n.label,\n                value: n.value,\n                hasChildren,\n                isOpen,\n                caret: isOpen ? '▾' : '▸',\n                children: isOpen && hasChildren ? n.children : []\n            };\n        });\n    }\n\n    toggle(value) {\n        this.expanded = this.expanded.includes(value)\n            ? this.expanded.filter((v) => v !== value)\n            : [...this.expanded, value];\n    }\n\n    handleParent(event) {\n        const value = event.currentTarget.dataset.value;\n        const node = this._nodes.find((n) => n.value === value);\n        if (node && Array.isArray(node.children) && node.children.length) {\n            this.toggle(value);\n        }\n        this.dispatchEvent(new CustomEvent('select', { detail: { value } }));\n    }\n\n    handleChild(event) {\n        const value = event.currentTarget.dataset.value;\n        this.dispatchEvent(new CustomEvent('select', { detail: { value } }));\n    }\n}\n",
+        "css": ".ui-tree {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n    font-size: 0.85rem;\n}\n\n.ui-tree__children {\n    list-style: none;\n    margin: 0;\n    padding: 0 0 0 22px;\n}\n\n.ui-tree__node {\n    display: flex;\n    align-items: center;\n    gap: 6px;\n    width: 100%;\n    border: none;\n    background: transparent;\n    padding: 6px 8px;\n    border-radius: 6px;\n    cursor: pointer;\n    text-align: left;\n    color: #181818;\n    font-family: inherit;\n    font-size: inherit;\n}\n.ui-tree__node:hover {\n    background: #f3f9ff;\n    color: #0176d3;\n}\n\n.ui-tree__node_child {\n    color: #514f4d;\n}\n\n.ui-tree__caret {\n    display: inline-flex;\n    justify-content: center;\n    width: 14px;\n    font-size: 0.7rem;\n    color: #706e6b;\n}\n.ui-tree__caret_leaf {\n    color: #c9c9c9;\n}\n\n.ui-tree__label {\n    flex: 1;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Tree</masterLabel>\n    <description>汎用ツリー（2階層）。折りたたみ表示し select イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCalendar",
+      "title": "UI Calendar",
+      "icon": "🗓️",
+      "category": "表示",
+      "demo": "calendar",
+      "description": "year / month の月間カレンダー。日付クリックで select イベント (detail.{year,month,day}) を発火。省略時は今月。",
+      "props": [
+        {
+          "name": "year",
+          "type": "Number",
+          "def": "今年",
+          "desc": "表示する年"
+        },
+        {
+          "name": "month",
+          "type": "Number",
+          "def": "今月",
+          "desc": "表示する月（1〜12）"
+        },
+        {
+          "name": "selected",
+          "type": "Number",
+          "def": "—",
+          "desc": "選択中の日"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "日付クリックで発火（detail.{year,month,day}）"
+        }
+      ],
+      "usage": "<c-ui-calendar year=\"2026\" month=\"6\" onselect={handleSelect}></c-ui-calendar>",
+      "ja": "カレンダー",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-cal\">\n        <div class=\"ui-cal__header\">{title}</div>\n        <div class=\"ui-cal__grid\">\n            <template for:each={weekdays} for:item=\"wd\">\n                <span key={wd.key} class=\"ui-cal__wd\">{wd.label}</span>\n            </template>\n        </div>\n        <template for:each={weeks} for:item=\"week\">\n            <div key={week.key} class=\"ui-cal__grid\">\n                <template for:each={week.days} for:item=\"cell\">\n                    <span lwc:if={cell.blank} key={cell.key} class=\"ui-cal__blank\"></span>\n                    <button\n                        lwc:else\n                        key={cell.key}\n                        class={cell.cssClass}\n                        type=\"button\"\n                        data-day={cell.day}\n                        onclick={handleDay}\n                    >\n                        {cell.day}\n                    </button>\n                </template>\n            </div>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\nconst WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];\n\n/**\n * uiCalendar — 汎用月間カレンダー。\n * year / month（1〜12）の月を表示し、日付クリックで select イベント\n * (detail.{ year, month, day }) を発火する。省略時は現在の月を表示。\n */\nexport default class UiCalendar extends LightningElement {\n    /** 年（省略時は今年） */\n    @api year;\n    /** 月 1〜12（省略時は今月） */\n    @api month;\n\n    @track _selected;\n\n    /** 選択中の日 */\n    @api\n    get selected() {\n        return this._selected;\n    }\n    set selected(value) {\n        this._selected = value;\n    }\n\n    get computedYear() {\n        return Number(this.year) || new Date().getFullYear();\n    }\n\n    get computedMonth() {\n        return Number(this.month) || new Date().getMonth() + 1;\n    }\n\n    get title() {\n        return `${this.computedYear}年 ${this.computedMonth}月`;\n    }\n\n    get weekdays() {\n        return WEEKDAYS.map((d, i) => ({ key: i, label: d }));\n    }\n\n    get weeks() {\n        const y = this.computedYear;\n        const m = this.computedMonth;\n        const startDow = new Date(y, m - 1, 1).getDay();\n        const daysInMonth = new Date(y, m, 0).getDate();\n        const cells = [];\n        for (let i = 0; i < startDow; i += 1) {\n            cells.push({ key: `b${i}`, blank: true });\n        }\n        for (let d = 1; d <= daysInMonth; d += 1) {\n            const selected = Number(this._selected) === d;\n            cells.push({\n                key: `d${d}`,\n                blank: false,\n                day: d,\n                cssClass: selected\n                    ? 'ui-cal__day ui-cal__day_selected'\n                    : 'ui-cal__day'\n            });\n        }\n        while (cells.length % 7 !== 0) {\n            cells.push({ key: `e${cells.length}`, blank: true });\n        }\n        const weeks = [];\n        for (let i = 0; i < cells.length; i += 7) {\n            weeks.push({ key: i, days: cells.slice(i, i + 7) });\n        }\n        return weeks;\n    }\n\n    handleDay(event) {\n        const day = Number(event.currentTarget.dataset.day);\n        this._selected = day;\n        this.dispatchEvent(\n            new CustomEvent('select', {\n                detail: { year: this.computedYear, month: this.computedMonth, day }\n            })\n        );\n    }\n}\n",
+        "css": ".ui-cal {\n    display: inline-block;\n    border: 1px solid #e5e5e5;\n    border-radius: 10px;\n    padding: 12px;\n    background: #ffffff;\n    width: 280px;\n}\n\n.ui-cal__header {\n    text-align: center;\n    font-weight: 700;\n    font-size: 0.9rem;\n    color: #181818;\n    margin-bottom: 10px;\n}\n\n.ui-cal__grid {\n    display: grid;\n    grid-template-columns: repeat(7, 1fr);\n    gap: 2px;\n}\n\n.ui-cal__wd {\n    text-align: center;\n    font-size: 0.7rem;\n    font-weight: 700;\n    color: #706e6b;\n    padding: 4px 0;\n}\n\n.ui-cal__blank {\n    aspect-ratio: 1;\n}\n\n.ui-cal__day {\n    aspect-ratio: 1;\n    border: none;\n    background: transparent;\n    border-radius: 6px;\n    font-size: 0.8rem;\n    color: #181818;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-cal__day:hover {\n    background: #f3f9ff;\n    color: #0176d3;\n}\n\n.ui-cal__day_selected {\n    background: #0176d3;\n    color: #ffffff;\n    font-weight: 700;\n}\n.ui-cal__day_selected:hover {\n    background: #014486;\n    color: #ffffff;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Calendar</masterLabel>\n    <description>汎用月間カレンダー。日付クリックで select イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCarousel",
+      "title": "UI Carousel",
+      "icon": "🎠",
+      "category": "表示",
+      "demo": "carousel",
+      "description": "slides 配列 ([{ title, text }]) を 1 枚ずつ表示。前後ボタン／ドットで切替え、change イベント (detail.index) を発火。",
+      "props": [
+        {
+          "name": "slides",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ title, text }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "切替時に発火（detail.index）"
+        }
+      ],
+      "usage": "<c-ui-carousel slides={slides} onchange={handleChange}></c-ui-carousel>",
+      "ja": "カルーセル",
+      "files": {
+        "html": "<template>\n    <div lwc:if={hasSlides} class=\"ui-carousel\">\n        <div class=\"ui-carousel__frame\">\n            <button\n                class=\"ui-carousel__nav ui-carousel__nav_prev\"\n                type=\"button\"\n                title=\"前へ\"\n                onclick={handlePrev}\n            >\n                ‹\n            </button>\n            <div class=\"ui-carousel__slide\">\n                <div class=\"ui-carousel__title\">{current.title}</div>\n                <div class=\"ui-carousel__text\">{current.text}</div>\n            </div>\n            <button\n                class=\"ui-carousel__nav ui-carousel__nav_next\"\n                type=\"button\"\n                title=\"次へ\"\n                onclick={handleNext}\n            >\n                ›\n            </button>\n        </div>\n        <div class=\"ui-carousel__dots\">\n            <template for:each={dots} for:item=\"dot\">\n                <button\n                    key={dot.key}\n                    class={dot.cssClass}\n                    type=\"button\"\n                    data-idx={dot.idx}\n                    onclick={handleDot}\n                ></button>\n            </template>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiCarousel — 汎用カルーセル。\n * slides 配列 ([{ title, text }]) を 1 枚ずつ表示し、前後ボタンと\n * ドットで切替える。切替時に change イベント (detail.index) を発火する。\n */\nexport default class UiCarousel extends LightningElement {\n    _slides = [];\n\n    /** [{ title, text }] の配列 */\n    @api\n    get slides() {\n        return this._slides;\n    }\n    set slides(value) {\n        this._slides = Array.isArray(value) ? value : [];\n    }\n\n    @track index = 0;\n\n    get current() {\n        return this._slides[this.index] || {};\n    }\n\n    get dots() {\n        return this._slides.map((s, i) => ({\n            key: i,\n            idx: i,\n            cssClass:\n                i === this.index\n                    ? 'ui-carousel__dot ui-carousel__dot_active'\n                    : 'ui-carousel__dot'\n        }));\n    }\n\n    get hasSlides() {\n        return this._slides.length > 0;\n    }\n\n    emit() {\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { index: this.index } })\n        );\n    }\n\n    handlePrev() {\n        const n = this._slides.length;\n        if (n) {\n            this.index = (this.index - 1 + n) % n;\n            this.emit();\n        }\n    }\n\n    handleNext() {\n        const n = this._slides.length;\n        if (n) {\n            this.index = (this.index + 1) % n;\n            this.emit();\n        }\n    }\n\n    handleDot(event) {\n        this.index = Number(event.currentTarget.dataset.idx);\n        this.emit();\n    }\n}\n",
+        "css": ".ui-carousel {\n    width: 100%;\n    max-width: 420px;\n}\n\n.ui-carousel__frame {\n    display: flex;\n    align-items: stretch;\n    border: 1px solid #e5e5e5;\n    border-radius: 10px;\n    overflow: hidden;\n    background: #ffffff;\n}\n\n.ui-carousel__nav {\n    width: 40px;\n    border: none;\n    background: #fafaf9;\n    color: #514f4d;\n    font-size: 1.4rem;\n    cursor: pointer;\n    flex-shrink: 0;\n}\n.ui-carousel__nav:hover {\n    background: #eef4ff;\n    color: #0176d3;\n}\n\n.ui-carousel__slide {\n    flex: 1;\n    padding: 24px 18px;\n    text-align: center;\n    min-height: 96px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    gap: 6px;\n}\n\n.ui-carousel__title {\n    font-size: 1rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-carousel__text {\n    font-size: 0.85rem;\n    color: #514f4d;\n    line-height: 1.5;\n}\n\n.ui-carousel__dots {\n    display: flex;\n    justify-content: center;\n    gap: 6px;\n    margin-top: 10px;\n}\n\n.ui-carousel__dot {\n    width: 8px;\n    height: 8px;\n    border-radius: 50%;\n    border: none;\n    background: #c9c9c9;\n    cursor: pointer;\n    padding: 0;\n}\n.ui-carousel__dot_active {\n    background: #0176d3;\n    width: 20px;\n    border-radius: 4px;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Carousel</masterLabel>\n    <description>汎用カルーセル。スライドを前後ボタン/ドットで切替え change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

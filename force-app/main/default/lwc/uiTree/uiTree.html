@@ -1,0 +1,32 @@
+<template>
+    <ul class="ui-tree">
+        <template for:each={computedNodes} for:item="node">
+            <li key={node.key} class="ui-tree__item">
+                <button
+                    class="ui-tree__node"
+                    type="button"
+                    data-value={node.value}
+                    onclick={handleParent}
+                >
+                    <span lwc:if={node.hasChildren} class="ui-tree__caret">{node.caret}</span>
+                    <span lwc:else class="ui-tree__caret ui-tree__caret_leaf">•</span>
+                    <span class="ui-tree__label">{node.label}</span>
+                </button>
+                <ul lwc:if={node.isOpen} class="ui-tree__children">
+                    <template for:each={node.children} for:item="child">
+                        <li key={child.value} class="ui-tree__item">
+                            <button
+                                class="ui-tree__node ui-tree__node_child"
+                                type="button"
+                                data-value={child.value}
+                                onclick={handleChild}
+                            >
+                                <span class="ui-tree__label">{child.label}</span>
+                            </button>
+                        </li>
+                    </template>
+                </ul>
+            </li>
+        </template>
+    </ul>
+</template>
