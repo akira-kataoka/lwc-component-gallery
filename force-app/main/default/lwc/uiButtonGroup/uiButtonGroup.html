@@ -1,0 +1,15 @@
+<template>
+    <div class="ui-btngroup" role="group">
+        <template for:each={computedButtons} for:item="btn">
+            <button
+                key={btn.value}
+                class={btn.cssClass}
+                type="button"
+                data-value={btn.value}
+                onclick={handleClick}
+            >
+                {btn.label}
+            </button>
+        </template>
+    </div>
+</template>

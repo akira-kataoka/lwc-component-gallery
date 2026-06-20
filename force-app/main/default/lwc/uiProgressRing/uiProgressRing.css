@@ -1,0 +1,61 @@
+.ui-ring {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ui-ring_small {
+    width: 36px;
+    height: 36px;
+}
+.ui-ring_medium {
+    width: 52px;
+    height: 52px;
+}
+.ui-ring_large {
+    width: 72px;
+    height: 72px;
+}
+
+.ui-ring__svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.ui-ring__track {
+    fill: none;
+    stroke: #e5e5e5;
+    stroke-width: 4;
+}
+
+.ui-ring__bar {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.35s ease;
+}
+
+.ui-ring_brand .ui-ring__bar {
+    stroke: #0176d3;
+}
+.ui-ring_success .ui-ring__bar {
+    stroke: #2e844a;
+}
+.ui-ring_warning .ui-ring__bar {
+    stroke: #dd7a01;
+}
+.ui-ring_error .ui-ring__bar {
+    stroke: #ba0517;
+}
+
+.ui-ring__label {
+    position: absolute;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #181818;
+}
+.ui-ring_large .ui-ring__label {
+    font-size: 0.9rem;
+}

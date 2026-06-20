@@ -231,6 +231,24 @@ html[data-theme='dark'] .nav-link.is-active {
 .nav-link__icon {
     font-size: 1rem;
 }
+.nav-link__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    min-width: 0;
+}
+.nav-link__ja {
+    font-size: 0.85rem;
+}
+.nav-link__en {
+    font-size: 0.66rem;
+    color: var(--text-mute);
+    font-weight: 400;
+}
+.nav-link.is-active .nav-link__en {
+    color: var(--brand);
+    opacity: 0.75;
+}
 
 .sidebar__footer {
     margin-top: 20px;
@@ -294,6 +312,15 @@ html[data-theme='dark'] .nav-link.is-active {
     margin: 0;
     font-size: 1.15rem;
     font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.comp__title-en {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-mute);
 }
 .comp__tag {
     font-size: 0.7rem;

@@ -1,0 +1,47 @@
+.ui-statusdot {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.82rem;
+    color: #181818;
+}
+
+.ui-statusdot__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: #969492;
+}
+
+.ui-statusdot__dot_online {
+    background: #2e844a;
+}
+.ui-statusdot__dot_offline {
+    background: #969492;
+}
+.ui-statusdot__dot_busy {
+    background: #ba0517;
+}
+.ui-statusdot__dot_away {
+    background: #dd7a01;
+}
+.ui-statusdot__dot_neutral {
+    background: #c9c9c9;
+}
+
+.ui-statusdot__dot_pulse {
+    animation: ui-statusdot-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes ui-statusdot-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(46, 132, 74, 0.5);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(46, 132, 74, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(46, 132, 74, 0);
+    }
+}

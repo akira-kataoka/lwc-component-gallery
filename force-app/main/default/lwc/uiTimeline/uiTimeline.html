@@ -1,0 +1,18 @@
+<template>
+    <ul class="ui-timeline">
+        <template for:each={computedItems} for:item="item">
+            <li key={item.key} class="ui-timeline__item">
+                <span class="ui-timeline__marker"></span>
+                <div class="ui-timeline__content">
+                    <div class="ui-timeline__head">
+                        <span class="ui-timeline__title">{item.title}</span>
+                        <span class="ui-timeline__time">{item.time}</span>
+                    </div>
+                    <p lwc:if={item.hasDescription} class="ui-timeline__desc">
+                        {item.description}
+                    </p>
+                </div>
+            </li>
+        </template>
+    </ul>
+</template>

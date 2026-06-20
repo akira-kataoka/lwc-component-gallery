@@ -92,7 +92,10 @@
                 items.appendChild(
                     el('a', { class: 'nav-link', href: '#' + c.id, 'data-id': c.id }, [
                         el('span', { class: 'nav-link__icon', text: c.icon }),
-                        el('span', { text: c.title })
+                        el('span', { class: 'nav-link__text' }, [
+                            el('span', { class: 'nav-link__ja', text: c.ja || c.title }),
+                            el('span', { class: 'nav-link__en', text: c.title })
+                        ])
                     ])
                 );
             });
@@ -185,7 +188,10 @@
         const header = el('div', { class: 'comp__header' }, [
             el('div', { class: 'comp__title-row' }, [
                 el('span', { class: 'comp__icon', text: comp.icon }),
-                el('h2', { class: 'comp__title', text: comp.title }),
+                el('h2', { class: 'comp__title' }, [
+                    el('span', { class: 'comp__title-ja', text: comp.ja || comp.title }),
+                    el('span', { class: 'comp__title-en', text: comp.title })
+                ]),
                 el('span', { class: 'comp__tag', text: comp.category }),
                 el('span', { class: 'comp__api', text: '<c-' + kebab(comp.id) + '>' })
             ]),
@@ -948,6 +954,216 @@
                     el('div', { class: 'ui-empty__action' }, [action])
                 ])
             );
+        },
+
+        radio(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '選択: （なし）' });
+            let value = '';
+            const opts = [['クレジットカード', 'card'], ['銀行振込', 'bank'], ['代金引換', 'cod']];
+            const fs = el('fieldset', { class: 'ui-radio-group' }, [
+                el('legend', { class: 'ui-radio-group__legend', text: '支払方法' })
+            ]);
+            opts.forEach((o) => {
+                const input = el('input', { type: 'radio', class: 'ui-radio__input', name: 'demo-radio', value: o[1] });
+                input.addEventListener('change', () => {
+                    value = o[1];
+                    out.textContent = '選択: ' + o[0];
+                });
+                fs.appendChild(
+                    el('label', { class: 'ui-radio' }, [
+                        input,
+                        el('span', { class: 'ui-radio__dot' }),
+                        el('span', { class: 'ui-radio__label', text: o[0] })
+                    ])
+                );
+            });
+            box.appendChild(fs);
+            controls.appendChild(out);
+        },
+
+        searchbox(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'クエリ: （空）' });
+            const field = el('input', { type: 'search', class: 'ui-search__field', placeholder: '検索…' });
+            const clear = el('button', { class: 'ui-search__clear', type: 'button', title: 'クリア', html: '&times;', style: 'display:none' });
+            field.addEventListener('input', () => {
+                out.textContent = 'クエリ: ' + (field.value || '（空）');
+                clear.style.display = field.value ? '' : 'none';
+            });
+            clear.addEventListener('click', () => {
+                field.value = '';
+                out.textContent = 'クエリ: （空）';
+                clear.style.display = 'none';
+            });
+            box.appendChild(
+                el('div', { class: 'ui-search', style: 'max-width:280px' }, [
+                    el('span', { class: 'ui-search__icon', text: '🔍' }),
+                    field,
+                    clear
+                ])
+            );
+            controls.appendChild(out);
+        },
+
+        slider(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '値: 60' });
+            const valSpan = el('span', { class: 'ui-slider__value', text: '60' });
+            const range = el('input', { type: 'range', class: 'ui-slider__range', min: '0', max: '100', value: '60' });
+            range.addEventListener('input', () => {
+                valSpan.textContent = range.value;
+                out.textContent = '値: ' + range.value;
+            });
+            box.appendChild(
+                el('div', { class: 'ui-slider', style: 'max-width:320px' }, [
+                    el('div', { class: 'ui-slider__header' }, [
+                        el('span', { class: 'ui-slider__label', text: '音量' }),
+                        valSpan
+                    ]),
+                    range
+                ])
+            );
+            controls.appendChild(out);
+        },
+
+        buttongroup(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '表示: リスト' });
+            const opts = [['リスト', 'list'], ['カード', 'card'], ['表', 'table']];
+            let active = 'list';
+            const group = el('div', { class: 'ui-btngroup', role: 'group' });
+            function render() {
+                group.innerHTML = '';
+                opts.forEach((o) => {
+                    const b = el('button', {
+                        class: 'ui-btngroup__item' + (o[1] === active ? ' ui-btngroup__item_active' : ''),
+                        type: 'button',
+                        text: o[0]
+                    });
+                    b.addEventListener('click', () => {
+                        active = o[1];
+                        out.textContent = '表示: ' + o[0];
+                        render();
+                    });
+                    group.appendChild(b);
+                });
+            }
+            render();
+            box.appendChild(group);
+            controls.appendChild(out);
+        },
+
+        timeline(box) {
+            const items = [
+                ['注文を受付', '10:24', 'ご注文ありがとうございます。'],
+                ['出荷準備', '12:40', '倉庫で梱包を開始しました。'],
+                ['発送完了', '15:10', '配送業者へ引き渡しました。'],
+                ['お届け', '翌日', '配達が完了しました。']
+            ];
+            const ul = el('ul', { class: 'ui-timeline', style: 'width:100%;max-width:420px' });
+            items.forEach((it) => {
+                ul.appendChild(
+                    el('li', { class: 'ui-timeline__item' }, [
+                        el('span', { class: 'ui-timeline__marker' }),
+                        el('div', { class: 'ui-timeline__content' }, [
+                            el('div', { class: 'ui-timeline__head' }, [
+                                el('span', { class: 'ui-timeline__title', text: it[0] }),
+                                el('span', { class: 'ui-timeline__time', text: it[1] })
+                            ]),
+                            el('p', { class: 'ui-timeline__desc', text: it[2] })
+                        ])
+                    ])
+                );
+            });
+            box.appendChild(ul);
+        },
+
+        statusdot(box) {
+            [
+                ['online', 'オンライン'],
+                ['busy', '取り込み中'],
+                ['away', '離席中'],
+                ['offline', 'オフライン']
+            ].forEach((s) => {
+                box.appendChild(
+                    el('span', { class: 'ui-statusdot' }, [
+                        el('span', { class: 'ui-statusdot__dot ui-statusdot__dot_' + s[0] + (s[0] === 'online' ? ' ui-statusdot__dot_pulse' : '') }),
+                        el('span', { class: 'ui-statusdot__label', text: s[1] })
+                    ])
+                );
+            });
+        },
+
+        progressring(box, controls) {
+            const circ = 2 * Math.PI * 16;
+            const variants = ['brand', 'success', 'warning'];
+            const bars = [];
+            variants.forEach((v, i) => {
+                const val = [72, 45, 90][i];
+                const bar = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                bar.setAttribute('class', 'ui-ring__bar');
+                bar.setAttribute('cx', '20');
+                bar.setAttribute('cy', '20');
+                bar.setAttribute('r', '16');
+                bar.setAttribute('style', `stroke-dasharray:${circ};stroke-dashoffset:${circ * (1 - val / 100)}`);
+                const track = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                track.setAttribute('class', 'ui-ring__track');
+                track.setAttribute('cx', '20');
+                track.setAttribute('cy', '20');
+                track.setAttribute('r', '16');
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('class', 'ui-ring__svg');
+                svg.setAttribute('viewBox', '0 0 40 40');
+                svg.appendChild(track);
+                svg.appendChild(bar);
+                const label = el('span', { class: 'ui-ring__label', text: val + '%' });
+                const ring = el('div', { class: 'ui-ring ui-ring_large ui-ring_' + v });
+                ring.appendChild(svg);
+                ring.appendChild(label);
+                box.appendChild(ring);
+                bars.push({ bar, label });
+            });
+            const range = el('input', { type: 'range', min: '0', max: '100', value: '72' });
+            range.addEventListener('input', () => {
+                const val = Number(range.value);
+                bars.forEach((b) => {
+                    b.bar.setAttribute('style', `stroke-dasharray:${circ};stroke-dashoffset:${circ * (1 - val / 100)}`);
+                    b.label.textContent = val + '%';
+                });
+            });
+            controls.appendChild(el('span', { text: '値:' }));
+            controls.appendChild(range);
+        },
+
+        dropdownmenu(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '選択: （なし）' });
+            const items = [['編集', 'edit'], ['複製', 'clone'], ['削除', 'delete']];
+            const menu = el('ul', { class: 'ui-dropdown__menu', role: 'menu', style: 'display:none' });
+            let open = false;
+            const caret = el('span', { class: 'ui-dropdown__caret', text: '▾' });
+            const trigger = el('button', { class: 'ui-dropdown__trigger', type: 'button' }, [
+                el('span', { class: 'ui-dropdown__label', text: '操作' }),
+                caret
+            ]);
+            items.forEach((it) => {
+                const b = el('button', { class: 'ui-dropdown__item', type: 'button', role: 'menuitem', text: it[0] });
+                b.addEventListener('click', () => {
+                    out.textContent = '選択: ' + it[0];
+                    open = false;
+                    menu.style.display = 'none';
+                });
+                menu.appendChild(el('li', { role: 'none' }, [b]));
+            });
+            trigger.addEventListener('click', () => {
+                open = !open;
+                menu.style.display = open ? '' : 'none';
+            });
+            const wrap = el('div', { class: 'ui-dropdown' }, [trigger, menu]);
+            wrap.addEventListener('focusout', (e) => {
+                if (open && (!e.relatedTarget || !wrap.contains(e.relatedTarget))) {
+                    open = false;
+                    menu.style.display = 'none';
+                }
+            });
+            box.appendChild(wrap);
+            controls.appendChild(out);
         }
     };
 
@@ -960,6 +1176,7 @@
                 const hit =
                     !q ||
                     c.title.toLowerCase().includes(q) ||
+                    (c.ja && c.ja.toLowerCase().includes(q)) ||
                     c.id.toLowerCase().includes(q) ||
                     c.description.toLowerCase().includes(q) ||
                     c.category.toLowerCase().includes(q);

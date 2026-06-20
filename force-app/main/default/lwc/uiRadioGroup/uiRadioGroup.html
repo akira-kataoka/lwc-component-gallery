@@ -1,0 +1,19 @@
+<template>
+    <fieldset class="ui-radio-group">
+        <legend lwc:if={label} class="ui-radio-group__legend">{label}</legend>
+        <template for:each={computedOptions} for:item="opt">
+            <label key={opt.value} class="ui-radio">
+                <input
+                    type="radio"
+                    class="ui-radio__input"
+                    name={computedName}
+                    value={opt.value}
+                    checked={opt.checked}
+                    onchange={handleChange}
+                />
+                <span class="ui-radio__dot"></span>
+                <span class="ui-radio__label">{opt.label}</span>
+            </label>
+        </template>
+    </fieldset>
+</template>

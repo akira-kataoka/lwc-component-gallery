@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T02:07:43.887Z",
+  "generatedAt": "2026-06-20T02:28:02.810Z",
   "components": [
     {
       "id": "uiBadge",
@@ -31,6 +31,7 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-badge label=\"承認済み\" variant=\"success\"></c-ui-badge>",
+      "ja": "バッジ",
       "files": {
         "html": "<template>\n    <span class={computedClass}>\n        <lightning-icon\n            lwc:if={iconName}\n            icon-name={iconName}\n            size=\"xx-small\"\n            class=\"ui-badge__icon\"\n        ></lightning-icon>\n        <span class=\"ui-badge__label\">{label}</span>\n    </span>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['neutral', 'info', 'success', 'warning', 'error'];\n\n/**\n * uiBadge — 汎用ステータスバッジ。\n * ラベルと色バリアント、任意のアイコンを表示する純粋な表示コンポーネント。\n */\nexport default class UiBadge extends LightningElement {\n    /** 表示テキスト */\n    @api label;\n    /** 色バリアント: neutral | info | success | warning | error */\n    @api variant = 'neutral';\n    /** 任意の lightning-icon 名 (例: utility:check) */\n    @api iconName;\n\n    get computedClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'neutral';\n        return `ui-badge ui-badge_${variant}`;\n    }\n}\n",
@@ -84,6 +85,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-button label=\"保存\" variant=\"brand\" onclick={handleSave}></c-ui-button>",
+      "ja": "ボタン",
       "files": {
         "html": "<template>\n    <button\n        class={computedClass}\n        type={type}\n        disabled={disabled}\n        onclick={handleClick}\n    >\n        <lightning-icon\n            lwc:if={iconName}\n            icon-name={iconName}\n            size=\"xx-small\"\n            class=\"ui-button__icon\"\n        ></lightning-icon>\n        <span class=\"ui-button__label\">{label}</span>\n    </button>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['brand', 'neutral', 'outline', 'success', 'destructive'];\n\n/**\n * uiButton — 汎用ボタン。\n * 色バリアント・アイコン・無効化に対応し、click イベントを発火する。\n */\nexport default class UiButton extends LightningElement {\n    /** ボタンラベル */\n    @api label;\n    /** 色バリアント: brand | neutral | outline | success | destructive */\n    @api variant = 'brand';\n    /** 任意の lightning-icon 名 (例: utility:add) */\n    @api iconName;\n    /** true で無効化 */\n    @api disabled = false;\n    /** ネイティブ type: button | submit | reset */\n    @api type = 'button';\n    /** true で横幅いっぱいに広げる */\n    @api stretch = false;\n\n    get computedClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        return `ui-button ui-button_${variant}${this.stretch ? ' ui-button_stretch' : ''}`;\n    }\n\n    handleClick() {\n        this.dispatchEvent(new CustomEvent('click'));\n    }\n}\n",
@@ -128,6 +130,7 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-card title=\"取引先\" icon-name=\"standard:account\">\n    本文をここに記述\n    <div slot=\"footer\">フッタ</div>\n</c-ui-card>",
+      "ja": "カード",
       "files": {
         "html": "<template>\n    <article class=\"ui-card\">\n        <header lwc:if={hasHeader} class=\"ui-card__header\">\n            <lightning-icon\n                lwc:if={iconName}\n                icon-name={iconName}\n                size=\"small\"\n                class=\"ui-card__icon\"\n            ></lightning-icon>\n            <h2 class=\"ui-card__title\">{title}</h2>\n            <div class=\"ui-card__actions\">\n                <slot name=\"actions\"></slot>\n            </div>\n        </header>\n        <div class=\"ui-card__body\">\n            <slot></slot>\n        </div>\n        <footer class={footerClass}>\n            <slot name=\"footer\" onslotchange={handleFooterSlotChange}></slot>\n        </footer>\n    </article>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiCard — 汎用カード。\n * タイトル・アイコンのヘッダ、本文 (default スロット)、\n * 任意のアクション (actions スロット) とフッタ (footer スロット) を持つ。\n */\nexport default class UiCard extends LightningElement {\n    /** ヘッダタイトル */\n    @api title;\n    /** 任意の lightning-icon 名 (例: standard:account) */\n    @api iconName;\n\n    hasFooter = false;\n\n    get hasHeader() {\n        return !!this.title || !!this.iconName;\n    }\n\n    get footerClass() {\n        return this.hasFooter\n            ? 'ui-card__footer'\n            : 'ui-card__footer ui-card__footer_empty';\n    }\n\n    handleFooterSlotChange(event) {\n        this.hasFooter = event.target.assignedNodes().length > 0;\n    }\n}\n",
@@ -179,6 +182,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-modal header=\"確認\" open={isOpen} onclose={handleClose}>\n    本当に削除しますか？\n    <div slot=\"footer\">\n        <c-ui-button label=\"OK\"></c-ui-button>\n    </div>\n</c-ui-modal>",
+      "ja": "モーダル",
       "files": {
         "html": "<template>\n    <template lwc:if={open}>\n        <div\n            class=\"ui-modal-backdrop\"\n            onclick={handleClose}\n            onkeydown={handleBackdropKeydown}\n        >\n            <section\n                class={modalClass}\n                role=\"dialog\"\n                aria-modal=\"true\"\n                aria-label={header}\n                onclick={stopPropagation}\n            >\n                <header class=\"ui-modal__header\">\n                    <h2 class=\"ui-modal__title\">{header}</h2>\n                    <button\n                        class=\"ui-modal__close\"\n                        type=\"button\"\n                        title=\"閉じる\"\n                        onclick={handleClose}\n                    >\n                        &times;\n                    </button>\n                </header>\n                <div class=\"ui-modal__body\">\n                    <slot></slot>\n                </div>\n                <footer class=\"ui-modal__footer\">\n                    <slot name=\"footer\"></slot>\n                </footer>\n            </section>\n        </div>\n    </template>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\nconst SIZES = ['small', 'medium', 'large'];\n\n/**\n * uiModal — 汎用モーダルダイアログ。\n * open プロパティで表示制御し、本文 (default スロット) と\n * フッタ (footer スロット) を持つ。背景・×ボタン・Esc で close イベントを発火。\n */\nexport default class UiModal extends LightningElement {\n    /** ヘッダタイトル */\n    @api header;\n    /** true で表示 */\n    @api open = false;\n    /** サイズ: small | medium | large */\n    @api size = 'medium';\n\n    get modalClass() {\n        const size = SIZES.includes(this.size) ? this.size : 'medium';\n        return `ui-modal ui-modal_${size}`;\n    }\n\n    handleClose() {\n        this.dispatchEvent(new CustomEvent('close'));\n    }\n\n    handleBackdropKeydown(event) {\n        if (event.key === 'Escape') {\n            this.handleClose();\n        }\n    }\n\n    stopPropagation(event) {\n        event.stopPropagation();\n    }\n}\n",
@@ -208,6 +212,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-tabs tabs={tabs} onselect={handleSelect}></c-ui-tabs>",
+      "ja": "タブ",
       "files": {
         "html": "<template>\n    <div class=\"ui-tabs\">\n        <div class=\"ui-tabs__nav\" role=\"tablist\">\n            <template for:each={computedTabs} for:item=\"tab\">\n                <button\n                    key={tab.value}\n                    class={tab.cssClass}\n                    role=\"tab\"\n                    type=\"button\"\n                    aria-selected={tab.selected}\n                    data-value={tab.value}\n                    onclick={handleSelect}\n                >\n                    {tab.label}\n                </button>\n            </template>\n        </div>\n        <div class=\"ui-tabs__panel\" role=\"tabpanel\">{activeContent}</div>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiTabs — 汎用タブ。\n * tabs 配列 ([{ label, value, content }]) を受け取り、\n * ヘッダ切替で本文を表示し、select イベントで選択値を通知する。\n */\nexport default class UiTabs extends LightningElement {\n    @track _tabs = [];\n    @track activeValue;\n\n    /** [{ label, value, content }] の配列 */\n    @api\n    get tabs() {\n        return this._tabs;\n    }\n    set tabs(value) {\n        this._tabs = Array.isArray(value) ? value : [];\n        if (this._tabs.length && !this._hasActive()) {\n            this.activeValue = this._tabs[0].value;\n        }\n    }\n\n    _hasActive() {\n        return this._tabs.some((t) => t.value === this.activeValue);\n    }\n\n    get computedTabs() {\n        return this._tabs.map((t) => ({\n            ...t,\n            cssClass:\n                t.value === this.activeValue\n                    ? 'ui-tab ui-tab_active'\n                    : 'ui-tab',\n            selected: t.value === this.activeValue\n        }));\n    }\n\n    get activeContent() {\n        const tab = this._tabs.find((t) => t.value === this.activeValue);\n        return tab ? tab.content : '';\n    }\n\n    handleSelect(event) {\n        this.activeValue = event.currentTarget.dataset.value;\n        this.dispatchEvent(\n            new CustomEvent('select', { detail: { value: this.activeValue } })\n        );\n    }\n}\n",
@@ -243,6 +248,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-accordion sections={sections}></c-ui-accordion>",
+      "ja": "アコーディオン",
       "files": {
         "html": "<template>\n    <div class=\"ui-accordion\">\n        <template for:each={computedSections} for:item=\"section\">\n            <div key={section.value} class={section.cssClass}>\n                <button\n                    class=\"ui-accordion__header\"\n                    type=\"button\"\n                    aria-expanded={section.isOpen}\n                    data-value={section.value}\n                    onclick={handleToggle}\n                >\n                    <span class=\"ui-accordion__icon\">{section.iconChar}</span>\n                    <span class=\"ui-accordion__label\">{section.label}</span>\n                </button>\n                <div lwc:if={section.isOpen} class=\"ui-accordion__body\">\n                    {section.content}\n                </div>\n            </div>\n        </template>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiAccordion — 汎用アコーディオン。\n * sections 配列 ([{ label, value, content }]) を折りたたみ表示する。\n * allowMultiple=false (既定) では同時に1つだけ開く。\n * 開閉時に toggle イベントで開いている value 配列を通知する。\n */\nexport default class UiAccordion extends LightningElement {\n    @track _sections = [];\n    @track openValues = [];\n\n    /** [{ label, value, content }] の配列 */\n    @api\n    get sections() {\n        return this._sections;\n    }\n    set sections(value) {\n        this._sections = Array.isArray(value) ? value : [];\n    }\n\n    /** true で複数同時オープンを許可 */\n    @api allowMultiple = false;\n\n    get computedSections() {\n        return this._sections.map((s) => {\n            const isOpen = this.openValues.includes(s.value);\n            return {\n                ...s,\n                isOpen,\n                cssClass: isOpen\n                    ? 'ui-accordion__item ui-accordion__item_open'\n                    : 'ui-accordion__item',\n                iconChar: isOpen ? '−' : '+'\n            };\n        });\n    }\n\n    handleToggle(event) {\n        const value = event.currentTarget.dataset.value;\n        const isOpen = this.openValues.includes(value);\n        if (this.allowMultiple) {\n            this.openValues = isOpen\n                ? this.openValues.filter((v) => v !== value)\n                : [...this.openValues, value];\n        } else {\n            this.openValues = isOpen ? [] : [value];\n        }\n        this.dispatchEvent(\n            new CustomEvent('toggle', { detail: { open: [...this.openValues] } })\n        );\n    }\n}\n",
@@ -278,6 +284,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-data-table columns={columns} data={rows} onrowselect={handleRow}></c-ui-data-table>",
+      "ja": "データテーブル",
       "files": {
         "html": "<template>\n    <table class=\"ui-dt\">\n        <thead>\n            <tr>\n                <template for:each={computedColumns} for:item=\"col\">\n                    <th\n                        key={col.fieldName}\n                        class={col.cssClass}\n                        data-field={col.fieldName}\n                        onclick={handleSort}\n                        scope=\"col\"\n                    >\n                        {col.headerLabel}\n                    </th>\n                </template>\n            </tr>\n        </thead>\n        <tbody>\n            <template for:each={computedRows} for:item=\"row\" for:index=\"idx\">\n                <tr\n                    key={row.key}\n                    class=\"ui-dt__row\"\n                    data-index={idx}\n                    onclick={handleRowClick}\n                >\n                    <template for:each={row.cells} for:item=\"cell\">\n                        <td key={cell.key} class=\"ui-dt__td\">{cell.value}</td>\n                    </template>\n                </tr>\n            </template>\n        </tbody>\n    </table>\n</template>\n",
         "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiDataTable — 汎用データテーブル。\n * columns ([{ label, fieldName, sortable }]) と data (オブジェクト配列) を受け取り、\n * ソート可能列のヘッダクリックで昇順→降順を切替える。\n * 行クリックで rowselect イベント (detail: { row }) を発火する。\n */\nexport default class UiDataTable extends LightningElement {\n    @track _columns = [];\n    @track _data = [];\n    @track sortBy;\n    @track sortDirection = 'asc';\n\n    /** [{ label, fieldName, sortable }] の配列 */\n    @api\n    get columns() {\n        return this._columns;\n    }\n    set columns(value) {\n        this._columns = Array.isArray(value) ? value : [];\n    }\n\n    /** 表示するレコード (オブジェクト配列) */\n    @api\n    get data() {\n        return this._data;\n    }\n    set data(value) {\n        this._data = Array.isArray(value) ? value : [];\n    }\n\n    get computedColumns() {\n        return this._columns.map((c) => {\n            const isSorted = c.sortable && c.fieldName === this.sortBy;\n            let indicator = '';\n            if (isSorted) {\n                indicator = this.sortDirection === 'asc' ? ' ▲' : ' ▼';\n            }\n            return {\n                ...c,\n                cssClass: c.sortable\n                    ? 'ui-dt__th ui-dt__th_sortable'\n                    : 'ui-dt__th',\n                headerLabel: c.label + indicator\n            };\n        });\n    }\n\n    get computedRows() {\n        const rows = [...this._data];\n        if (this.sortBy) {\n            const dir = this.sortDirection === 'asc' ? 1 : -1;\n            rows.sort((a, b) => {\n                const av = a[this.sortBy];\n                const bv = b[this.sortBy];\n                if (av === bv) {\n                    return 0;\n                }\n                if (av === undefined || av === null) {\n                    return 1;\n                }\n                if (bv === undefined || bv === null) {\n                    return -1;\n                }\n                return av > bv ? dir : -dir;\n            });\n        }\n        return rows.map((row, index) => ({\n            key: row.id !== undefined ? row.id : index,\n            data: row,\n            cells: this._columns.map((c) => ({\n                key: c.fieldName,\n                value: row[c.fieldName]\n            }))\n        }));\n    }\n\n    handleSort(event) {\n        const field = event.currentTarget.dataset.field;\n        const column = this._columns.find((c) => c.fieldName === field);\n        if (!column || !column.sortable) {\n            return;\n        }\n        if (this.sortBy === field) {\n            this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';\n        } else {\n            this.sortBy = field;\n            this.sortDirection = 'asc';\n        }\n    }\n\n    handleRowClick(event) {\n        const index = Number(event.currentTarget.dataset.index);\n        const row = this.computedRows[index];\n        this.dispatchEvent(\n            new CustomEvent('rowselect', { detail: { row: row && row.data } })\n        );\n    }\n}\n",
@@ -314,6 +321,7 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-progress-bar value=\"65\" variant=\"success\" show-label></c-ui-progress-bar>",
+      "ja": "プログレスバー",
       "files": {
         "html": "<template>\n    <div class=\"ui-progress\">\n        <div\n            class=\"ui-progress__track\"\n            role=\"progressbar\"\n            aria-valuenow={clampedValue}\n            aria-valuemin=\"0\"\n            aria-valuemax=\"100\"\n        >\n            <div class={fillClass} style={barStyle}></div>\n        </div>\n        <span lwc:if={showLabel} class=\"ui-progress__label\">{labelText}</span>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['brand', 'success', 'warning', 'error'];\n\n/**\n * uiProgressBar — 汎用プログレスバー。\n * 0〜100 の値を色付きバーで表示し、任意でパーセント数値を併記する。\n */\nexport default class UiProgressBar extends LightningElement {\n    /** 進捗率 0〜100 */\n    @api value = 0;\n    /** 色バリアント: brand | success | warning | error */\n    @api variant = 'brand';\n    /** true でパーセント表示 */\n    @api showLabel = false;\n\n    get clampedValue() {\n        const n = Number(this.value);\n        if (Number.isNaN(n)) {\n            return 0;\n        }\n        return Math.min(100, Math.max(0, n));\n    }\n\n    get barStyle() {\n        return `width: ${this.clampedValue}%`;\n    }\n\n    get fillClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        return `ui-progress__fill ui-progress__fill_${variant}`;\n    }\n\n    get labelText() {\n        return `${Math.round(this.clampedValue)}%`;\n    }\n}\n",
@@ -373,6 +381,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-input label=\"氏名\" required onchange={handleChange}></c-ui-input>",
+      "ja": "入力フィールド",
       "files": {
         "html": "<template>\n    <div class=\"ui-input\">\n        <label lwc:if={label} class=\"ui-input__label\">\n            {label}\n            <abbr lwc:if={required} class=\"ui-input__req\" title=\"必須\">*</abbr>\n        </label>\n        <input\n            class=\"ui-input__field\"\n            type={type}\n            value={value}\n            placeholder={placeholder}\n            disabled={disabled}\n            oninput={handleInput}\n        />\n    </div>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiInput — 汎用テキスト入力。\n * ラベル・プレースホルダ・必須表示に対応し、入力時に change イベント\n * (detail.value) を発火する。\n */\nexport default class UiInput extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 入力値 */\n    @api value = '';\n    /** プレースホルダ */\n    @api placeholder = '';\n    /** input type: text | email | number | password など */\n    @api type = 'text';\n    /** true で必須マーク表示 */\n    @api required = false;\n    /** true で無効化 */\n    @api disabled = false;\n\n    handleInput(event) {\n        this.value = event.target.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
@@ -414,6 +423,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-toggle label=\"通知を受け取る\" checked onchange={handleToggle}></c-ui-toggle>",
+      "ja": "トグルスイッチ",
       "files": {
         "html": "<template>\n    <button\n        class=\"ui-toggle\"\n        type=\"button\"\n        role=\"switch\"\n        aria-checked={checked}\n        disabled={disabled}\n        onclick={handleClick}\n    >\n        <span class={trackClass}>\n            <span class=\"ui-toggle__thumb\"></span>\n        </span>\n        <span lwc:if={label} class=\"ui-toggle__label\">{label}</span>\n    </button>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiToggle — 汎用トグルスイッチ。\n * checked の ON/OFF を切替え、change イベント (detail.checked) を発火する。\n */\nexport default class UiToggle extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** ON 状態 */\n    @api checked = false;\n    /** true で無効化 */\n    @api disabled = false;\n\n    get trackClass() {\n        return this.checked\n            ? 'ui-toggle__track ui-toggle__track_on'\n            : 'ui-toggle__track';\n    }\n\n    handleClick() {\n        if (this.disabled) {\n            return;\n        }\n        this.checked = !this.checked;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { checked: this.checked } })\n        );\n    }\n}\n",
@@ -456,6 +466,7 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-avatar name=\"田中 太郎\" size=\"large\"></c-ui-avatar>",
+      "ja": "アバター",
       "files": {
         "html": "<template>\n    <span class={avatarClass}>\n        <img\n            lwc:if={hasImage}\n            src={src}\n            alt={name}\n            class=\"ui-avatar__img\"\n        />\n        <span lwc:else class=\"ui-avatar__initials\">{initials}</span>\n    </span>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\nconst SIZES = ['small', 'medium', 'large'];\n\n/**\n * uiAvatar — 汎用アバター。\n * 画像 (src) があれば画像、なければ name から生成したイニシャルを表示する。\n */\nexport default class UiAvatar extends LightningElement {\n    /** 表示名（イニシャル生成に使用） */\n    @api name = '';\n    /** 画像 URL（指定時は画像を表示） */\n    @api src;\n    /** サイズ: small | medium | large */\n    @api size = 'medium';\n    /** 形状: circle | square */\n    @api variant = 'circle';\n\n    get hasImage() {\n        return !!this.src;\n    }\n\n    get initials() {\n        const text = (this.name || '').trim();\n        if (!text) {\n            return '?';\n        }\n        const parts = text.split(/\\s+/);\n        if (parts.length === 1) {\n            return parts[0].slice(0, 2).toUpperCase();\n        }\n        return (parts[0][0] + parts[1][0]).toUpperCase();\n    }\n\n    get avatarClass() {\n        const size = SIZES.includes(this.size) ? this.size : 'medium';\n        const shape = this.variant === 'square' ? 'square' : 'circle';\n        return `ui-avatar ui-avatar_${size} ui-avatar_${shape}`;\n    }\n}\n",
@@ -491,6 +502,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-pill label=\"重要\" removable onremove={handleRemove}></c-ui-pill>",
+      "ja": "ピル（タグ）",
       "files": {
         "html": "<template>\n    <span class=\"ui-pill\">\n        <span class=\"ui-pill__label\">{label}</span>\n        <button\n            lwc:if={removable}\n            class=\"ui-pill__remove\"\n            type=\"button\"\n            title=\"削除\"\n            onclick={handleRemove}\n        >\n            &times;\n        </button>\n    </span>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiPill — 汎用ピル（タグ）。\n * ラベルを表示し、removable=true のとき×ボタンで remove イベントを発火する。\n */\nexport default class UiPill extends LightningElement {\n    /** 表示テキスト */\n    @api label;\n    /** true で削除ボタンを表示 */\n    @api removable = false;\n\n    handleRemove() {\n        this.dispatchEvent(new CustomEvent('remove'));\n    }\n}\n",
@@ -538,6 +550,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-alert variant=\"success\" title=\"保存しました\" closable>\n    変更内容が保存されました。\n</c-ui-alert>",
+      "ja": "アラート",
       "files": {
         "html": "<template>\n    <div lwc:if={isVisible} class={alertClass} role=\"alert\">\n        <span class=\"ui-alert__icon\">{iconChar}</span>\n        <div class=\"ui-alert__content\">\n            <strong lwc:if={title} class=\"ui-alert__title\">{title}</strong>\n            <div class=\"ui-alert__message\"><slot></slot></div>\n        </div>\n        <button\n            lwc:if={closable}\n            class=\"ui-alert__close\"\n            type=\"button\"\n            title=\"閉じる\"\n            onclick={handleClose}\n        >\n            &times;\n        </button>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api, track } from 'lwc';\n\nconst ICONS = {\n    info: 'ℹ',\n    success: '✓',\n    warning: '!',\n    error: '✕'\n};\n\n/**\n * uiAlert — 汎用インラインアラート。\n * variant に応じた色とアイコンでメッセージ (default スロット) を表示する。\n * closable=true のとき×ボタンで閉じ、close イベントを発火する。\n */\nexport default class UiAlert extends LightningElement {\n    /** バリアント: info | success | warning | error */\n    @api variant = 'info';\n    /** 見出し（任意） */\n    @api title;\n    /** true で閉じるボタンを表示 */\n    @api closable = false;\n\n    @track closed = false;\n\n    get isVisible() {\n        return !this.closed;\n    }\n\n    get alertClass() {\n        const variant = ICONS[this.variant] ? this.variant : 'info';\n        return `ui-alert ui-alert_${variant}`;\n    }\n\n    get iconChar() {\n        return ICONS[this.variant] || ICONS.info;\n    }\n\n    handleClose() {\n        this.closed = true;\n        this.dispatchEvent(new CustomEvent('close'));\n    }\n}\n",
@@ -574,6 +587,7 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-spinner size=\"large\"></c-ui-spinner>",
+      "ja": "スピナー",
       "files": {
         "html": "<template>\n    <span class={spinnerClass} role=\"status\">\n        <span class=\"ui-spinner__circle\"></span>\n        <span class=\"ui-spinner__assistive\">{alternativeText}</span>\n    </span>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\nconst SIZES = ['small', 'medium', 'large'];\n\n/**\n * uiSpinner — 汎用ローディングスピナー。\n * サイズと色バリアントに対応した CSS アニメーションの円形スピナー。\n */\nexport default class UiSpinner extends LightningElement {\n    /** サイズ: small | medium | large */\n    @api size = 'medium';\n    /** バリアント: brand | inverse */\n    @api variant = 'brand';\n    /** スクリーンリーダー向けの代替テキスト */\n    @api alternativeText = '読み込み中';\n\n    get spinnerClass() {\n        const size = SIZES.includes(this.size) ? this.size : 'medium';\n        const variant = this.variant === 'inverse' ? 'inverse' : 'brand';\n        return `ui-spinner ui-spinner_${size} ui-spinner_${variant}`;\n    }\n}\n",
@@ -619,6 +633,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "// 親コンポーネントから\nthis.template.querySelector('c-ui-toast').show('保存しました', 'success');",
+      "ja": "トースト通知",
       "files": {
         "html": "<template>\n    <div lwc:if={isVisible} class={toastClass} role=\"status\" aria-live=\"polite\">\n        <span class=\"ui-toast__icon\">{iconChar}</span>\n        <span class=\"ui-toast__message\">{message}</span>\n        <button\n            class=\"ui-toast__close\"\n            type=\"button\"\n            title=\"閉じる\"\n            onclick={close}\n        >\n            &times;\n        </button>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api, track } from 'lwc';\n\nconst ICONS = {\n    info: 'ℹ',\n    success: '✓',\n    warning: '!',\n    error: '✕'\n};\n\n/**\n * uiToast — 汎用トースト通知。\n * show(message, variant) で表示し、duration 経過後に自動で閉じる。\n * ×ボタンまたは自動クローズ時に close イベントを発火する。\n */\nexport default class UiToast extends LightningElement {\n    /** 既定バリアント: info | success | warning | error */\n    @api variant = 'info';\n    /** 自動クローズまでの ms（0 で自動クローズしない） */\n    @api duration = 3000;\n\n    @track _message = '';\n    @track _variant = 'info';\n    @track _visible = false;\n    _timer;\n\n    /** トーストを表示する */\n    @api\n    show(message, variant) {\n        this._message = message;\n        this._variant = ICONS[variant] ? variant : this.variant;\n        this._visible = true;\n        if (this._timer) {\n            clearTimeout(this._timer);\n        }\n        if (this.duration > 0) {\n            // eslint-disable-next-line @lwc/lwc/no-async-operation\n            this._timer = setTimeout(() => this.close(), this.duration);\n        }\n    }\n\n    /** トーストを閉じる */\n    @api\n    close() {\n        if (this._timer) {\n            clearTimeout(this._timer);\n        }\n        this._visible = false;\n        this.dispatchEvent(new CustomEvent('close'));\n    }\n\n    get isVisible() {\n        return this._visible;\n    }\n\n    get message() {\n        return this._message;\n    }\n\n    get toastClass() {\n        return `ui-toast ui-toast_${this._variant}`;\n    }\n\n    get iconChar() {\n        return ICONS[this._variant] || ICONS.info;\n    }\n}\n",
@@ -654,6 +669,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-pagination total-pages=\"8\" current-page=\"1\" onchange={handlePage}></c-ui-pagination>",
+      "ja": "ページネーション",
       "files": {
         "html": "<template>\n    <nav class=\"ui-pagination\" aria-label=\"ページネーション\">\n        <button\n            class=\"ui-pagination__nav\"\n            type=\"button\"\n            disabled={isFirst}\n            title=\"前へ\"\n            onclick={handlePrev}\n        >\n            ‹\n        </button>\n        <template for:each={pages} for:item=\"page\">\n            <button\n                key={page.num}\n                class={page.cssClass}\n                type=\"button\"\n                data-page={page.num}\n                onclick={handlePage}\n            >\n                {page.num}\n            </button>\n        </template>\n        <button\n            class=\"ui-pagination__nav\"\n            type=\"button\"\n            disabled={isLast}\n            title=\"次へ\"\n            onclick={handleNext}\n        >\n            ›\n        </button>\n    </nav>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiPagination — 汎用ページネーション。\n * totalPages と currentPage を受け取りページ番号を表示する。\n * ページ変更時に change イベント (detail.page) を発火する。\n */\nexport default class UiPagination extends LightningElement {\n    /** 総ページ数 */\n    @api totalPages = 1;\n    /** 現在ページ（1 始まり） */\n    @api currentPage = 1;\n\n    get pages() {\n        const total = Math.max(1, Number(this.totalPages) || 1);\n        const list = [];\n        for (let i = 1; i <= total; i += 1) {\n            list.push({\n                num: i,\n                cssClass:\n                    i === Number(this.currentPage)\n                        ? 'ui-pagination__page ui-pagination__page_active'\n                        : 'ui-pagination__page'\n            });\n        }\n        return list;\n    }\n\n    get isFirst() {\n        return Number(this.currentPage) <= 1;\n    }\n\n    get isLast() {\n        return Number(this.currentPage) >= Number(this.totalPages);\n    }\n\n    goTo(page) {\n        const target = Math.min(\n            Math.max(1, page),\n            Math.max(1, Number(this.totalPages) || 1)\n        );\n        if (target !== Number(this.currentPage)) {\n            this.currentPage = target;\n            this.dispatchEvent(\n                new CustomEvent('change', { detail: { page: target } })\n            );\n        }\n    }\n\n    handlePage(event) {\n        this.goTo(Number(event.currentTarget.dataset.page));\n    }\n\n    handlePrev() {\n        this.goTo(Number(this.currentPage) - 1);\n    }\n\n    handleNext() {\n        this.goTo(Number(this.currentPage) + 1);\n    }\n}\n",
@@ -707,6 +723,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-select label=\"部署\" options={options} onchange={handleChange}></c-ui-select>",
+      "ja": "セレクト",
       "files": {
         "html": "<template>\n    <div class=\"ui-select\">\n        <label lwc:if={label} class=\"ui-select__label\">{label}</label>\n        <select\n            class=\"ui-select__field\"\n            disabled={disabled}\n            onchange={handleChange}\n        >\n            <option value=\"\" selected={placeholderSelected}>{placeholder}</option>\n            <template for:each={computedOptions} for:item=\"opt\">\n                <option key={opt.value} value={opt.value} selected={opt.selected}>\n                    {opt.label}\n                </option>\n            </template>\n        </select>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiSelect — 汎用セレクト（ドロップダウン）。\n * options 配列 ([{ label, value }]) を表示し、選択時に change イベント\n * (detail.value) を発火する。\n */\nexport default class UiSelect extends LightningElement {\n    _options = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get options() {\n        return this._options;\n    }\n    set options(value) {\n        this._options = Array.isArray(value) ? value : [];\n    }\n\n    /** ラベル */\n    @api label;\n    /** 選択値 */\n    @api value = '';\n    /** 未選択時のプレースホルダ */\n    @api placeholder = '選択してください';\n    /** true で無効化 */\n    @api disabled = false;\n\n    get computedOptions() {\n        return this._options.map((o) => ({\n            ...o,\n            selected: String(o.value) === String(this.value)\n        }));\n    }\n\n    get placeholderSelected() {\n        return !this.value;\n    }\n\n    handleChange(event) {\n        this.value = event.target.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
@@ -748,6 +765,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-checkbox label=\"利用規約に同意\" onchange={handleChange}></c-ui-checkbox>",
+      "ja": "チェックボックス",
       "files": {
         "html": "<template>\n    <label class=\"ui-checkbox\">\n        <input\n            type=\"checkbox\"\n            class=\"ui-checkbox__input\"\n            checked={checked}\n            disabled={disabled}\n            onchange={handleChange}\n        />\n        <span class=\"ui-checkbox__box\"></span>\n        <span lwc:if={label} class=\"ui-checkbox__label\">{label}</span>\n    </label>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiCheckbox — 汎用チェックボックス。\n * ラベル付きのチェックボックスで、変更時に change イベント\n * (detail.checked) を発火する。\n */\nexport default class UiCheckbox extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** チェック状態 */\n    @api checked = false;\n    /** true で無効化 */\n    @api disabled = false;\n\n    handleChange(event) {\n        this.checked = event.target.checked;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { checked: this.checked } })\n        );\n    }\n}\n",
@@ -801,6 +819,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-textarea label=\"備考\" rows=\"5\" onchange={handleChange}></c-ui-textarea>",
+      "ja": "テキストエリア",
       "files": {
         "html": "<template>\n    <div class=\"ui-textarea\">\n        <label lwc:if={label} class=\"ui-textarea__label\">{label}</label>\n        <textarea\n            class=\"ui-textarea__field\"\n            rows={rows}\n            placeholder={placeholder}\n            disabled={disabled}\n            oninput={handleInput}\n        >{value}</textarea>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiTextarea — 汎用複数行テキスト入力。\n * ラベル・行数・プレースホルダに対応し、入力時に change イベント\n * (detail.value) を発火する。\n */\nexport default class UiTextarea extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 入力値 */\n    @api value = '';\n    /** プレースホルダ */\n    @api placeholder = '';\n    /** 表示行数 */\n    @api rows = 4;\n    /** true で無効化 */\n    @api disabled = false;\n\n    handleInput(event) {\n        this.value = event.target.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
@@ -830,6 +849,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-breadcrumb items={items} onnavigate={handleNavigate}></c-ui-breadcrumb>",
+      "ja": "パンくずリスト",
       "files": {
         "html": "<template>\n    <nav class=\"ui-breadcrumb\" aria-label=\"パンくず\">\n        <ol class=\"ui-breadcrumb__list\">\n            <template for:each={computedItems} for:item=\"item\">\n                <li key={item.label} class=\"ui-breadcrumb__item\">\n                    <a\n                        lwc:if={item.clickable}\n                        class=\"ui-breadcrumb__link\"\n                        href=\"#\"\n                        data-value={item.value}\n                        onclick={handleClick}\n                    >\n                        {item.label}\n                    </a>\n                    <span lwc:else class=\"ui-breadcrumb__current\" aria-current=\"page\">\n                        {item.label}\n                    </span>\n                    <span lwc:if={item.showSep} class=\"ui-breadcrumb__sep\">/</span>\n                </li>\n            </template>\n        </ol>\n    </nav>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiBreadcrumb — 汎用パンくずリスト。\n * items 配列 ([{ label, value }]) を「/」区切りで表示する。\n * 最後の項目以外はリンクとして navigate イベント (detail.value) を発火する。\n */\nexport default class UiBreadcrumb extends LightningElement {\n    _items = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    get computedItems() {\n        const last = this._items.length - 1;\n        return this._items.map((item, index) => ({\n            label: item.label,\n            value: item.value !== undefined ? item.value : item.label,\n            clickable: index !== last,\n            showSep: index !== last\n        }));\n    }\n\n    handleClick(event) {\n        event.preventDefault();\n        const value = event.currentTarget.dataset.value;\n        this.dispatchEvent(\n            new CustomEvent('navigate', { detail: { value } })\n        );\n    }\n}\n",
@@ -860,6 +880,7 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-steps steps={steps} current=\"2\"></c-ui-steps>",
+      "ja": "ステップ",
       "files": {
         "html": "<template>\n    <ol class=\"ui-steps\">\n        <template for:each={computedSteps} for:item=\"step\">\n            <li key={step.label} class={step.cssClass}>\n                <span class=\"ui-steps__marker\">{step.marker}</span>\n                <span class=\"ui-steps__label\">{step.label}</span>\n            </li>\n        </template>\n    </ol>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiSteps — 汎用ステップインジケータ。\n * steps 配列 ([{ label }]) と current（1 始まりの現在ステップ）から、\n * 完了/進行中/未着手を色とマーカーで表示する。\n */\nexport default class UiSteps extends LightningElement {\n    _steps = [];\n\n    /** [{ label }] の配列 */\n    @api\n    get steps() {\n        return this._steps;\n    }\n    set steps(value) {\n        this._steps = Array.isArray(value) ? value : [];\n    }\n\n    /** 現在ステップ（1 始まり） */\n    @api current = 1;\n\n    get computedSteps() {\n        const cur = Number(this.current);\n        return this._steps.map((step, index) => {\n            const num = index + 1;\n            let state = 'upcoming';\n            if (num < cur) {\n                state = 'complete';\n            } else if (num === cur) {\n                state = 'active';\n            }\n            return {\n                label: step.label,\n                marker: state === 'complete' ? '✓' : String(num),\n                cssClass: `ui-steps__item ui-steps__item_${state}`\n            };\n        });\n    }\n}\n",
@@ -901,6 +922,7 @@ window.GALLERY_DATA = {
         }
       ],
       "usage": "<c-ui-rating value=\"3\" onchange={handleRate}></c-ui-rating>",
+      "ja": "スター評価",
       "files": {
         "html": "<template>\n    <div class={rootClass} onmouseleave={handleLeave}>\n        <template for:each={stars} for:item=\"star\">\n            <button\n                key={star.index}\n                class={star.cssClass}\n                type=\"button\"\n                data-index={star.index}\n                onclick={handleClick}\n                onmouseenter={handleEnter}\n                aria-label={star.index}\n            >\n                {star.char}\n            </button>\n        </template>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiRating — 汎用スター評価。\n * value（現在値）と max（星の数）を表示し、クリックで評価を変更して\n * change イベント (detail.value) を発火する。readOnly で閲覧専用。\n */\nexport default class UiRating extends LightningElement {\n    /** 現在の評価値 */\n    @api value = 0;\n    /** 星の数 */\n    @api max = 5;\n    /** true で閲覧専用 */\n    @api readOnly = false;\n\n    @track hover = 0;\n\n    get stars() {\n        const total = Math.max(1, Number(this.max) || 5);\n        const filledTo = this.hover || Number(this.value) || 0;\n        const list = [];\n        for (let i = 1; i <= total; i += 1) {\n            list.push({\n                index: i,\n                char: i <= filledTo ? '★' : '☆',\n                cssClass:\n                    i <= filledTo\n                        ? 'ui-rating__star ui-rating__star_on'\n                        : 'ui-rating__star'\n            });\n        }\n        return list;\n    }\n\n    get rootClass() {\n        return this.readOnly ? 'ui-rating ui-rating_readonly' : 'ui-rating';\n    }\n\n    handleClick(event) {\n        if (this.readOnly) {\n            return;\n        }\n        this.value = Number(event.currentTarget.dataset.index);\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n\n    handleEnter(event) {\n        if (this.readOnly) {\n            return;\n        }\n        this.hover = Number(event.currentTarget.dataset.index);\n    }\n\n    handleLeave() {\n        this.hover = 0;\n    }\n}\n",
@@ -943,6 +965,7 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-stat label=\"今月の売上\" value=\"¥1,250,000\" delta=\"+12.5%\" trend=\"up\"></c-ui-stat>",
+      "ja": "KPI表示",
       "files": {
         "html": "<template>\n    <div class=\"ui-stat\">\n        <span class=\"ui-stat__label\">{label}</span>\n        <span class=\"ui-stat__value\">{value}</span>\n        <span lwc:if={hasDelta} class={deltaClass}>\n            <span class=\"ui-stat__trend\">{trendIcon}</span>\n            {delta}\n        </span>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\nconst TRENDS = {\n    up: { icon: '▲', cls: 'up' },\n    down: { icon: '▼', cls: 'down' },\n    flat: { icon: '—', cls: 'flat' }\n};\n\n/**\n * uiStat — 汎用 KPI 表示タイル。\n * ラベル・大きな値・前期比（delta）を表示し、trend で増減色を切替える。\n */\nexport default class UiStat extends LightningElement {\n    /** 指標ラベル */\n    @api label;\n    /** 主要な値（例: ¥1,250,000） */\n    @api value;\n    /** 補足の差分テキスト（例: +12.5%） */\n    @api delta;\n    /** 増減: up | down | flat */\n    @api trend = 'flat';\n\n    get hasDelta() {\n        return this.delta !== undefined && this.delta !== null && this.delta !== '';\n    }\n\n    get trendIcon() {\n        return (TRENDS[this.trend] || TRENDS.flat).icon;\n    }\n\n    get deltaClass() {\n        const cls = (TRENDS[this.trend] || TRENDS.flat).cls;\n        return `ui-stat__delta ui-stat__delta_${cls}`;\n    }\n}\n",
@@ -973,6 +996,7 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-divider label=\"または\"></c-ui-divider>",
+      "ja": "区切り線",
       "files": {
         "html": "<template>\n    <div class={rootClass} role=\"separator\">\n        <template lwc:if={label}>\n            <span class=\"ui-divider__line\"></span>\n            <span class=\"ui-divider__label\">{label}</span>\n            <span class=\"ui-divider__line\"></span>\n        </template>\n        <template lwc:else>\n            <span class=\"ui-divider__line ui-divider__line_full\"></span>\n        </template>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\nconst SPACINGS = ['small', 'medium', 'large'];\n\n/**\n * uiDivider — 汎用区切り線。\n * label を指定すると中央にラベル付きの区切り、無指定なら水平線を表示する。\n */\nexport default class UiDivider extends LightningElement {\n    /** 中央に表示するラベル（任意） */\n    @api label;\n    /** 上下の余白: small | medium | large */\n    @api spacing = 'medium';\n\n    get rootClass() {\n        const spacing = SPACINGS.includes(this.spacing) ? this.spacing : 'medium';\n        return `ui-divider ui-divider_${spacing}`;\n    }\n}\n",
@@ -1009,6 +1033,7 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-tooltip content=\"詳細はこちら\">\n    <c-ui-button label=\"?\"></c-ui-button>\n</c-ui-tooltip>",
+      "ja": "ツールチップ",
       "files": {
         "html": "<template>\n    <span class={rootClass} tabindex=\"0\">\n        <slot></slot>\n        <span class=\"ui-tooltip__bubble\" role=\"tooltip\">{content}</span>\n    </span>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\nconst POSITIONS = ['top', 'bottom', 'left', 'right'];\n\n/**\n * uiTooltip — 汎用ツールチップ。\n * default スロットの要素にホバー／フォーカスすると content を吹き出し表示する。\n */\nexport default class UiTooltip extends LightningElement {\n    /** 吹き出しに表示するテキスト */\n    @api content;\n    /** 表示位置: top | bottom | left | right */\n    @api position = 'top';\n\n    get rootClass() {\n        const pos = POSITIONS.includes(this.position) ? this.position : 'top';\n        return `ui-tooltip ui-tooltip_${pos}`;\n    }\n}\n",
@@ -1051,11 +1076,333 @@ window.GALLERY_DATA = {
       ],
       "events": [],
       "usage": "<c-ui-empty-state heading=\"データがありません\" message=\"新規作成してください\">\n    <c-ui-button label=\"新規作成\"></c-ui-button>\n</c-ui-empty-state>",
+      "ja": "空状態",
       "files": {
         "html": "<template>\n    <div class=\"ui-empty\">\n        <div class=\"ui-empty__icon\">{icon}</div>\n        <h3 class=\"ui-empty__heading\">{heading}</h3>\n        <p lwc:if={message} class=\"ui-empty__message\">{message}</p>\n        <div class=\"ui-empty__action\">\n            <slot></slot>\n        </div>\n    </div>\n</template>\n",
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiEmptyState — 汎用エンプティステート。\n * アイコン・見出し・説明と、任意のアクション（default スロット）を中央表示する。\n * データ未登録時や検索 0 件時のプレースホルダとして使う。\n */\nexport default class UiEmptyState extends LightningElement {\n    /** 見出し */\n    @api heading;\n    /** 補足メッセージ（任意） */\n    @api message;\n    /** アイコン文字（絵文字可） */\n    @api icon = '📭';\n}\n",
         "css": ".ui-empty {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    text-align: center;\n    gap: 6px;\n    padding: 32px 20px;\n}\n\n.ui-empty__icon {\n    font-size: 2.6rem;\n    line-height: 1;\n    margin-bottom: 4px;\n}\n\n.ui-empty__heading {\n    margin: 0;\n    font-size: 1rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-empty__message {\n    margin: 0;\n    font-size: 0.85rem;\n    color: #706e6b;\n    max-width: 320px;\n}\n\n.ui-empty__action {\n    margin-top: 10px;\n}\n.ui-empty__action:empty {\n    display: none;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Empty State</masterLabel>\n    <description>汎用エンプティステート。アイコン・見出し・アクションを中央表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiRadioGroup",
+      "title": "UI Radio Group",
+      "icon": "🔘",
+      "category": "フォーム",
+      "demo": "radio",
+      "description": "options 配列から単一選択のラジオボタンを生成。選択時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "グループ見出し"
+        },
+        {
+          "name": "options",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "—",
+          "desc": "選択値"
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "def": "自動採番",
+          "desc": "ラジオ name 属性"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-radio-group label=\"支払方法\" options={options} onchange={handleChange}></c-ui-radio-group>",
+      "ja": "ラジオボタン",
+      "files": {
+        "html": "<template>\n    <fieldset class=\"ui-radio-group\">\n        <legend lwc:if={label} class=\"ui-radio-group__legend\">{label}</legend>\n        <template for:each={computedOptions} for:item=\"opt\">\n            <label key={opt.value} class=\"ui-radio\">\n                <input\n                    type=\"radio\"\n                    class=\"ui-radio__input\"\n                    name={computedName}\n                    value={opt.value}\n                    checked={opt.checked}\n                    onchange={handleChange}\n                />\n                <span class=\"ui-radio__dot\"></span>\n                <span class=\"ui-radio__label\">{opt.label}</span>\n            </label>\n        </template>\n    </fieldset>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nlet GID = 0;\n\n/**\n * uiRadioGroup — 汎用ラジオボタングループ。\n * options 配列 ([{ label, value }]) から単一選択の UI を生成し、\n * 選択時に change イベント (detail.value) を発火する。\n */\nexport default class UiRadioGroup extends LightningElement {\n    _options = [];\n    groupName = `ui-radio-${GID++}`;\n\n    /** グループの見出し */\n    @api label;\n    /** 選択値 */\n    @api value;\n    /** ラジオ name 属性（未指定なら自動採番） */\n    @api name;\n\n    /** [{ label, value }] の配列 */\n    @api\n    get options() {\n        return this._options;\n    }\n    set options(value) {\n        this._options = Array.isArray(value) ? value : [];\n    }\n\n    get computedName() {\n        return this.name || this.groupName;\n    }\n\n    get computedOptions() {\n        return this._options.map((o) => ({\n            label: o.label,\n            value: o.value,\n            checked: String(o.value) === String(this.value)\n        }));\n    }\n\n    handleChange(event) {\n        this.value = event.target.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-radio-group {\n    border: none;\n    margin: 0;\n    padding: 0;\n    display: flex;\n    flex-direction: column;\n    gap: 8px;\n}\n\n.ui-radio-group__legend {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n    padding: 0;\n    margin-bottom: 2px;\n}\n\n.ui-radio {\n    display: inline-flex;\n    align-items: center;\n    gap: 8px;\n    cursor: pointer;\n    font-size: 0.85rem;\n    color: #181818;\n}\n\n.ui-radio__input {\n    position: absolute;\n    opacity: 0;\n    width: 0;\n    height: 0;\n}\n\n.ui-radio__dot {\n    position: relative;\n    width: 18px;\n    height: 18px;\n    border: 1px solid #c9c9c9;\n    border-radius: 50%;\n    background: #ffffff;\n    flex-shrink: 0;\n    transition: border-color 0.12s ease;\n}\n\n.ui-radio__dot::after {\n    content: '';\n    position: absolute;\n    inset: 4px;\n    border-radius: 50%;\n    background: #0176d3;\n    transform: scale(0);\n    transition: transform 0.12s ease;\n}\n\n.ui-radio__input:checked ~ .ui-radio__dot {\n    border-color: #0176d3;\n}\n.ui-radio__input:checked ~ .ui-radio__dot::after {\n    transform: scale(1);\n}\n\n.ui-radio__input:focus-visible ~ .ui-radio__dot {\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.35);\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Radio Group</masterLabel>\n    <description>汎用ラジオボタングループ。単一選択で change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiSearchBox",
+      "title": "UI Search Box",
+      "icon": "🔎",
+      "category": "フォーム",
+      "demo": "searchbox",
+      "description": "虫眼鏡アイコン付き検索ボックス。入力時に search イベント (detail.value) を発火、クリアボタン付き。",
+      "props": [
+        {
+          "name": "value",
+          "type": "String",
+          "def": "''",
+          "desc": "入力値"
+        },
+        {
+          "name": "placeholder",
+          "type": "String",
+          "def": "'検索…'",
+          "desc": "プレースホルダ"
+        }
+      ],
+      "events": [
+        {
+          "name": "search",
+          "desc": "入力／クリア時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-search-box onsearch={handleSearch}></c-ui-search-box>",
+      "ja": "検索ボックス",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-search\">\n        <span class=\"ui-search__icon\" aria-hidden=\"true\">🔍</span>\n        <input\n            type=\"search\"\n            class=\"ui-search__field\"\n            value={value}\n            placeholder={placeholder}\n            oninput={handleInput}\n        />\n        <button\n            lwc:if={hasValue}\n            class=\"ui-search__clear\"\n            type=\"button\"\n            title=\"クリア\"\n            onclick={handleClear}\n        >\n            &times;\n        </button>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiSearchBox — 汎用検索ボックス。\n * 虫眼鏡アイコン付きの入力で、入力時に search イベント (detail.value) を発火。\n * クリアボタンで入力を消去する。\n */\nexport default class UiSearchBox extends LightningElement {\n    /** 入力値 */\n    @api value = '';\n    /** プレースホルダ */\n    @api placeholder = '検索…';\n\n    get hasValue() {\n        return !!this.value;\n    }\n\n    handleInput(event) {\n        this.value = event.target.value;\n        this.dispatchEvent(\n            new CustomEvent('search', { detail: { value: this.value } })\n        );\n    }\n\n    handleClear() {\n        this.value = '';\n        this.dispatchEvent(new CustomEvent('search', { detail: { value: '' } }));\n    }\n}\n",
+        "css": ".ui-search {\n    position: relative;\n    display: flex;\n    align-items: center;\n    width: 100%;\n}\n\n.ui-search__icon {\n    position: absolute;\n    left: 10px;\n    font-size: 0.85rem;\n    pointer-events: none;\n    opacity: 0.7;\n}\n\n.ui-search__field {\n    width: 100%;\n    height: 34px;\n    padding: 0 32px;\n    border: 1px solid #c9c9c9;\n    border-radius: 18px;\n    font-size: 0.875rem;\n    color: #181818;\n    background: #ffffff;\n    font-family: inherit;\n}\n\n.ui-search__field:focus {\n    outline: none;\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n\n.ui-search__field::-webkit-search-cancel-button {\n    display: none;\n}\n\n.ui-search__clear {\n    position: absolute;\n    right: 8px;\n    width: 20px;\n    height: 20px;\n    border: none;\n    border-radius: 50%;\n    background: #ececec;\n    color: #514f4d;\n    font-size: 1rem;\n    line-height: 1;\n    cursor: pointer;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n}\n.ui-search__clear:hover {\n    background: #dddbda;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Search Box</masterLabel>\n    <description>汎用検索ボックス。入力時に search イベントを発火、クリアボタン付き。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiSlider",
+      "title": "UI Slider",
+      "icon": "🎚️",
+      "category": "フォーム",
+      "demo": "slider",
+      "description": "min/max/step の範囲で値を選ぶスライダー。変更時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "min",
+          "type": "Number",
+          "def": "0",
+          "desc": "最小値"
+        },
+        {
+          "name": "max",
+          "type": "Number",
+          "def": "100",
+          "desc": "最大値"
+        },
+        {
+          "name": "step",
+          "type": "Number",
+          "def": "1",
+          "desc": "刻み"
+        },
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "50",
+          "desc": "現在値"
+        },
+        {
+          "name": "show-value",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で現在値を併記"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-slider label=\"音量\" value=\"60\" show-value onchange={handleChange}></c-ui-slider>",
+      "ja": "スライダー",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-slider\">\n        <div lwc:if={label} class=\"ui-slider__header\">\n            <span class=\"ui-slider__label\">{label}</span>\n            <span lwc:if={showValue} class=\"ui-slider__value\">{value}</span>\n        </div>\n        <input\n            type=\"range\"\n            class=\"ui-slider__range\"\n            min={min}\n            max={max}\n            step={step}\n            value={value}\n            oninput={handleInput}\n        />\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiSlider — 汎用スライダー（範囲入力）。\n * min/max/step の範囲で値を選び、変更時に change イベント (detail.value) を発火する。\n */\nexport default class UiSlider extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 最小値 */\n    @api min = 0;\n    /** 最大値 */\n    @api max = 100;\n    /** 刻み */\n    @api step = 1;\n    /** 現在値 */\n    @api value = 50;\n    /** true で現在値を併記 */\n    @api showValue = false;\n\n    handleInput(event) {\n        this.value = Number(event.target.value);\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-slider {\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    gap: 6px;\n}\n\n.ui-slider__header {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    font-size: 0.78rem;\n}\n\n.ui-slider__label {\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-slider__value {\n    font-weight: 700;\n    color: #0176d3;\n}\n\n.ui-slider__range {\n    width: 100%;\n    height: 6px;\n    -webkit-appearance: none;\n    appearance: none;\n    background: #e5e5e5;\n    border-radius: 3px;\n    outline: none;\n    cursor: pointer;\n}\n\n.ui-slider__range::-webkit-slider-thumb {\n    -webkit-appearance: none;\n    appearance: none;\n    width: 18px;\n    height: 18px;\n    border-radius: 50%;\n    background: #0176d3;\n    border: 2px solid #ffffff;\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n    cursor: pointer;\n}\n\n.ui-slider__range::-moz-range-thumb {\n    width: 18px;\n    height: 18px;\n    border-radius: 50%;\n    background: #0176d3;\n    border: 2px solid #ffffff;\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n    cursor: pointer;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Slider</masterLabel>\n    <description>汎用スライダー。min/max/step で値を選び change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiButtonGroup",
+      "title": "UI Button Group",
+      "icon": "🎛️",
+      "category": "アクション",
+      "demo": "buttongroup",
+      "description": "buttons 配列を横並びにしたセグメンテッドコントロール。選択時に select イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "buttons",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        },
+        {
+          "name": "active",
+          "type": "String",
+          "def": "—",
+          "desc": "選択中の value"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-button-group buttons={views} active=\"list\" onselect={handleSelect}></c-ui-button-group>",
+      "ja": "ボタングループ",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-btngroup\" role=\"group\">\n        <template for:each={computedButtons} for:item=\"btn\">\n            <button\n                key={btn.value}\n                class={btn.cssClass}\n                type=\"button\"\n                data-value={btn.value}\n                onclick={handleClick}\n            >\n                {btn.label}\n            </button>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiButtonGroup — 汎用ボタングループ（セグメンテッドコントロール）。\n * buttons 配列 ([{ label, value }]) を横並びで表示し、選択時に\n * select イベント (detail.value) を発火する。\n */\nexport default class UiButtonGroup extends LightningElement {\n    _buttons = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get buttons() {\n        return this._buttons;\n    }\n    set buttons(value) {\n        this._buttons = Array.isArray(value) ? value : [];\n    }\n\n    /** 選択中の value */\n    @api active;\n\n    get computedButtons() {\n        return this._buttons.map((b) => ({\n            label: b.label,\n            value: b.value,\n            cssClass:\n                String(b.value) === String(this.active)\n                    ? 'ui-btngroup__item ui-btngroup__item_active'\n                    : 'ui-btngroup__item'\n        }));\n    }\n\n    handleClick(event) {\n        this.active = event.currentTarget.dataset.value;\n        this.dispatchEvent(\n            new CustomEvent('select', { detail: { value: this.active } })\n        );\n    }\n}\n",
+        "css": ".ui-btngroup {\n    display: inline-flex;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    overflow: hidden;\n}\n\n.ui-btngroup__item {\n    border: none;\n    background: #ffffff;\n    color: #444444;\n    padding: 0 16px;\n    height: 32px;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n}\n\n.ui-btngroup__item + .ui-btngroup__item {\n    border-left: 1px solid #c9c9c9;\n}\n\n.ui-btngroup__item:hover {\n    background: #f3f3f3;\n}\n\n.ui-btngroup__item_active {\n    background: #0176d3;\n    color: #ffffff;\n}\n.ui-btngroup__item_active:hover {\n    background: #014486;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Button Group</masterLabel>\n    <description>汎用ボタングループ（セグメンテッド）。選択時に select イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiTimeline",
+      "title": "UI Timeline",
+      "icon": "📅",
+      "category": "表示",
+      "demo": "timeline",
+      "description": "items 配列 ([{ title, time, description }]) を時系列で縦表示するタイムライン。",
+      "props": [
+        {
+          "name": "items",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ title, time, description }] の配列"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-timeline items={events}></c-ui-timeline>",
+      "ja": "タイムライン",
+      "files": {
+        "html": "<template>\n    <ul class=\"ui-timeline\">\n        <template for:each={computedItems} for:item=\"item\">\n            <li key={item.key} class=\"ui-timeline__item\">\n                <span class=\"ui-timeline__marker\"></span>\n                <div class=\"ui-timeline__content\">\n                    <div class=\"ui-timeline__head\">\n                        <span class=\"ui-timeline__title\">{item.title}</span>\n                        <span class=\"ui-timeline__time\">{item.time}</span>\n                    </div>\n                    <p lwc:if={item.hasDescription} class=\"ui-timeline__desc\">\n                        {item.description}\n                    </p>\n                </div>\n            </li>\n        </template>\n    </ul>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiTimeline — 汎用タイムライン。\n * items 配列 ([{ title, time, description }]) を縦並びで時系列表示する。\n */\nexport default class UiTimeline extends LightningElement {\n    _items = [];\n\n    /** [{ title, time, description }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    get computedItems() {\n        return this._items.map((item, index) => ({\n            key: index,\n            title: item.title,\n            time: item.time,\n            description: item.description,\n            hasDescription: !!item.description\n        }));\n    }\n}\n",
+        "css": ".ui-timeline {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n}\n\n.ui-timeline__item {\n    position: relative;\n    padding: 0 0 18px 24px;\n}\n\n/* 縦線 */\n.ui-timeline__item::before {\n    content: '';\n    position: absolute;\n    left: 6px;\n    top: 4px;\n    bottom: -4px;\n    width: 2px;\n    background: #e5e5e5;\n}\n.ui-timeline__item:last-child::before {\n    display: none;\n}\n\n.ui-timeline__marker {\n    position: absolute;\n    left: 0;\n    top: 3px;\n    width: 14px;\n    height: 14px;\n    border-radius: 50%;\n    background: #ffffff;\n    border: 3px solid #0176d3;\n    z-index: 1;\n}\n\n.ui-timeline__head {\n    display: flex;\n    align-items: baseline;\n    justify-content: space-between;\n    gap: 12px;\n}\n\n.ui-timeline__title {\n    font-size: 0.875rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-timeline__time {\n    font-size: 0.72rem;\n    color: #706e6b;\n    white-space: nowrap;\n}\n\n.ui-timeline__desc {\n    margin: 4px 0 0;\n    font-size: 0.8125rem;\n    color: #514f4d;\n    line-height: 1.5;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Timeline</masterLabel>\n    <description>汎用タイムライン。items を時系列で縦表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiStatusDot",
+      "title": "UI Status Dot",
+      "icon": "🟢",
+      "category": "表示",
+      "demo": "statusdot",
+      "description": "online/offline/busy などの状態を色付きの丸とラベルで表示。pulse で点滅も可能。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル（任意）"
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "def": "'neutral'",
+          "desc": "online | offline | busy | away | neutral"
+        },
+        {
+          "name": "pulse",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で点滅アニメーション"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-status-dot label=\"オンライン\" status=\"online\" pulse></c-ui-status-dot>",
+      "ja": "ステータスドット",
+      "files": {
+        "html": "<template>\n    <span class=\"ui-statusdot\">\n        <span class={dotClass}></span>\n        <span lwc:if={label} class=\"ui-statusdot__label\">{label}</span>\n    </span>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst STATUSES = ['online', 'offline', 'busy', 'away', 'neutral'];\n\n/**\n * uiStatusDot — 汎用ステータスドット。\n * オンライン/離席などの状態を色付きの丸とラベルで表示する。\n */\nexport default class UiStatusDot extends LightningElement {\n    /** ラベル（任意） */\n    @api label;\n    /** 状態: online | offline | busy | away | neutral */\n    @api status = 'neutral';\n    /** true で点滅アニメーション */\n    @api pulse = false;\n\n    get dotClass() {\n        const status = STATUSES.includes(this.status) ? this.status : 'neutral';\n        return `ui-statusdot__dot ui-statusdot__dot_${status}${\n            this.pulse ? ' ui-statusdot__dot_pulse' : ''\n        }`;\n    }\n}\n",
+        "css": ".ui-statusdot {\n    display: inline-flex;\n    align-items: center;\n    gap: 7px;\n    font-size: 0.82rem;\n    color: #181818;\n}\n\n.ui-statusdot__dot {\n    width: 10px;\n    height: 10px;\n    border-radius: 50%;\n    flex-shrink: 0;\n    background: #969492;\n}\n\n.ui-statusdot__dot_online {\n    background: #2e844a;\n}\n.ui-statusdot__dot_offline {\n    background: #969492;\n}\n.ui-statusdot__dot_busy {\n    background: #ba0517;\n}\n.ui-statusdot__dot_away {\n    background: #dd7a01;\n}\n.ui-statusdot__dot_neutral {\n    background: #c9c9c9;\n}\n\n.ui-statusdot__dot_pulse {\n    animation: ui-statusdot-pulse 1.4s ease-in-out infinite;\n}\n\n@keyframes ui-statusdot-pulse {\n    0% {\n        box-shadow: 0 0 0 0 rgba(46, 132, 74, 0.5);\n    }\n    70% {\n        box-shadow: 0 0 0 6px rgba(46, 132, 74, 0);\n    }\n    100% {\n        box-shadow: 0 0 0 0 rgba(46, 132, 74, 0);\n    }\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Status Dot</masterLabel>\n    <description>汎用ステータスドット。状態を色とラベルで表示、点滅対応。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiProgressRing",
+      "title": "UI Progress Ring",
+      "icon": "⭕",
+      "category": "フィードバック",
+      "demo": "progressring",
+      "description": "0〜100 の進捗を SVG の円形リングで表示。任意で中央にパーセントを併記。",
+      "props": [
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "0",
+          "desc": "進捗率 0〜100"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "def": "'medium'",
+          "desc": "small | medium | large"
+        },
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'brand'",
+          "desc": "brand | success | warning | error"
+        },
+        {
+          "name": "show-label",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で中央にパーセント表示"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-progress-ring value=\"72\" size=\"large\" show-label></c-ui-progress-ring>",
+      "ja": "円形プログレス",
+      "files": {
+        "html": "<template>\n    <div class={rootClass}>\n        <svg class=\"ui-ring__svg\" viewBox=\"0 0 40 40\">\n            <circle class=\"ui-ring__track\" cx=\"20\" cy=\"20\" r=\"16\"></circle>\n            <circle class=\"ui-ring__bar\" cx=\"20\" cy=\"20\" r=\"16\" style={ringStyle}></circle>\n        </svg>\n        <span lwc:if={showLabel} class=\"ui-ring__label\">{labelText}</span>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst SIZES = ['small', 'medium', 'large'];\nconst VARIANTS = ['brand', 'success', 'warning', 'error'];\nconst RADIUS = 16;\nconst CIRCUMFERENCE = 2 * Math.PI * RADIUS;\n\n/**\n * uiProgressRing — 汎用円形プログレス。\n * 0〜100 の値を SVG リングで表示し、任意で中央にパーセントを併記する。\n */\nexport default class UiProgressRing extends LightningElement {\n    /** 進捗率 0〜100 */\n    @api value = 0;\n    /** サイズ: small | medium | large */\n    @api size = 'medium';\n    /** 色: brand | success | warning | error */\n    @api variant = 'brand';\n    /** true で中央にパーセント表示 */\n    @api showLabel = false;\n\n    get clampedValue() {\n        const n = Number(this.value);\n        if (Number.isNaN(n)) {\n            return 0;\n        }\n        return Math.min(100, Math.max(0, n));\n    }\n\n    get rootClass() {\n        const size = SIZES.includes(this.size) ? this.size : 'medium';\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        return `ui-ring ui-ring_${size} ui-ring_${variant}`;\n    }\n\n    get ringStyle() {\n        const offset = CIRCUMFERENCE * (1 - this.clampedValue / 100);\n        return `stroke-dasharray: ${CIRCUMFERENCE}; stroke-dashoffset: ${offset};`;\n    }\n\n    get labelText() {\n        return `${Math.round(this.clampedValue)}%`;\n    }\n}\n",
+        "css": ".ui-ring {\n    position: relative;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.ui-ring_small {\n    width: 36px;\n    height: 36px;\n}\n.ui-ring_medium {\n    width: 52px;\n    height: 52px;\n}\n.ui-ring_large {\n    width: 72px;\n    height: 72px;\n}\n\n.ui-ring__svg {\n    width: 100%;\n    height: 100%;\n    transform: rotate(-90deg);\n}\n\n.ui-ring__track {\n    fill: none;\n    stroke: #e5e5e5;\n    stroke-width: 4;\n}\n\n.ui-ring__bar {\n    fill: none;\n    stroke-width: 4;\n    stroke-linecap: round;\n    transition: stroke-dashoffset 0.35s ease;\n}\n\n.ui-ring_brand .ui-ring__bar {\n    stroke: #0176d3;\n}\n.ui-ring_success .ui-ring__bar {\n    stroke: #2e844a;\n}\n.ui-ring_warning .ui-ring__bar {\n    stroke: #dd7a01;\n}\n.ui-ring_error .ui-ring__bar {\n    stroke: #ba0517;\n}\n\n.ui-ring__label {\n    position: absolute;\n    font-size: 0.7rem;\n    font-weight: 700;\n    color: #181818;\n}\n.ui-ring_large .ui-ring__label {\n    font-size: 0.9rem;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Progress Ring</masterLabel>\n    <description>汎用円形プログレス。0〜100をSVGリングで表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiDropdownMenu",
+      "title": "UI Dropdown Menu",
+      "icon": "🔻",
+      "category": "ナビゲーション",
+      "demo": "dropdownmenu",
+      "description": "トリガーで items を開閉するメニュー。項目選択で select イベント (detail.value) を発火し、外側クリックで閉じる。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "'メニュー'",
+          "desc": "トリガーラベル"
+        },
+        {
+          "name": "items",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "項目選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-dropdown-menu label=\"操作\" items={actions} onselect={handleSelect}></c-ui-dropdown-menu>",
+      "ja": "ドロップダウンメニュー",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-dropdown\" onfocusout={handleFocusOut}>\n        <button\n            class=\"ui-dropdown__trigger\"\n            type=\"button\"\n            aria-haspopup=\"true\"\n            aria-expanded={open}\n            onclick={handleToggle}\n        >\n            <span class=\"ui-dropdown__label\">{label}</span>\n            <span class=\"ui-dropdown__caret\">▾</span>\n        </button>\n        <ul lwc:if={open} class=\"ui-dropdown__menu\" role=\"menu\">\n            <template for:each={items} for:item=\"item\">\n                <li key={item.value} role=\"none\">\n                    <button\n                        class=\"ui-dropdown__item\"\n                        type=\"button\"\n                        role=\"menuitem\"\n                        data-value={item.value}\n                        onclick={handleSelect}\n                    >\n                        {item.label}\n                    </button>\n                </li>\n            </template>\n        </ul>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiDropdownMenu — 汎用ドロップダウンメニュー。\n * トリガーボタンで items 配列 ([{ label, value }]) を開閉し、\n * 項目選択時に select イベント (detail.value) を発火する。\n * メニュー外へフォーカスが外れると自動で閉じる。\n */\nexport default class UiDropdownMenu extends LightningElement {\n    _items = [];\n\n    /** トリガーのラベル */\n    @api label = 'メニュー';\n    /** [{ label, value }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    @track open = false;\n\n    handleToggle() {\n        this.open = !this.open;\n    }\n\n    handleSelect(event) {\n        const value = event.currentTarget.dataset.value;\n        this.open = false;\n        this.dispatchEvent(new CustomEvent('select', { detail: { value } }));\n    }\n\n    handleFocusOut(event) {\n        if (\n            this.open &&\n            (!event.relatedTarget ||\n                !event.currentTarget.contains(event.relatedTarget))\n        ) {\n            this.open = false;\n        }\n    }\n}\n",
+        "css": ".ui-dropdown {\n    position: relative;\n    display: inline-block;\n}\n\n.ui-dropdown__trigger {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n    height: 32px;\n    padding: 0 12px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    background: #ffffff;\n    color: #181818;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-dropdown__trigger:hover {\n    background: #f3f3f3;\n}\n\n.ui-dropdown__caret {\n    font-size: 0.7rem;\n    color: #706e6b;\n}\n\n.ui-dropdown__menu {\n    position: absolute;\n    top: calc(100% + 4px);\n    left: 0;\n    min-width: 180px;\n    margin: 0;\n    padding: 4px;\n    list-style: none;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);\n    z-index: 20;\n}\n\n.ui-dropdown__item {\n    display: block;\n    width: 100%;\n    text-align: left;\n    border: none;\n    background: transparent;\n    padding: 8px 12px;\n    font-size: 0.82rem;\n    color: #181818;\n    border-radius: 6px;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-dropdown__item:hover {\n    background: #f3f9ff;\n    color: #0176d3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Dropdown Menu</masterLabel>\n    <description>汎用ドロップダウンメニュー。項目選択で select イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

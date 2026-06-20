@@ -732,8 +732,231 @@ const COMPONENTS = [
         slots: [{ name: '(default)', desc: 'アクション（ボタン等）' }],
         events: [],
         usage: `<c-ui-empty-state heading="データがありません" message="新規作成してください">\n    <c-ui-button label="新規作成"></c-ui-button>\n</c-ui-empty-state>`
+    },
+    {
+        id: 'uiRadioGroup',
+        title: 'UI Radio Group',
+        icon: '🔘',
+        category: 'フォーム',
+        demo: 'radio',
+        description:
+            'options 配列から単一選択のラジオボタンを生成。選択時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'グループ見出し' },
+            {
+                name: 'options',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            },
+            { name: 'value', type: 'String', def: '—', desc: '選択値' },
+            { name: 'name', type: 'String', def: '自動採番', desc: 'ラジオ name 属性' }
+        ],
+        events: [{ name: 'change', desc: '選択時に発火（detail.value）' }],
+        usage: `<c-ui-radio-group label="支払方法" options={options} onchange={handleChange}></c-ui-radio-group>`
+    },
+    {
+        id: 'uiSearchBox',
+        title: 'UI Search Box',
+        icon: '🔎',
+        category: 'フォーム',
+        demo: 'searchbox',
+        description:
+            '虫眼鏡アイコン付き検索ボックス。入力時に search イベント (detail.value) を発火、クリアボタン付き。',
+        props: [
+            { name: 'value', type: 'String', def: "''", desc: '入力値' },
+            {
+                name: 'placeholder',
+                type: 'String',
+                def: "'検索…'",
+                desc: 'プレースホルダ'
+            }
+        ],
+        events: [{ name: 'search', desc: '入力／クリア時に発火（detail.value）' }],
+        usage: `<c-ui-search-box onsearch={handleSearch}></c-ui-search-box>`
+    },
+    {
+        id: 'uiSlider',
+        title: 'UI Slider',
+        icon: '🎚️',
+        category: 'フォーム',
+        demo: 'slider',
+        description:
+            'min/max/step の範囲で値を選ぶスライダー。変更時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'min', type: 'Number', def: '0', desc: '最小値' },
+            { name: 'max', type: 'Number', def: '100', desc: '最大値' },
+            { name: 'step', type: 'Number', def: '1', desc: '刻み' },
+            { name: 'value', type: 'Number', def: '50', desc: '現在値' },
+            {
+                name: 'show-value',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で現在値を併記'
+            }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.value）' }],
+        usage: `<c-ui-slider label="音量" value="60" show-value onchange={handleChange}></c-ui-slider>`
+    },
+    {
+        id: 'uiButtonGroup',
+        title: 'UI Button Group',
+        icon: '🎛️',
+        category: 'アクション',
+        demo: 'buttongroup',
+        description:
+            'buttons 配列を横並びにしたセグメンテッドコントロール。選択時に select イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'buttons',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            },
+            { name: 'active', type: 'String', def: '—', desc: '選択中の value' }
+        ],
+        events: [{ name: 'select', desc: '選択時に発火（detail.value）' }],
+        usage: `<c-ui-button-group buttons={views} active="list" onselect={handleSelect}></c-ui-button-group>`
+    },
+    {
+        id: 'uiTimeline',
+        title: 'UI Timeline',
+        icon: '📅',
+        category: '表示',
+        demo: 'timeline',
+        description:
+            'items 配列 ([{ title, time, description }]) を時系列で縦表示するタイムライン。',
+        props: [
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ title, time, description }] の配列'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-timeline items={events}></c-ui-timeline>`
+    },
+    {
+        id: 'uiStatusDot',
+        title: 'UI Status Dot',
+        icon: '🟢',
+        category: '表示',
+        demo: 'statusdot',
+        description:
+            'online/offline/busy などの状態を色付きの丸とラベルで表示。pulse で点滅も可能。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル（任意）' },
+            {
+                name: 'status',
+                type: 'String',
+                def: "'neutral'",
+                desc: 'online | offline | busy | away | neutral'
+            },
+            {
+                name: 'pulse',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で点滅アニメーション'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-status-dot label="オンライン" status="online" pulse></c-ui-status-dot>`
+    },
+    {
+        id: 'uiProgressRing',
+        title: 'UI Progress Ring',
+        icon: '⭕',
+        category: 'フィードバック',
+        demo: 'progressring',
+        description:
+            '0〜100 の進捗を SVG の円形リングで表示。任意で中央にパーセントを併記。',
+        props: [
+            { name: 'value', type: 'Number', def: '0', desc: '進捗率 0〜100' },
+            {
+                name: 'size',
+                type: 'String',
+                def: "'medium'",
+                desc: 'small | medium | large'
+            },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | success | warning | error'
+            },
+            {
+                name: 'show-label',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で中央にパーセント表示'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-progress-ring value="72" size="large" show-label></c-ui-progress-ring>`
+    },
+    {
+        id: 'uiDropdownMenu',
+        title: 'UI Dropdown Menu',
+        icon: '🔻',
+        category: 'ナビゲーション',
+        demo: 'dropdownmenu',
+        description:
+            'トリガーで items を開閉するメニュー。項目選択で select イベント (detail.value) を発火し、外側クリックで閉じる。',
+        props: [
+            { name: 'label', type: 'String', def: "'メニュー'", desc: 'トリガーラベル' },
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            }
+        ],
+        events: [{ name: 'select', desc: '項目選択時に発火（detail.value）' }],
+        usage: `<c-ui-dropdown-menu label="操作" items={actions} onselect={handleSelect}></c-ui-dropdown-menu>`
     }
 ];
+
+/**
+ * 日本語表示名（カタログのナビ・見出しで「日本語（English）」と併記）。
+ */
+const JA_NAMES = {
+    uiBadge: 'バッジ',
+    uiButton: 'ボタン',
+    uiCard: 'カード',
+    uiModal: 'モーダル',
+    uiTabs: 'タブ',
+    uiAccordion: 'アコーディオン',
+    uiDataTable: 'データテーブル',
+    uiProgressBar: 'プログレスバー',
+    uiInput: '入力フィールド',
+    uiToggle: 'トグルスイッチ',
+    uiAvatar: 'アバター',
+    uiPill: 'ピル（タグ）',
+    uiAlert: 'アラート',
+    uiSpinner: 'スピナー',
+    uiToast: 'トースト通知',
+    uiPagination: 'ページネーション',
+    uiSelect: 'セレクト',
+    uiCheckbox: 'チェックボックス',
+    uiTextarea: 'テキストエリア',
+    uiBreadcrumb: 'パンくずリスト',
+    uiSteps: 'ステップ',
+    uiRating: 'スター評価',
+    uiStat: 'KPI表示',
+    uiDivider: '区切り線',
+    uiTooltip: 'ツールチップ',
+    uiEmptyState: '空状態',
+    uiRadioGroup: 'ラジオボタン',
+    uiSearchBox: '検索ボックス',
+    uiSlider: 'スライダー',
+    uiButtonGroup: 'ボタングループ',
+    uiTimeline: 'タイムライン',
+    uiStatusDot: 'ステータスドット',
+    uiProgressRing: '円形プログレス',
+    uiDropdownMenu: 'ドロップダウンメニュー'
+};
 
 const FILE_KEYS = [
     { key: 'html', ext: '.html' },
@@ -768,7 +991,7 @@ for (const comp of COMPONENTS) {
         console.warn(`⚠ ${comp.id}: .js が見つかりません（スキップ）`);
         continue;
     }
-    out.push({ ...comp, files });
+    out.push({ ...comp, ja: JA_NAMES[comp.id] || comp.title, files });
     if (css) {
         cssAll.push(css);
     }

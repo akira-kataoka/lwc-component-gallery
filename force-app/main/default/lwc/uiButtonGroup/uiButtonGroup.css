@@ -1,0 +1,34 @@
+.ui-btngroup {
+    display: inline-flex;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.ui-btngroup__item {
+    border: none;
+    background: #ffffff;
+    color: #444444;
+    padding: 0 16px;
+    height: 32px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.ui-btngroup__item + .ui-btngroup__item {
+    border-left: 1px solid #c9c9c9;
+}
+
+.ui-btngroup__item:hover {
+    background: #f3f3f3;
+}
+
+.ui-btngroup__item_active {
+    background: #0176d3;
+    color: #ffffff;
+}
+.ui-btngroup__item_active:hover {
+    background: #014486;
+}

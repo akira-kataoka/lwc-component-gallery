@@ -1,0 +1,9 @@
+<template>
+    <div class={rootClass}>
+        <svg class="ui-ring__svg" viewBox="0 0 40 40">
+            <circle class="ui-ring__track" cx="20" cy="20" r="16"></circle>
+            <circle class="ui-ring__bar" cx="20" cy="20" r="16" style={ringStyle}></circle>
+        </svg>
+        <span lwc:if={showLabel} class="ui-ring__label">{labelText}</span>
+    </div>
+</template>

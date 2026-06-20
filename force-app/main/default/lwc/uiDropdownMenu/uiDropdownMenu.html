@@ -1,0 +1,29 @@
+<template>
+    <div class="ui-dropdown" onfocusout={handleFocusOut}>
+        <button
+            class="ui-dropdown__trigger"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded={open}
+            onclick={handleToggle}
+        >
+            <span class="ui-dropdown__label">{label}</span>
+            <span class="ui-dropdown__caret">▾</span>
+        </button>
+        <ul lwc:if={open} class="ui-dropdown__menu" role="menu">
+            <template for:each={items} for:item="item">
+                <li key={item.value} role="none">
+                    <button
+                        class="ui-dropdown__item"
+                        type="button"
+                        role="menuitem"
+                        data-value={item.value}
+                        onclick={handleSelect}
+                    >
+                        {item.label}
+                    </button>
+                </li>
+            </template>
+        </ul>
+    </div>
+</template>

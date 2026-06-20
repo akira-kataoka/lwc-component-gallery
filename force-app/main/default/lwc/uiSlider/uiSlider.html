@@ -1,0 +1,17 @@
+<template>
+    <div class="ui-slider">
+        <div lwc:if={label} class="ui-slider__header">
+            <span class="ui-slider__label">{label}</span>
+            <span lwc:if={showValue} class="ui-slider__value">{value}</span>
+        </div>
+        <input
+            type="range"
+            class="ui-slider__range"
+            min={min}
+            max={max}
+            step={step}
+            value={value}
+            oninput={handleInput}
+        />
+    </div>
+</template>
