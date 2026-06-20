@@ -1,0 +1,26 @@
+<template>
+    <div class="ui-rsummary">
+        <div class="ui-rsummary__head">
+            <div class="ui-rsummary__avg">{averageText}</div>
+            <div class="ui-rsummary__meta">
+                <div class="ui-rsummary__stars">
+                    <template for:each={stars} for:item="s">
+                        <span key={s.key} class="ui-rsummary__star">{s.char}</span>
+                    </template>
+                </div>
+                <div class="ui-rsummary__count">{count} 件のレビュー</div>
+            </div>
+        </div>
+        <div class="ui-rsummary__dist">
+            <template for:each={rows} for:item="row">
+                <div key={row.key} class="ui-rsummary__row">
+                    <span class="ui-rsummary__rowlabel">{row.star}★</span>
+                    <div class="ui-rsummary__track">
+                        <div class="ui-rsummary__bar" style={row.barStyle}></div>
+                    </div>
+                    <span class="ui-rsummary__rowval">{row.value}</span>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

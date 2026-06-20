@@ -1547,6 +1547,83 @@ const COMPONENTS = [
         ],
         events: [{ name: 'change', desc: '選択時に発火（detail.value）' }],
         usage: `<c-ui-likert left-label="不満" right-label="満足" onchange={handleChange}></c-ui-likert>`
+    },
+    {
+        id: 'uiDrawer',
+        title: 'UI Drawer',
+        icon: '🗄️',
+        category: 'オーバーレイ',
+        demo: 'drawer',
+        description:
+            'open で表示制御し画面端からスライドインするパネル。背景・×・Esc で close を発火。',
+        props: [
+            { name: 'header', type: 'String', def: '—', desc: 'ヘッダタイトル' },
+            { name: 'open', type: 'Boolean', def: 'false', desc: 'true で表示' },
+            { name: 'side', type: 'String', def: "'right'", desc: 'right | left' }
+        ],
+        slots: [
+            { name: '(default)', desc: '本文' },
+            { name: 'footer', desc: 'フッタ' }
+        ],
+        events: [{ name: 'close', desc: '閉じる操作時に発火' }],
+        usage: `<c-ui-drawer header="フィルタ" open={isOpen} onclose={handleClose}>...</c-ui-drawer>`
+    },
+    {
+        id: 'uiCallout',
+        title: 'UI Callout',
+        icon: '🗯️',
+        category: 'フィードバック',
+        demo: 'callout',
+        description:
+            '左罫線・見出し・アイコンで補足を強調するボックス。本文は default スロット。',
+        props: [
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'info'",
+                desc: 'info | success | warning | error | tip'
+            },
+            { name: 'title', type: 'String', def: '—', desc: '見出し' }
+        ],
+        slots: [{ name: '(default)', desc: '本文' }],
+        events: [],
+        usage: `<c-ui-callout variant="tip" title="ヒント">\n    便利な使い方を紹介します。\n</c-ui-callout>`
+    },
+    {
+        id: 'uiRatingSummary',
+        title: 'UI Rating Summary',
+        icon: '🌟',
+        category: '表示',
+        demo: 'ratingsummary',
+        description:
+            '平均評価・件数・星分布（5★〜1★）をまとめて表示するレビューサマリー。',
+        props: [
+            { name: 'average', type: 'Number', def: '0', desc: '平均評価（例: 4.3）' },
+            { name: 'count', type: 'Number', def: '0', desc: '総件数' },
+            {
+                name: 'distribution',
+                type: 'Array',
+                def: '[]',
+                desc: '5★→1★ の件数配列（長さ 5）'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-rating-summary average="4.3" count="128" distribution={dist}></c-ui-rating-summary>`
+    },
+    {
+        id: 'uiToolbar',
+        title: 'UI Toolbar',
+        icon: '🧰',
+        category: 'レイアウト',
+        demo: 'toolbar',
+        description:
+            '左にタイトル、右にアクション（default スロット）を配置する横長のバー。',
+        props: [
+            { name: 'title', type: 'String', def: '—', desc: '左側のタイトル' }
+        ],
+        slots: [{ name: '(default)', desc: '右側のアクション' }],
+        events: [],
+        usage: `<c-ui-toolbar title="一覧">\n    <c-ui-button label="追加"></c-ui-button>\n</c-ui-toolbar>`
     }
 ];
 
@@ -1620,7 +1697,11 @@ const JA_NAMES = {
     uiOtpInput: 'OTP入力',
     uiCurrencyInput: '通貨入力',
     uiPhoneInput: '電話番号入力',
-    uiLikert: 'リッカート尺度'
+    uiLikert: 'リッカート尺度',
+    uiDrawer: 'ドロワー',
+    uiCallout: 'コールアウト',
+    uiRatingSummary: '評価サマリー',
+    uiToolbar: 'ツールバー'
 };
 
 const FILE_KEYS = [

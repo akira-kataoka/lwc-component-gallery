@@ -1,0 +1,35 @@
+<template>
+    <template lwc:if={open}>
+        <div
+            class="ui-drawer-backdrop"
+            onclick={handleClose}
+            onkeydown={handleKeydown}
+        >
+            <aside
+                class={panelClass}
+                role="dialog"
+                aria-modal="true"
+                aria-label={header}
+                onclick={stopPropagation}
+            >
+                <header class="ui-drawer__header">
+                    <h2 class="ui-drawer__title">{header}</h2>
+                    <button
+                        class="ui-drawer__close"
+                        type="button"
+                        title="閉じる"
+                        onclick={handleClose}
+                    >
+                        &times;
+                    </button>
+                </header>
+                <div class="ui-drawer__body">
+                    <slot></slot>
+                </div>
+                <footer class="ui-drawer__footer">
+                    <slot name="footer"></slot>
+                </footer>
+            </aside>
+        </div>
+    </template>
+</template>

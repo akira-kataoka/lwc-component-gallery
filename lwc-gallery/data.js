@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T07:20:48.168Z",
+  "generatedAt": "2026-06-20T07:28:52.337Z",
   "components": [
     {
       "id": "uiBadge",
@@ -2628,6 +2628,163 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiLikert — 汎用リッカート尺度（5 段階）。\n * 1〜5 の選択肢を丸で表示し、両端にラベルを置く。\n * 選択時に change イベント (detail.value) を発火する。\n */\nexport default class UiLikert extends LightningElement {\n    /** 選択値（1〜5） */\n    @api value;\n    /** 左端ラベル */\n    @api leftLabel = '不満';\n    /** 右端ラベル */\n    @api rightLabel = '満足';\n\n    get points() {\n        return [1, 2, 3, 4, 5].map((n) => ({\n            key: n,\n            value: n,\n            cssClass:\n                Number(this.value) === n\n                    ? 'ui-likert__pt ui-likert__pt_on'\n                    : 'ui-likert__pt'\n        }));\n    }\n\n    handleSelect(event) {\n        this.value = Number(event.currentTarget.dataset.value);\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
         "css": ".ui-likert {\n    display: inline-flex;\n    align-items: center;\n    gap: 12px;\n}\n\n.ui-likert__end {\n    font-size: 0.78rem;\n    color: #706e6b;\n    white-space: nowrap;\n}\n\n.ui-likert__scale {\n    display: inline-flex;\n    gap: 8px;\n}\n\n.ui-likert__pt {\n    width: 34px;\n    height: 34px;\n    border-radius: 50%;\n    border: 1px solid #c9c9c9;\n    background: #ffffff;\n    color: #706e6b;\n    font-size: 0.85rem;\n    font-weight: 700;\n    cursor: pointer;\n    font-family: inherit;\n    transition: all 0.12s ease;\n}\n.ui-likert__pt:hover {\n    border-color: #0176d3;\n    color: #0176d3;\n}\n\n.ui-likert__pt_on {\n    background: #0176d3;\n    border-color: #0176d3;\n    color: #ffffff;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Likert</masterLabel>\n    <description>汎用リッカート尺度（5段階）。両端ラベル付きで change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiDrawer",
+      "title": "UI Drawer",
+      "icon": "🗄️",
+      "category": "オーバーレイ",
+      "demo": "drawer",
+      "description": "open で表示制御し画面端からスライドインするパネル。背景・×・Esc で close を発火。",
+      "props": [
+        {
+          "name": "header",
+          "type": "String",
+          "def": "—",
+          "desc": "ヘッダタイトル"
+        },
+        {
+          "name": "open",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で表示"
+        },
+        {
+          "name": "side",
+          "type": "String",
+          "def": "'right'",
+          "desc": "right | left"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "本文"
+        },
+        {
+          "name": "footer",
+          "desc": "フッタ"
+        }
+      ],
+      "events": [
+        {
+          "name": "close",
+          "desc": "閉じる操作時に発火"
+        }
+      ],
+      "usage": "<c-ui-drawer header=\"フィルタ\" open={isOpen} onclose={handleClose}>...</c-ui-drawer>",
+      "ja": "ドロワー",
+      "files": {
+        "html": "<template>\n    <template lwc:if={open}>\n        <div\n            class=\"ui-drawer-backdrop\"\n            onclick={handleClose}\n            onkeydown={handleKeydown}\n        >\n            <aside\n                class={panelClass}\n                role=\"dialog\"\n                aria-modal=\"true\"\n                aria-label={header}\n                onclick={stopPropagation}\n            >\n                <header class=\"ui-drawer__header\">\n                    <h2 class=\"ui-drawer__title\">{header}</h2>\n                    <button\n                        class=\"ui-drawer__close\"\n                        type=\"button\"\n                        title=\"閉じる\"\n                        onclick={handleClose}\n                    >\n                        &times;\n                    </button>\n                </header>\n                <div class=\"ui-drawer__body\">\n                    <slot></slot>\n                </div>\n                <footer class=\"ui-drawer__footer\">\n                    <slot name=\"footer\"></slot>\n                </footer>\n            </aside>\n        </div>\n    </template>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiDrawer — 汎用ドロワー（スライドインパネル）。\n * open で表示制御し、画面端からスライドインする。背景・×・Esc で close を発火。\n * 本文は default スロット、フッタは footer スロットに置く。\n */\nexport default class UiDrawer extends LightningElement {\n    /** ヘッダタイトル */\n    @api header;\n    /** true で表示 */\n    @api open = false;\n    /** 表示する側: right | left */\n    @api side = 'right';\n\n    get panelClass() {\n        const side = this.side === 'left' ? 'left' : 'right';\n        return `ui-drawer__panel ui-drawer__panel_${side}`;\n    }\n\n    handleClose() {\n        this.dispatchEvent(new CustomEvent('close'));\n    }\n\n    handleKeydown(event) {\n        if (event.key === 'Escape') {\n            this.handleClose();\n        }\n    }\n\n    stopPropagation(event) {\n        event.stopPropagation();\n    }\n}\n",
+        "css": ".ui-drawer-backdrop {\n    position: fixed;\n    inset: 0;\n    background: rgba(8, 7, 7, 0.45);\n    z-index: 9100;\n}\n\n.ui-drawer__panel {\n    position: fixed;\n    top: 0;\n    bottom: 0;\n    width: 340px;\n    max-width: 86vw;\n    background: #ffffff;\n    display: flex;\n    flex-direction: column;\n    box-shadow: 0 0 32px rgba(0, 0, 0, 0.25);\n    animation: ui-drawer-in 0.22s ease;\n}\n\n.ui-drawer__panel_right {\n    right: 0;\n}\n.ui-drawer__panel_left {\n    left: 0;\n}\n.ui-drawer__panel_left {\n    animation: ui-drawer-in-left 0.22s ease;\n}\n\n@keyframes ui-drawer-in {\n    from {\n        transform: translateX(100%);\n    }\n    to {\n        transform: translateX(0);\n    }\n}\n@keyframes ui-drawer-in-left {\n    from {\n        transform: translateX(-100%);\n    }\n    to {\n        transform: translateX(0);\n    }\n}\n\n.ui-drawer__header {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    padding: 16px 18px;\n    border-bottom: 1px solid #ececec;\n}\n.ui-drawer__title {\n    flex: 1;\n    margin: 0;\n    font-size: 1rem;\n    font-weight: 700;\n    color: #181818;\n}\n.ui-drawer__close {\n    border: none;\n    background: transparent;\n    font-size: 1.4rem;\n    line-height: 1;\n    color: #706e6b;\n    cursor: pointer;\n}\n.ui-drawer__close:hover {\n    color: #181818;\n}\n\n.ui-drawer__body {\n    flex: 1;\n    padding: 18px;\n    overflow-y: auto;\n    font-size: 0.875rem;\n    color: #444444;\n    line-height: 1.6;\n}\n\n.ui-drawer__footer {\n    display: flex;\n    justify-content: flex-end;\n    gap: 8px;\n    padding: 12px 18px;\n    border-top: 1px solid #ececec;\n    background: #fafafa;\n}\n.ui-drawer__footer:empty {\n    display: none;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Drawer</masterLabel>\n    <description>汎用ドロワー。画面端からスライドインし背景/×/Escで close を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCallout",
+      "title": "UI Callout",
+      "icon": "🗯️",
+      "category": "フィードバック",
+      "demo": "callout",
+      "description": "左罫線・見出し・アイコンで補足を強調するボックス。本文は default スロット。",
+      "props": [
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'info'",
+          "desc": "info | success | warning | error | tip"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "見出し"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "本文"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-callout variant=\"tip\" title=\"ヒント\">\n    便利な使い方を紹介します。\n</c-ui-callout>",
+      "ja": "コールアウト",
+      "files": {
+        "html": "<template>\n    <div class={calloutClass}>\n        <span class=\"ui-callout__icon\">{iconChar}</span>\n        <div class=\"ui-callout__content\">\n            <strong lwc:if={title} class=\"ui-callout__title\">{title}</strong>\n            <div class=\"ui-callout__body\"><slot></slot></div>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst ICONS = {\n    info: 'ℹ',\n    success: '✓',\n    warning: '!',\n    error: '✕',\n    tip: '💡'\n};\n\n/**\n * uiCallout — 汎用コールアウト。\n * 左罫線と見出し・アイコンで強調する補足ボックス。本文は default スロット。\n */\nexport default class UiCallout extends LightningElement {\n    /** バリアント: info | success | warning | error | tip */\n    @api variant = 'info';\n    /** 見出し */\n    @api title;\n\n    get calloutClass() {\n        const variant = ICONS[this.variant] ? this.variant : 'info';\n        return `ui-callout ui-callout_${variant}`;\n    }\n\n    get iconChar() {\n        return ICONS[this.variant] || ICONS.info;\n    }\n}\n",
+        "css": ".ui-callout {\n    display: flex;\n    gap: 10px;\n    padding: 12px 14px;\n    border-radius: 8px;\n    border-left: 4px solid #0176d3;\n    background: #f4f8fd;\n    font-size: 0.85rem;\n    line-height: 1.6;\n}\n\n.ui-callout__icon {\n    flex-shrink: 0;\n    font-size: 0.95rem;\n    line-height: 1.6;\n}\n\n.ui-callout__title {\n    display: block;\n    margin-bottom: 2px;\n    color: #181818;\n}\n\n.ui-callout__body {\n    color: #444444;\n}\n\n.ui-callout_info {\n    border-left-color: #0176d3;\n    background: #f0f6fd;\n}\n.ui-callout_success {\n    border-left-color: #2e844a;\n    background: #f0f8f2;\n}\n.ui-callout_warning {\n    border-left-color: #dd7a01;\n    background: #fdf6ec;\n}\n.ui-callout_error {\n    border-left-color: #ba0517;\n    background: #fdf0ef;\n}\n.ui-callout_tip {\n    border-left-color: #7f56d9;\n    background: #f6f2fd;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Callout</masterLabel>\n    <description>汎用コールアウト。左罫線と見出し・アイコンで補足を強調表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiRatingSummary",
+      "title": "UI Rating Summary",
+      "icon": "🌟",
+      "category": "表示",
+      "demo": "ratingsummary",
+      "description": "平均評価・件数・星分布（5★〜1★）をまとめて表示するレビューサマリー。",
+      "props": [
+        {
+          "name": "average",
+          "type": "Number",
+          "def": "0",
+          "desc": "平均評価（例: 4.3）"
+        },
+        {
+          "name": "count",
+          "type": "Number",
+          "def": "0",
+          "desc": "総件数"
+        },
+        {
+          "name": "distribution",
+          "type": "Array",
+          "def": "[]",
+          "desc": "5★→1★ の件数配列（長さ 5）"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-rating-summary average=\"4.3\" count=\"128\" distribution={dist}></c-ui-rating-summary>",
+      "ja": "評価サマリー",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-rsummary\">\n        <div class=\"ui-rsummary__head\">\n            <div class=\"ui-rsummary__avg\">{averageText}</div>\n            <div class=\"ui-rsummary__meta\">\n                <div class=\"ui-rsummary__stars\">\n                    <template for:each={stars} for:item=\"s\">\n                        <span key={s.key} class=\"ui-rsummary__star\">{s.char}</span>\n                    </template>\n                </div>\n                <div class=\"ui-rsummary__count\">{count} 件のレビュー</div>\n            </div>\n        </div>\n        <div class=\"ui-rsummary__dist\">\n            <template for:each={rows} for:item=\"row\">\n                <div key={row.key} class=\"ui-rsummary__row\">\n                    <span class=\"ui-rsummary__rowlabel\">{row.star}★</span>\n                    <div class=\"ui-rsummary__track\">\n                        <div class=\"ui-rsummary__bar\" style={row.barStyle}></div>\n                    </div>\n                    <span class=\"ui-rsummary__rowval\">{row.value}</span>\n                </div>\n            </template>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiRatingSummary — 汎用評価サマリー。\n * 平均評価・件数・星分布（5★〜1★の件数）をまとめて表示する純粋な表示コンポーネント。\n */\nexport default class UiRatingSummary extends LightningElement {\n    /** 平均評価（例: 4.3） */\n    @api average = 0;\n    /** 総件数 */\n    @api count = 0;\n\n    _distribution = [];\n\n    /** 5★→1★ の件数配列（長さ 5） */\n    @api\n    get distribution() {\n        return this._distribution;\n    }\n    set distribution(value) {\n        this._distribution = Array.isArray(value) ? value : [];\n    }\n\n    get averageText() {\n        return (Number(this.average) || 0).toFixed(1);\n    }\n\n    get stars() {\n        const filled = Math.round(Number(this.average) || 0);\n        return [1, 2, 3, 4, 5].map((n) => ({\n            key: n,\n            char: n <= filled ? '★' : '☆'\n        }));\n    }\n\n    get rows() {\n        const total = this._distribution.reduce((a, b) => a + (Number(b) || 0), 0) || 1;\n        return this._distribution.map((c, i) => {\n            const star = 5 - i;\n            const value = Number(c) || 0;\n            return {\n                key: star,\n                star,\n                value,\n                barStyle: `width: ${Math.round((value / total) * 100)}%`\n            };\n        });\n    }\n}\n",
+        "css": ".ui-rsummary {\n    display: flex;\n    flex-direction: column;\n    gap: 12px;\n    max-width: 320px;\n}\n\n.ui-rsummary__head {\n    display: flex;\n    align-items: center;\n    gap: 14px;\n}\n\n.ui-rsummary__avg {\n    font-size: 2.4rem;\n    font-weight: 800;\n    color: #181818;\n    line-height: 1;\n}\n\n.ui-rsummary__stars {\n    color: #f5a623;\n    font-size: 1rem;\n    letter-spacing: 1px;\n}\n\n.ui-rsummary__count {\n    font-size: 0.78rem;\n    color: #706e6b;\n    margin-top: 2px;\n}\n\n.ui-rsummary__row {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    font-size: 0.78rem;\n}\n\n.ui-rsummary__rowlabel {\n    width: 28px;\n    color: #706e6b;\n    flex-shrink: 0;\n}\n\n.ui-rsummary__track {\n    flex: 1;\n    height: 8px;\n    background: #f0f0f0;\n    border-radius: 4px;\n    overflow: hidden;\n}\n\n.ui-rsummary__bar {\n    height: 100%;\n    background: #f5a623;\n    border-radius: 4px;\n}\n\n.ui-rsummary__rowval {\n    width: 28px;\n    text-align: right;\n    color: #444444;\n    flex-shrink: 0;\n    font-variant-numeric: tabular-nums;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Rating Summary</masterLabel>\n    <description>汎用評価サマリー。平均・件数・星分布をまとめて表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiToolbar",
+      "title": "UI Toolbar",
+      "icon": "🧰",
+      "category": "レイアウト",
+      "demo": "toolbar",
+      "description": "左にタイトル、右にアクション（default スロット）を配置する横長のバー。",
+      "props": [
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "左側のタイトル"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "右側のアクション"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-toolbar title=\"一覧\">\n    <c-ui-button label=\"追加\"></c-ui-button>\n</c-ui-toolbar>",
+      "ja": "ツールバー",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-toolbar\">\n        <span lwc:if={title} class=\"ui-toolbar__title\">{title}</span>\n        <div class=\"ui-toolbar__actions\">\n            <slot></slot>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiToolbar — 汎用ツールバー。\n * 左にタイトル、右にアクション（default スロット）を配置する横長のバー。\n */\nexport default class UiToolbar extends LightningElement {\n    /** 左側のタイトル */\n    @api title;\n}\n",
+        "css": ".ui-toolbar {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 8px 12px;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n}\n\n.ui-toolbar__title {\n    font-size: 0.9rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-toolbar__actions {\n    margin-left: auto;\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    flex-wrap: wrap;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Toolbar</masterLabel>\n    <description>汎用ツールバー。左にタイトル、右にアクションを配置するバー。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

@@ -1,0 +1,9 @@
+<template>
+    <div class={calloutClass}>
+        <span class="ui-callout__icon">{iconChar}</span>
+        <div class="ui-callout__content">
+            <strong lwc:if={title} class="ui-callout__title">{title}</strong>
+            <div class="ui-callout__body"><slot></slot></div>
+        </div>
+    </div>
+</template>

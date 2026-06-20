@@ -2139,6 +2139,118 @@
                 ])
             );
             controls.appendChild(out);
+        },
+
+        drawer(box, controls) {
+            const openBtn = el('button', { class: 'ui-button ui-button_brand' }, [
+                el('span', { class: 'ui-button__label', text: 'ドロワーを開く' })
+            ]);
+            box.appendChild(openBtn);
+            let keyHandler;
+            const close = (overlay) => {
+                overlay.remove();
+                if (keyHandler) document.removeEventListener('keydown', keyHandler);
+            };
+            openBtn.addEventListener('click', () => {
+                const closeBtn = el('button', { class: 'ui-drawer__close', type: 'button', html: '&times;' });
+                const okBtn = el('button', { class: 'ui-button ui-button_brand' }, [
+                    el('span', { class: 'ui-button__label', text: '適用' })
+                ]);
+                const panel = el('aside', { class: 'ui-drawer__panel ui-drawer__panel_right', role: 'dialog' }, [
+                    el('header', { class: 'ui-drawer__header' }, [
+                        el('h2', { class: 'ui-drawer__title', text: 'フィルタ' }),
+                        closeBtn
+                    ]),
+                    el('div', { class: 'ui-drawer__body' }, ['右からスライドインするドロワーです。背景クリック・×・Esc で閉じます。']),
+                    el('footer', { class: 'ui-drawer__footer' }, [okBtn])
+                ]);
+                const overlay = el('div', { class: 'ui-drawer-backdrop' }, [panel]);
+                panel.addEventListener('click', (e) => e.stopPropagation());
+                overlay.addEventListener('click', () => close(overlay));
+                closeBtn.addEventListener('click', () => close(overlay));
+                okBtn.addEventListener('click', () => close(overlay));
+                keyHandler = (e) => {
+                    if (e.key === 'Escape') close(overlay);
+                };
+                document.addEventListener('keydown', keyHandler);
+                document.body.appendChild(overlay);
+            });
+            controls.appendChild(el('span', { class: 'demo__out', text: 'open プロパティで表示制御' }));
+        },
+
+        callout(box) {
+            const icons = { info: 'ℹ', success: '✓', warning: '!', error: '✕', tip: '💡' };
+            const data = [
+                ['tip', 'ヒント', 'ショートカット Ctrl+S で素早く保存できます。'],
+                ['warning', '注意', 'この操作は元に戻せません。'],
+                ['success', '完了', 'すべての項目が同期されました。']
+            ];
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:10px;width:100%;max-width:460px' });
+            data.forEach((d) => {
+                col.appendChild(
+                    el('div', { class: 'ui-callout ui-callout_' + d[0] }, [
+                        el('span', { class: 'ui-callout__icon', text: icons[d[0]] }),
+                        el('div', { class: 'ui-callout__content' }, [
+                            el('strong', { class: 'ui-callout__title', text: d[1] }),
+                            el('div', { class: 'ui-callout__body', text: d[2] })
+                        ])
+                    ])
+                );
+            });
+            box.appendChild(col);
+        },
+
+        ratingsummary(box) {
+            const average = 4.3;
+            const count = 128;
+            const dist = [82, 28, 10, 5, 3];
+            const total = dist.reduce((a, b) => a + b, 0);
+            const filled = Math.round(average);
+            const stars = el('div', { class: 'ui-rsummary__stars' });
+            for (let n = 1; n <= 5; n += 1) {
+                stars.appendChild(el('span', { class: 'ui-rsummary__star', text: n <= filled ? '★' : '☆' }));
+            }
+            const distEl = el('div', { class: 'ui-rsummary__dist' });
+            dist.forEach((c, i) => {
+                const star = 5 - i;
+                distEl.appendChild(
+                    el('div', { class: 'ui-rsummary__row' }, [
+                        el('span', { class: 'ui-rsummary__rowlabel', text: star + '★' }),
+                        el('div', { class: 'ui-rsummary__track' }, [
+                            el('div', { class: 'ui-rsummary__bar', style: 'width:' + Math.round((c / total) * 100) + '%' })
+                        ]),
+                        el('span', { class: 'ui-rsummary__rowval', text: String(c) })
+                    ])
+                );
+            });
+            box.appendChild(
+                el('div', { class: 'ui-rsummary' }, [
+                    el('div', { class: 'ui-rsummary__head' }, [
+                        el('div', { class: 'ui-rsummary__avg', text: average.toFixed(1) }),
+                        el('div', { class: 'ui-rsummary__meta' }, [
+                            stars,
+                            el('div', { class: 'ui-rsummary__count', text: count + ' 件のレビュー' })
+                        ])
+                    ]),
+                    distEl
+                ])
+            );
+        },
+
+        toolbar(box) {
+            const search = el('input', { class: 'ui-input__field', type: 'search', placeholder: '検索…', style: 'max-width:160px' });
+            const filterBtn = el('button', { class: 'ui-button ui-button_neutral' }, [
+                el('span', { class: 'ui-button__label', text: '絞り込み' })
+            ]);
+            const addBtn = el('button', { class: 'ui-button ui-button_brand' }, [
+                el('span', { class: 'ui-button__label', text: '＋ 追加' })
+            ]);
+            box.appendChild(
+                el('div', { class: 'ui-toolbar', style: 'width:100%;max-width:460px' }, [
+                    el('span', { class: 'ui-toolbar__title', text: '取引先一覧' }),
+                    el('div', { class: 'ui-toolbar__actions' }, [search, filterBtn, addBtn])
+                ])
+            );
         }
     };
 

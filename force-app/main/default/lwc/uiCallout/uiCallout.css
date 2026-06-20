@@ -1,0 +1,47 @@
+.ui-callout {
+    display: flex;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border-left: 4px solid #0176d3;
+    background: #f4f8fd;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.ui-callout__icon {
+    flex-shrink: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.ui-callout__title {
+    display: block;
+    margin-bottom: 2px;
+    color: #181818;
+}
+
+.ui-callout__body {
+    color: #444444;
+}
+
+.ui-callout_info {
+    border-left-color: #0176d3;
+    background: #f0f6fd;
+}
+.ui-callout_success {
+    border-left-color: #2e844a;
+    background: #f0f8f2;
+}
+.ui-callout_warning {
+    border-left-color: #dd7a01;
+    background: #fdf6ec;
+}
+.ui-callout_error {
+    border-left-color: #ba0517;
+    background: #fdf0ef;
+}
+.ui-callout_tip {
+    border-left-color: #7f56d9;
+    background: #f6f2fd;
+}

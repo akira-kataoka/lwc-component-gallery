@@ -3353,3 +3353,244 @@
     border-color: #0176d3;
     color: #ffffff;
 }
+
+
+/* ===== uiDrawer ===== */
+.ui-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 7, 7, 0.45);
+    z-index: 9100;
+}
+
+.ui-drawer__panel {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 340px;
+    max-width: 86vw;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 32px rgba(0, 0, 0, 0.25);
+    animation: ui-drawer-in 0.22s ease;
+}
+
+.ui-drawer__panel_right {
+    right: 0;
+}
+.ui-drawer__panel_left {
+    left: 0;
+}
+.ui-drawer__panel_left {
+    animation: ui-drawer-in-left 0.22s ease;
+}
+
+@keyframes ui-drawer-in {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+@keyframes ui-drawer-in-left {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.ui-drawer__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 18px;
+    border-bottom: 1px solid #ececec;
+}
+.ui-drawer__title {
+    flex: 1;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #181818;
+}
+.ui-drawer__close {
+    border: none;
+    background: transparent;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: #706e6b;
+    cursor: pointer;
+}
+.ui-drawer__close:hover {
+    color: #181818;
+}
+
+.ui-drawer__body {
+    flex: 1;
+    padding: 18px;
+    overflow-y: auto;
+    font-size: 0.875rem;
+    color: #444444;
+    line-height: 1.6;
+}
+
+.ui-drawer__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 18px;
+    border-top: 1px solid #ececec;
+    background: #fafafa;
+}
+.ui-drawer__footer:empty {
+    display: none;
+}
+
+
+/* ===== uiCallout ===== */
+.ui-callout {
+    display: flex;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border-left: 4px solid #0176d3;
+    background: #f4f8fd;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.ui-callout__icon {
+    flex-shrink: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.ui-callout__title {
+    display: block;
+    margin-bottom: 2px;
+    color: #181818;
+}
+
+.ui-callout__body {
+    color: #444444;
+}
+
+.ui-callout_info {
+    border-left-color: #0176d3;
+    background: #f0f6fd;
+}
+.ui-callout_success {
+    border-left-color: #2e844a;
+    background: #f0f8f2;
+}
+.ui-callout_warning {
+    border-left-color: #dd7a01;
+    background: #fdf6ec;
+}
+.ui-callout_error {
+    border-left-color: #ba0517;
+    background: #fdf0ef;
+}
+.ui-callout_tip {
+    border-left-color: #7f56d9;
+    background: #f6f2fd;
+}
+
+
+/* ===== uiRatingSummary ===== */
+.ui-rsummary {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+}
+
+.ui-rsummary__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ui-rsummary__avg {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #181818;
+    line-height: 1;
+}
+
+.ui-rsummary__stars {
+    color: #f5a623;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+.ui-rsummary__count {
+    font-size: 0.78rem;
+    color: #706e6b;
+    margin-top: 2px;
+}
+
+.ui-rsummary__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+}
+
+.ui-rsummary__rowlabel {
+    width: 28px;
+    color: #706e6b;
+    flex-shrink: 0;
+}
+
+.ui-rsummary__track {
+    flex: 1;
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ui-rsummary__bar {
+    height: 100%;
+    background: #f5a623;
+    border-radius: 4px;
+}
+
+.ui-rsummary__rowval {
+    width: 28px;
+    text-align: right;
+    color: #444444;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* ===== uiToolbar ===== */
+.ui-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+}
+
+.ui-toolbar__title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-toolbar__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}

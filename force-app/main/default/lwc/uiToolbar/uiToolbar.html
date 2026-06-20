@@ -1,0 +1,8 @@
+<template>
+    <div class="ui-toolbar">
+        <span lwc:if={title} class="ui-toolbar__title">{title}</span>
+        <div class="ui-toolbar__actions">
+            <slot></slot>
+        </div>
+    </div>
+</template>
