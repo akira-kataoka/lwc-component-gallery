@@ -1,0 +1,22 @@
+<template>
+    <ul class="ui-list">
+        <template for:each={computedItems} for:item="item">
+            <li key={item.key} class="ui-list__item">
+                <button
+                    class="ui-list__button"
+                    type="button"
+                    data-value={item.value}
+                    onclick={handleSelect}
+                >
+                    <span lwc:if={item.hasIcon} class="ui-list__icon"
+                        >{item.icon}</span
+                    >
+                    <span class="ui-list__title">{item.title}</span>
+                    <span lwc:if={item.hasMeta} class="ui-list__meta"
+                        >{item.meta}</span
+                    >
+                </button>
+            </li>
+        </template>
+    </ul>
+</template>

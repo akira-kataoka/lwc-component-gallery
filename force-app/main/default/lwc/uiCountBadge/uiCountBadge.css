@@ -1,0 +1,32 @@
+.ui-countbadge {
+    position: relative;
+    display: inline-flex;
+}
+
+.ui-countbadge__badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: #ba0517;
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    box-shadow: 0 0 0 2px #ffffff;
+    box-sizing: border-box;
+}
+
+.ui-countbadge__badge_dot {
+    min-width: 10px;
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border-radius: 50%;
+    top: -2px;
+    right: -2px;
+}

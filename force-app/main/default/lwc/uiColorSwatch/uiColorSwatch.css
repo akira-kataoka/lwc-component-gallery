@@ -1,0 +1,23 @@
+.ui-swatches {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ui-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px #dddbda;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.1s ease;
+}
+.ui-swatch:hover {
+    transform: scale(1.12);
+}
+
+.ui-swatch_selected {
+    box-shadow: 0 0 0 2px #0176d3;
+}

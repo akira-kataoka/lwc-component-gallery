@@ -1164,6 +1164,293 @@
             });
             box.appendChild(wrap);
             controls.appendChild(out);
+        },
+
+        stepper(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '値: 1' });
+            let value = 1;
+            const input = el('input', { class: 'ui-stepper__input', type: 'number', value: '1' });
+            function sync() {
+                input.value = String(value);
+                out.textContent = '値: ' + value;
+            }
+            const dec = el('button', { class: 'ui-stepper__btn', type: 'button', text: '−' });
+            const inc = el('button', { class: 'ui-stepper__btn', type: 'button', text: '+' });
+            dec.addEventListener('click', () => {
+                value = Math.max(0, value - 1);
+                sync();
+            });
+            inc.addEventListener('click', () => {
+                value += 1;
+                sync();
+            });
+            input.addEventListener('input', () => {
+                value = Number(input.value) || 0;
+                out.textContent = '値: ' + value;
+            });
+            box.appendChild(
+                el('div', { class: 'ui-stepper' }, [
+                    el('label', { class: 'ui-stepper__label', text: '数量' }),
+                    el('div', { class: 'ui-stepper__control' }, [dec, input, inc])
+                ])
+            );
+            controls.appendChild(out);
+        },
+
+        fileupload(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '未選択' });
+            const text = el('span', { class: 'ui-upload__text', text: 'ファイルをドラッグ、またはクリックして選択' });
+            const zone = el('div', { class: 'ui-upload', style: 'max-width:360px' }, [
+                el('span', { class: 'ui-upload__icon', text: '📎' }),
+                text
+            ]);
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('ui-upload_drag');
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('ui-upload_drag'));
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('ui-upload_drag');
+                const f = e.dataTransfer.files && e.dataTransfer.files[0];
+                if (f) {
+                    text.className = 'ui-upload__name';
+                    text.textContent = f.name;
+                    out.textContent = '選択: ' + f.name;
+                }
+            });
+            zone.addEventListener('click', () => {
+                text.className = 'ui-upload__name';
+                text.textContent = '提案書.pdf';
+                out.textContent = '選択: 提案書.pdf（デモ）';
+            });
+            box.appendChild(zone);
+            controls.appendChild(out);
+        },
+
+        colorswatch(box, controls) {
+            const colors = ['#0176d3', '#2e844a', '#dd7a01', '#ba0517', '#7f56d9', '#181818'];
+            let value = colors[0];
+            const out = el('span', { class: 'demo__out', text: '選択: ' + value });
+            const wrap = el('div', { class: 'ui-swatches' });
+            function render() {
+                wrap.innerHTML = '';
+                colors.forEach((c) => {
+                    const b = el('button', {
+                        class: 'ui-swatch' + (c === value ? ' ui-swatch_selected' : ''),
+                        type: 'button',
+                        style: 'background:' + c,
+                        title: c
+                    });
+                    b.addEventListener('click', () => {
+                        value = c;
+                        out.textContent = '選択: ' + c;
+                        render();
+                    });
+                    wrap.appendChild(b);
+                });
+            }
+            render();
+            box.appendChild(wrap);
+            controls.appendChild(out);
+        },
+
+        popover(box) {
+            const closeBtn = el('button', { class: 'ui-popover__close', type: 'button', title: '閉じる', html: '&times;' });
+            const panel = el('div', { class: 'ui-popover__panel', role: 'dialog', style: 'display:none' }, [
+                el('header', { class: 'ui-popover__header' }, [
+                    el('span', { class: 'ui-popover__title', text: '使い方' }),
+                    closeBtn
+                ]),
+                el('div', { class: 'ui-popover__body' }, [
+                    'トリガーをクリックするとこの吹き出しが開きます。外側クリックや × で閉じます。'
+                ])
+            ]);
+            let open = false;
+            const trigger = el('button', { class: 'ui-popover__trigger', type: 'button', text: '詳細' });
+            const wrap = el('div', { class: 'ui-popover' }, [trigger, panel]);
+            trigger.addEventListener('click', () => {
+                open = !open;
+                panel.style.display = open ? '' : 'none';
+            });
+            closeBtn.addEventListener('click', () => {
+                open = false;
+                panel.style.display = 'none';
+            });
+            wrap.addEventListener('focusout', (e) => {
+                if (open && (!e.relatedTarget || !wrap.contains(e.relatedTarget))) {
+                    open = false;
+                    panel.style.display = 'none';
+                }
+            });
+            box.appendChild(wrap);
+        },
+
+        skeleton(box) {
+            const lines = el('div', { class: 'ui-skeleton__lines' });
+            ['100%', '92%', '78%'].forEach((w) =>
+                lines.appendChild(el('div', { class: 'ui-skeleton__line', style: 'width:' + w }))
+            );
+            box.appendChild(
+                el('div', { class: 'ui-skeleton', style: 'width:100%;max-width:360px' }, [
+                    el('div', { class: 'ui-skeleton__avatar' }),
+                    lines
+                ])
+            );
+        },
+
+        list(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'クリックで選択' });
+            const data = [
+                ['📄', '提案書.pdf', '2.4 MB'],
+                ['📊', '売上レポート', '1日前'],
+                ['🖼️', 'ロゴ.png', '320 KB']
+            ];
+            const ul = el('ul', { class: 'ui-list', style: 'width:100%;max-width:360px' });
+            data.forEach((d) => {
+                const btn = el('button', { class: 'ui-list__button', type: 'button' }, [
+                    el('span', { class: 'ui-list__icon', text: d[0] }),
+                    el('span', { class: 'ui-list__title', text: d[1] }),
+                    el('span', { class: 'ui-list__meta', text: d[2] })
+                ]);
+                btn.addEventListener('click', () => {
+                    out.textContent = '選択: ' + d[1];
+                });
+                ul.appendChild(el('li', { class: 'ui-list__item' }, [btn]));
+            });
+            box.appendChild(ul);
+            controls.appendChild(out);
+        },
+
+        verticalnav(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '選択: ホーム' });
+            const items = [
+                ['🏠', 'ホーム', 'home'],
+                ['📋', 'タスク', 'task'],
+                ['📈', 'レポート', 'report'],
+                ['⚙️', '設定', 'settings']
+            ];
+            let active = 'home';
+            const nav = el('nav', { class: 'ui-vnav', style: 'min-width:170px' });
+            function render() {
+                nav.innerHTML = '';
+                items.forEach((it) => {
+                    const b = el('button', {
+                        class: 'ui-vnav__item' + (it[2] === active ? ' ui-vnav__item_active' : ''),
+                        type: 'button'
+                    }, [
+                        el('span', { class: 'ui-vnav__icon', text: it[0] }),
+                        el('span', { class: 'ui-vnav__label', text: it[1] })
+                    ]);
+                    b.addEventListener('click', () => {
+                        active = it[2];
+                        out.textContent = '選択: ' + it[1];
+                        render();
+                    });
+                    nav.appendChild(b);
+                });
+            }
+            render();
+            box.appendChild(nav);
+            controls.appendChild(out);
+        },
+
+        banner(box) {
+            const icons = { info: 'ℹ', success: '✓', warning: '!', error: '✕' };
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:10px;width:100%;max-width:520px' });
+            const actionBtn = el('button', { class: 'ui-button ui-button_brand' }, [
+                el('span', { class: 'ui-button__label', text: '更新' })
+            ]);
+            col.appendChild(
+                el('div', { class: 'ui-banner ui-banner_info', role: 'status' }, [
+                    el('span', { class: 'ui-banner__icon', text: icons.info }),
+                    el('span', { class: 'ui-banner__message', text: '新しいバージョンが利用可能です。' }),
+                    el('span', { class: 'ui-banner__action' }, [actionBtn])
+                ])
+            );
+            const wclose = el('button', { class: 'ui-banner__close', type: 'button', html: '&times;' });
+            const wb = el('div', { class: 'ui-banner ui-banner_warning', role: 'status' }, [
+                el('span', { class: 'ui-banner__icon', text: icons.warning }),
+                el('span', { class: 'ui-banner__message', text: '近日メンテナンスを予定しています。' }),
+                el('span', { class: 'ui-banner__action' }),
+                wclose
+            ]);
+            wclose.addEventListener('click', () => wb.remove());
+            col.appendChild(wb);
+            box.appendChild(col);
+        },
+
+        meter(box, controls) {
+            function level(r) {
+                return r < 0.34 ? 'low' : r < 0.67 ? 'mid' : 'high';
+            }
+            const rows = [['CPU使用率', 28, 100], ['メモリ', 55, 100], ['ディスク', 88, 100]];
+            const fills = [];
+            const wrap = el('div', { style: 'display:flex;flex-direction:column;gap:12px;width:100%;max-width:360px' });
+            rows.forEach((r) => {
+                const ratio = r[1] / r[2];
+                const fill = el('div', {
+                    class: 'ui-meter__fill ui-meter__fill_' + level(ratio),
+                    style: 'width:' + Math.round(ratio * 100) + '%'
+                });
+                const val = el('span', { class: 'ui-meter__value', text: r[1] + ' / ' + r[2] });
+                wrap.appendChild(
+                    el('div', { class: 'ui-meter' }, [
+                        el('div', { class: 'ui-meter__head' }, [
+                            el('span', { class: 'ui-meter__label', text: r[0] }),
+                            val
+                        ]),
+                        el('div', { class: 'ui-meter__track' }, [fill])
+                    ])
+                );
+                fills.push({ fill, val });
+            });
+            box.appendChild(wrap);
+            const range = el('input', { type: 'range', min: '0', max: '100', value: '28' });
+            range.addEventListener('input', () => {
+                const v = Number(range.value);
+                const ratio = v / 100;
+                fills[0].fill.className = 'ui-meter__fill ui-meter__fill_' + level(ratio);
+                fills[0].fill.style.width = Math.round(ratio * 100) + '%';
+                fills[0].val.textContent = v + ' / 100';
+            });
+            controls.appendChild(el('span', { text: 'CPU:' }));
+            controls.appendChild(range);
+        },
+
+        countbadge(box, controls) {
+            let count = 5;
+            const badge = el('span', { class: 'ui-countbadge__badge', text: '5' });
+            const wrap = el('span', { class: 'ui-countbadge', style: 'font-size:1.9rem' }, [
+                el('span', { text: '🔔' }),
+                badge
+            ]);
+            function render() {
+                if (count > 0) {
+                    badge.style.display = '';
+                    badge.textContent = count > 99 ? '99+' : String(count);
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+            render();
+            const dec = el('button', { class: 'ui-button ui-button_neutral' }, [
+                el('span', { class: 'ui-button__label', text: '−' })
+            ]);
+            const inc = el('button', { class: 'ui-button ui-button_neutral' }, [
+                el('span', { class: 'ui-button__label', text: '+' })
+            ]);
+            dec.addEventListener('click', () => {
+                count = Math.max(0, count - 1);
+                render();
+            });
+            inc.addEventListener('click', () => {
+                count += 1;
+                render();
+            });
+            box.appendChild(wrap);
+            controls.appendChild(dec);
+            controls.appendChild(inc);
         }
     };
 

@@ -1,0 +1,15 @@
+<template>
+    <div class="ui-swatches">
+        <template for:each={swatches} for:item="swatch">
+            <button
+                key={swatch.value}
+                class={swatch.cssClass}
+                type="button"
+                style={swatch.style}
+                title={swatch.label}
+                data-value={swatch.value}
+                onclick={handleSelect}
+            ></button>
+        </template>
+    </div>
+</template>

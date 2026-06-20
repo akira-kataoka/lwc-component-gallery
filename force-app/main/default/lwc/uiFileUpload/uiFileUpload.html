@@ -1,0 +1,19 @@
+<template>
+    <div
+        class={rootClass}
+        onclick={handleClick}
+        ondragover={handleDragOver}
+        ondragleave={handleDragLeave}
+        ondrop={handleDrop}
+    >
+        <input
+            type="file"
+            class="ui-upload__input"
+            accept={accept}
+            onchange={handleChange}
+        />
+        <span class="ui-upload__icon">📎</span>
+        <span lwc:if={hasFile} class="ui-upload__name">{fileName}</span>
+        <span lwc:else class="ui-upload__text">{label}</span>
+    </div>
+</template>

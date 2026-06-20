@@ -1,0 +1,14 @@
+<template>
+    <div class="ui-skeleton">
+        <div lwc:if={avatar} class="ui-skeleton__avatar"></div>
+        <div class="ui-skeleton__lines">
+            <template for:each={lineList} for:item="item">
+                <div
+                    key={item.key}
+                    class="ui-skeleton__line"
+                    style={item.style}
+                ></div>
+            </template>
+        </div>
+    </div>
+</template>

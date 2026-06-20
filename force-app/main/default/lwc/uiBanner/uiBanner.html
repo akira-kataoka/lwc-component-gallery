@@ -1,0 +1,18 @@
+<template>
+    <div lwc:if={isVisible} class={bannerClass} role="status">
+        <span class="ui-banner__icon">{iconChar}</span>
+        <span class="ui-banner__message">{message}</span>
+        <span class="ui-banner__action">
+            <slot></slot>
+        </span>
+        <button
+            lwc:if={closable}
+            class="ui-banner__close"
+            type="button"
+            title="閉じる"
+            onclick={handleClose}
+        >
+            &times;
+        </button>
+    </div>
+</template>

@@ -915,6 +915,199 @@ const COMPONENTS = [
         ],
         events: [{ name: 'select', desc: '項目選択時に発火（detail.value）' }],
         usage: `<c-ui-dropdown-menu label="操作" items={actions} onselect={handleSelect}></c-ui-dropdown-menu>`
+    },
+    {
+        id: 'uiStepper',
+        title: 'UI Stepper',
+        icon: '🔢',
+        category: 'フォーム',
+        demo: 'stepper',
+        description:
+            '−/+ ボタンと数値入力で値を増減する数値ステッパー。変更時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'Number', def: '0', desc: '現在値' },
+            { name: 'min', type: 'Number', def: '—', desc: '最小値（任意）' },
+            { name: 'max', type: 'Number', def: '—', desc: '最大値（任意）' },
+            { name: 'step', type: 'Number', def: '1', desc: '刻み' }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.value）' }],
+        usage: `<c-ui-stepper label="数量" value="1" min="0" onchange={handleChange}></c-ui-stepper>`
+    },
+    {
+        id: 'uiFileUpload',
+        title: 'UI File Upload',
+        icon: '📤',
+        category: 'フォーム',
+        demo: 'fileupload',
+        description:
+            'クリックまたはドラッグ＆ドロップでファイルを選択するドロップゾーン。選択時に upload イベント (detail.name) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '案内文', desc: '案内テキスト' },
+            { name: 'accept', type: 'String', def: '—', desc: 'accept 属性（例: image/*）' }
+        ],
+        events: [{ name: 'upload', desc: 'ファイル選択時に発火（detail.name）' }],
+        usage: `<c-ui-file-upload accept="image/*" onupload={handleUpload}></c-ui-file-upload>`
+    },
+    {
+        id: 'uiColorSwatch',
+        title: 'UI Color Swatch',
+        icon: '🎨',
+        category: 'フォーム',
+        demo: 'colorswatch',
+        description:
+            '色見本を並べて単一選択する。選択時に change イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'colors',
+                type: 'Array',
+                def: '[]',
+                desc: "HEX 文字列または { value, label } の配列"
+            },
+            { name: 'value', type: 'String', def: '—', desc: '選択中の色' }
+        ],
+        events: [{ name: 'change', desc: '選択時に発火（detail.value）' }],
+        usage: `<c-ui-color-swatch colors={colors} value="#0176d3" onchange={handleChange}></c-ui-color-swatch>`
+    },
+    {
+        id: 'uiPopover',
+        title: 'UI Popover',
+        icon: '💭',
+        category: 'オーバーレイ',
+        demo: 'popover',
+        description:
+            'トリガークリックでヘッダ付きの吹き出し（default スロット）を開閉。外側クリックで閉じる。',
+        props: [
+            { name: 'trigger-label', type: 'String', def: "'詳細'", desc: 'トリガーのラベル' },
+            { name: 'header', type: 'String', def: '—', desc: '吹き出しの見出し（任意）' }
+        ],
+        slots: [{ name: '(default)', desc: '吹き出しの本文' }],
+        events: [{ name: 'close', desc: '閉じる操作時に発火' }],
+        usage: `<c-ui-popover trigger-label="ヘルプ" header="使い方">\n    ここに説明を表示します。\n</c-ui-popover>`
+    },
+    {
+        id: 'uiSkeleton',
+        title: 'UI Skeleton',
+        icon: '⬜',
+        category: 'フィードバック',
+        demo: 'skeleton',
+        description:
+            '読み込み中のプレースホルダ。シマーアニメーションの行を表示し、avatar で円形も表示。',
+        props: [
+            { name: 'lines', type: 'Number', def: '3', desc: '行数' },
+            {
+                name: 'avatar',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で円形アバターを表示'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-skeleton lines="3" avatar></c-ui-skeleton>`
+    },
+    {
+        id: 'uiList',
+        title: 'UI List',
+        icon: '📋',
+        category: '表示',
+        demo: 'list',
+        description:
+            'items 配列 ([{ title, meta, icon }]) をクリック可能な行で表示。行クリックで select イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ title, meta, icon }] の配列'
+            }
+        ],
+        events: [{ name: 'select', desc: '行クリック時に発火（detail.value）' }],
+        usage: `<c-ui-list items={items} onselect={handleSelect}></c-ui-list>`
+    },
+    {
+        id: 'uiVerticalNav',
+        title: 'UI Vertical Nav',
+        icon: '🧱',
+        category: 'ナビゲーション',
+        demo: 'verticalnav',
+        description:
+            'items 配列を縦並びで表示し active を強調する縦型ナビ。選択時に select イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value, icon }] の配列'
+            },
+            { name: 'active', type: 'String', def: '—', desc: '選択中の value' }
+        ],
+        events: [{ name: 'select', desc: '選択時に発火（detail.value）' }],
+        usage: `<c-ui-vertical-nav items={items} active="home" onselect={handleSelect}></c-ui-vertical-nav>`
+    },
+    {
+        id: 'uiBanner',
+        title: 'UI Banner',
+        icon: '📣',
+        category: 'フィードバック',
+        demo: 'banner',
+        description:
+            'variant に応じた色・アイコンで横長の通知を表示。default スロットにアクションを差し込め、closable で閉じられる。',
+        props: [
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'info'",
+                desc: 'info | success | warning | error'
+            },
+            { name: 'message', type: 'String', def: '—', desc: 'メッセージ本文' },
+            {
+                name: 'closable',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で閉じるボタンを表示'
+            }
+        ],
+        slots: [{ name: '(default)', desc: 'アクション（ボタン等）' }],
+        events: [{ name: 'close', desc: '閉じる操作時に発火' }],
+        usage: `<c-ui-banner variant="warning" message="メンテナンス予定があります" closable></c-ui-banner>`
+    },
+    {
+        id: 'uiMeter',
+        title: 'UI Meter',
+        icon: '🌡️',
+        category: '表示',
+        demo: 'meter',
+        description:
+            'value / max の割合をバーで表示。割合に応じて低（赤）/中（橙）/高（緑）に色が変わる。',
+        props: [
+            { name: 'value', type: 'Number', def: '0', desc: '現在値' },
+            { name: 'max', type: 'Number', def: '100', desc: '最大値' },
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' }
+        ],
+        events: [],
+        usage: `<c-ui-meter label="ディスク使用量" value="82" max="100"></c-ui-meter>`
+    },
+    {
+        id: 'uiCountBadge',
+        title: 'UI Count Badge',
+        icon: '🔴',
+        category: '表示',
+        demo: 'countbadge',
+        description:
+            'default スロットの要素の右上に件数バッジを重ねて表示。max 超過で「max+」、dot で点のみ表示。',
+        props: [
+            { name: 'count', type: 'Number', def: '0', desc: '件数' },
+            { name: 'max', type: 'Number', def: '99', desc: '表示上限（超過で max+）' },
+            {
+                name: 'dot',
+                type: 'Boolean',
+                def: 'false',
+                desc: 'true で数字なしのドット表示'
+            }
+        ],
+        slots: [{ name: '(default)', desc: 'バッジを重ねる要素' }],
+        events: [],
+        usage: `<c-ui-count-badge count="5">\n    <span>🔔</span>\n</c-ui-count-badge>`
     }
 ];
 
@@ -955,7 +1148,17 @@ const JA_NAMES = {
     uiTimeline: 'タイムライン',
     uiStatusDot: 'ステータスドット',
     uiProgressRing: '円形プログレス',
-    uiDropdownMenu: 'ドロップダウンメニュー'
+    uiDropdownMenu: 'ドロップダウンメニュー',
+    uiStepper: '数値ステッパー',
+    uiFileUpload: 'ファイルアップロード',
+    uiColorSwatch: 'カラースウォッチ',
+    uiPopover: 'ポップオーバー',
+    uiSkeleton: 'スケルトン',
+    uiList: 'リスト',
+    uiVerticalNav: '縦ナビ',
+    uiBanner: 'バナー',
+    uiMeter: 'メーター',
+    uiCountBadge: 'カウントバッジ'
 };
 
 const FILE_KEYS = [

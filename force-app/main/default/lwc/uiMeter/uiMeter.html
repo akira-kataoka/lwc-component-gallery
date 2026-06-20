@@ -1,0 +1,11 @@
+<template>
+    <div class="ui-meter">
+        <div class="ui-meter__head">
+            <span lwc:if={label} class="ui-meter__label">{label}</span>
+            <span class="ui-meter__value">{valueText}</span>
+        </div>
+        <div class="ui-meter__track">
+            <div class={fillClass} style={fillStyle}></div>
+        </div>
+    </div>
+</template>

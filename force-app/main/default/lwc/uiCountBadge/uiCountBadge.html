@@ -1,0 +1,9 @@
+<template>
+    <span class="ui-countbadge">
+        <slot></slot>
+        <span lwc:if={show} class={badgeClass}>
+            <span lwc:if={isDot}></span>
+            <span lwc:else>{display}</span>
+        </span>
+    </span>
+</template>

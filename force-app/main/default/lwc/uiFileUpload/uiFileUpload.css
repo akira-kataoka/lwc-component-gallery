@@ -1,0 +1,42 @@
+.ui-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px;
+    border: 2px dashed #c9c9c9;
+    border-radius: 10px;
+    background: #fafaf9;
+    color: #706e6b;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.12s ease, background 0.12s ease;
+}
+.ui-upload:hover {
+    border-color: #0176d3;
+    background: #f3f9ff;
+}
+
+.ui-upload_drag {
+    border-color: #0176d3;
+    background: #eef4ff;
+}
+
+.ui-upload__input {
+    display: none;
+}
+
+.ui-upload__icon {
+    font-size: 1.6rem;
+}
+
+.ui-upload__text {
+    font-size: 0.82rem;
+}
+
+.ui-upload__name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0176d3;
+}

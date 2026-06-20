@@ -1,0 +1,29 @@
+<template>
+    <div class="ui-stepper">
+        <label lwc:if={label} class="ui-stepper__label">{label}</label>
+        <div class="ui-stepper__control">
+            <button
+                class="ui-stepper__btn"
+                type="button"
+                aria-label="減らす"
+                onclick={handleDecrement}
+            >
+                −
+            </button>
+            <input
+                class="ui-stepper__input"
+                type="number"
+                value={value}
+                oninput={handleInput}
+            />
+            <button
+                class="ui-stepper__btn"
+                type="button"
+                aria-label="増やす"
+                onclick={handleIncrement}
+            >
+                +
+            </button>
+        </div>
+    </div>
+</template>

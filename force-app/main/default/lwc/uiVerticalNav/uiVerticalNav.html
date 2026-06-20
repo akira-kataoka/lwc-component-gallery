@@ -1,0 +1,18 @@
+<template>
+    <nav class="ui-vnav">
+        <template for:each={computedItems} for:item="item">
+            <button
+                key={item.key}
+                class={item.itemClass}
+                type="button"
+                data-value={item.value}
+                onclick={handleSelect}
+            >
+                <span lwc:if={item.hasIcon} class="ui-vnav__icon"
+                    >{item.icon}</span
+                >
+                <span class="ui-vnav__label">{item.label}</span>
+            </button>
+        </template>
+    </nav>
+</template>

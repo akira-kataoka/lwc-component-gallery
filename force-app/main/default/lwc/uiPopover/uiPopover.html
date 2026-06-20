@@ -1,0 +1,29 @@
+<template>
+    <div class="ui-popover" onfocusout={handleFocusOut}>
+        <button
+            class="ui-popover__trigger"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded={open}
+            onclick={handleToggle}
+        >
+            {triggerLabel}
+        </button>
+        <div lwc:if={open} class="ui-popover__panel" role="dialog">
+            <header lwc:if={header} class="ui-popover__header">
+                <span class="ui-popover__title">{header}</span>
+                <button
+                    class="ui-popover__close"
+                    type="button"
+                    title="閉じる"
+                    onclick={handleClose}
+                >
+                    &times;
+                </button>
+            </header>
+            <div class="ui-popover__body">
+                <slot></slot>
+            </div>
+        </div>
+    </div>
+</template>

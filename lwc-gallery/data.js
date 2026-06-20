@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T02:28:02.810Z",
+  "generatedAt": "2026-06-20T06:28:59.886Z",
   "components": [
     {
       "id": "uiBadge",
@@ -1403,6 +1403,399 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiDropdownMenu — 汎用ドロップダウンメニュー。\n * トリガーボタンで items 配列 ([{ label, value }]) を開閉し、\n * 項目選択時に select イベント (detail.value) を発火する。\n * メニュー外へフォーカスが外れると自動で閉じる。\n */\nexport default class UiDropdownMenu extends LightningElement {\n    _items = [];\n\n    /** トリガーのラベル */\n    @api label = 'メニュー';\n    /** [{ label, value }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    @track open = false;\n\n    handleToggle() {\n        this.open = !this.open;\n    }\n\n    handleSelect(event) {\n        const value = event.currentTarget.dataset.value;\n        this.open = false;\n        this.dispatchEvent(new CustomEvent('select', { detail: { value } }));\n    }\n\n    handleFocusOut(event) {\n        if (\n            this.open &&\n            (!event.relatedTarget ||\n                !event.currentTarget.contains(event.relatedTarget))\n        ) {\n            this.open = false;\n        }\n    }\n}\n",
         "css": ".ui-dropdown {\n    position: relative;\n    display: inline-block;\n}\n\n.ui-dropdown__trigger {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n    height: 32px;\n    padding: 0 12px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    background: #ffffff;\n    color: #181818;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-dropdown__trigger:hover {\n    background: #f3f3f3;\n}\n\n.ui-dropdown__caret {\n    font-size: 0.7rem;\n    color: #706e6b;\n}\n\n.ui-dropdown__menu {\n    position: absolute;\n    top: calc(100% + 4px);\n    left: 0;\n    min-width: 180px;\n    margin: 0;\n    padding: 4px;\n    list-style: none;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);\n    z-index: 20;\n}\n\n.ui-dropdown__item {\n    display: block;\n    width: 100%;\n    text-align: left;\n    border: none;\n    background: transparent;\n    padding: 8px 12px;\n    font-size: 0.82rem;\n    color: #181818;\n    border-radius: 6px;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-dropdown__item:hover {\n    background: #f3f9ff;\n    color: #0176d3;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Dropdown Menu</masterLabel>\n    <description>汎用ドロップダウンメニュー。項目選択で select イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiStepper",
+      "title": "UI Stepper",
+      "icon": "🔢",
+      "category": "フォーム",
+      "demo": "stepper",
+      "description": "−/+ ボタンと数値入力で値を増減する数値ステッパー。変更時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "0",
+          "desc": "現在値"
+        },
+        {
+          "name": "min",
+          "type": "Number",
+          "def": "—",
+          "desc": "最小値（任意）"
+        },
+        {
+          "name": "max",
+          "type": "Number",
+          "def": "—",
+          "desc": "最大値（任意）"
+        },
+        {
+          "name": "step",
+          "type": "Number",
+          "def": "1",
+          "desc": "刻み"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-stepper label=\"数量\" value=\"1\" min=\"0\" onchange={handleChange}></c-ui-stepper>",
+      "ja": "数値ステッパー",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-stepper\">\n        <label lwc:if={label} class=\"ui-stepper__label\">{label}</label>\n        <div class=\"ui-stepper__control\">\n            <button\n                class=\"ui-stepper__btn\"\n                type=\"button\"\n                aria-label=\"減らす\"\n                onclick={handleDecrement}\n            >\n                −\n            </button>\n            <input\n                class=\"ui-stepper__input\"\n                type=\"number\"\n                value={value}\n                oninput={handleInput}\n            />\n            <button\n                class=\"ui-stepper__btn\"\n                type=\"button\"\n                aria-label=\"増やす\"\n                onclick={handleIncrement}\n            >\n                +\n            </button>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiStepper — 汎用数値ステッパー。\n * −/+ ボタンと数値入力で値を増減し、変更時に change イベント\n * (detail.value) を発火する。min/max で範囲を制限できる。\n */\nexport default class UiStepper extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 現在値 */\n    @api value = 0;\n    /** 最小値（任意） */\n    @api min;\n    /** 最大値（任意） */\n    @api max;\n    /** 刻み */\n    @api step = 1;\n\n    get stepValue() {\n        return Number(this.step) || 1;\n    }\n\n    clamp(n) {\n        let v = n;\n        if (this.min !== undefined && this.min !== '' && this.min !== null) {\n            v = Math.max(Number(this.min), v);\n        }\n        if (this.max !== undefined && this.max !== '' && this.max !== null) {\n            v = Math.min(Number(this.max), v);\n        }\n        return v;\n    }\n\n    emit() {\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n\n    handleDecrement() {\n        this.value = this.clamp(Number(this.value) - this.stepValue);\n        this.emit();\n    }\n\n    handleIncrement() {\n        this.value = this.clamp(Number(this.value) + this.stepValue);\n        this.emit();\n    }\n\n    handleInput(event) {\n        this.value = this.clamp(Number(event.target.value) || 0);\n        this.emit();\n    }\n}\n",
+        "css": ".ui-stepper {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-stepper__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-stepper__control {\n    display: inline-flex;\n    align-items: stretch;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    overflow: hidden;\n    width: fit-content;\n}\n\n.ui-stepper__btn {\n    width: 32px;\n    border: none;\n    background: #f3f3f3;\n    color: #181818;\n    font-size: 1.1rem;\n    cursor: pointer;\n    line-height: 1;\n}\n.ui-stepper__btn:hover {\n    background: #e5e5e5;\n    color: #0176d3;\n}\n\n.ui-stepper__input {\n    width: 56px;\n    border: none;\n    border-left: 1px solid #c9c9c9;\n    border-right: 1px solid #c9c9c9;\n    text-align: center;\n    font-size: 0.875rem;\n    color: #181818;\n    font-family: inherit;\n    -moz-appearance: textfield;\n}\n.ui-stepper__input::-webkit-outer-spin-button,\n.ui-stepper__input::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n    margin: 0;\n}\n.ui-stepper__input:focus {\n    outline: none;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Stepper</masterLabel>\n    <description>汎用数値ステッパー。−/+で増減し change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiFileUpload",
+      "title": "UI File Upload",
+      "icon": "📤",
+      "category": "フォーム",
+      "demo": "fileupload",
+      "description": "クリックまたはドラッグ＆ドロップでファイルを選択するドロップゾーン。選択時に upload イベント (detail.name) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "案内文",
+          "desc": "案内テキスト"
+        },
+        {
+          "name": "accept",
+          "type": "String",
+          "def": "—",
+          "desc": "accept 属性（例: image/*）"
+        }
+      ],
+      "events": [
+        {
+          "name": "upload",
+          "desc": "ファイル選択時に発火（detail.name）"
+        }
+      ],
+      "usage": "<c-ui-file-upload accept=\"image/*\" onupload={handleUpload}></c-ui-file-upload>",
+      "ja": "ファイルアップロード",
+      "files": {
+        "html": "<template>\n    <div\n        class={rootClass}\n        onclick={handleClick}\n        ondragover={handleDragOver}\n        ondragleave={handleDragLeave}\n        ondrop={handleDrop}\n    >\n        <input\n            type=\"file\"\n            class=\"ui-upload__input\"\n            accept={accept}\n            onchange={handleChange}\n        />\n        <span class=\"ui-upload__icon\">📎</span>\n        <span lwc:if={hasFile} class=\"ui-upload__name\">{fileName}</span>\n        <span lwc:else class=\"ui-upload__text\">{label}</span>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiFileUpload — 汎用ファイルアップロード（ドロップゾーン）。\n * クリックまたはドラッグ＆ドロップでファイルを選択し、\n * upload イベント (detail.name) を発火する。\n */\nexport default class UiFileUpload extends LightningElement {\n    /** 案内テキスト */\n    @api label = 'ファイルをドラッグ、またはクリックして選択';\n    /** accept 属性（例: image/*） */\n    @api accept;\n\n    @track fileName = '';\n    @track dragging = false;\n\n    get hasFile() {\n        return !!this.fileName;\n    }\n\n    get rootClass() {\n        return this.dragging ? 'ui-upload ui-upload_drag' : 'ui-upload';\n    }\n\n    handleClick() {\n        this.template.querySelector('input').click();\n    }\n\n    handleChange(event) {\n        const file = event.target.files && event.target.files[0];\n        if (file) {\n            this.setFile(file.name);\n        }\n    }\n\n    handleDragOver(event) {\n        event.preventDefault();\n        this.dragging = true;\n    }\n\n    handleDragLeave() {\n        this.dragging = false;\n    }\n\n    handleDrop(event) {\n        event.preventDefault();\n        this.dragging = false;\n        const file = event.dataTransfer.files && event.dataTransfer.files[0];\n        if (file) {\n            this.setFile(file.name);\n        }\n    }\n\n    setFile(name) {\n        this.fileName = name;\n        this.dispatchEvent(new CustomEvent('upload', { detail: { name } }));\n    }\n}\n",
+        "css": ".ui-upload {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    gap: 8px;\n    padding: 24px;\n    border: 2px dashed #c9c9c9;\n    border-radius: 10px;\n    background: #fafaf9;\n    color: #706e6b;\n    cursor: pointer;\n    text-align: center;\n    transition: border-color 0.12s ease, background 0.12s ease;\n}\n.ui-upload:hover {\n    border-color: #0176d3;\n    background: #f3f9ff;\n}\n\n.ui-upload_drag {\n    border-color: #0176d3;\n    background: #eef4ff;\n}\n\n.ui-upload__input {\n    display: none;\n}\n\n.ui-upload__icon {\n    font-size: 1.6rem;\n}\n\n.ui-upload__text {\n    font-size: 0.82rem;\n}\n\n.ui-upload__name {\n    font-size: 0.85rem;\n    font-weight: 600;\n    color: #0176d3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI File Upload</masterLabel>\n    <description>汎用ファイルアップロード。クリック/D&Dで選択し upload イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiColorSwatch",
+      "title": "UI Color Swatch",
+      "icon": "🎨",
+      "category": "フォーム",
+      "demo": "colorswatch",
+      "description": "色見本を並べて単一選択する。選択時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "colors",
+          "type": "Array",
+          "def": "[]",
+          "desc": "HEX 文字列または { value, label } の配列"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "—",
+          "desc": "選択中の色"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-color-swatch colors={colors} value=\"#0176d3\" onchange={handleChange}></c-ui-color-swatch>",
+      "ja": "カラースウォッチ",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-swatches\">\n        <template for:each={swatches} for:item=\"swatch\">\n            <button\n                key={swatch.value}\n                class={swatch.cssClass}\n                type=\"button\"\n                style={swatch.style}\n                title={swatch.label}\n                data-value={swatch.value}\n                onclick={handleSelect}\n            ></button>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiColorSwatch — 汎用カラースウォッチ。\n * colors 配列（HEX 文字列 or [{ value, label }]）から色見本を並べ、\n * 選択時に change イベント (detail.value) を発火する。\n */\nexport default class UiColorSwatch extends LightningElement {\n    _colors = [];\n\n    /** 色の配列（'#0176d3' または { value, label }） */\n    @api\n    get colors() {\n        return this._colors;\n    }\n    set colors(value) {\n        this._colors = Array.isArray(value) ? value : [];\n    }\n\n    /** 選択中の色 */\n    @api value;\n\n    get swatches() {\n        return this._colors.map((c) => {\n            const val = typeof c === 'string' ? c : c.value;\n            const label = typeof c === 'string' ? c : c.label || c.value;\n            return {\n                value: val,\n                label,\n                style: `background:${val}`,\n                cssClass:\n                    String(val) === String(this.value)\n                        ? 'ui-swatch ui-swatch_selected'\n                        : 'ui-swatch'\n            };\n        });\n    }\n\n    handleSelect(event) {\n        this.value = event.currentTarget.dataset.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-swatches {\n    display: inline-flex;\n    flex-wrap: wrap;\n    gap: 8px;\n}\n\n.ui-swatch {\n    width: 28px;\n    height: 28px;\n    border-radius: 50%;\n    border: 2px solid #ffffff;\n    box-shadow: 0 0 0 1px #dddbda;\n    cursor: pointer;\n    padding: 0;\n    transition: transform 0.1s ease;\n}\n.ui-swatch:hover {\n    transform: scale(1.12);\n}\n\n.ui-swatch_selected {\n    box-shadow: 0 0 0 2px #0176d3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Color Swatch</masterLabel>\n    <description>汎用カラースウォッチ。色見本を選択し change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiPopover",
+      "title": "UI Popover",
+      "icon": "💭",
+      "category": "オーバーレイ",
+      "demo": "popover",
+      "description": "トリガークリックでヘッダ付きの吹き出し（default スロット）を開閉。外側クリックで閉じる。",
+      "props": [
+        {
+          "name": "trigger-label",
+          "type": "String",
+          "def": "'詳細'",
+          "desc": "トリガーのラベル"
+        },
+        {
+          "name": "header",
+          "type": "String",
+          "def": "—",
+          "desc": "吹き出しの見出し（任意）"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "吹き出しの本文"
+        }
+      ],
+      "events": [
+        {
+          "name": "close",
+          "desc": "閉じる操作時に発火"
+        }
+      ],
+      "usage": "<c-ui-popover trigger-label=\"ヘルプ\" header=\"使い方\">\n    ここに説明を表示します。\n</c-ui-popover>",
+      "ja": "ポップオーバー",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-popover\" onfocusout={handleFocusOut}>\n        <button\n            class=\"ui-popover__trigger\"\n            type=\"button\"\n            aria-haspopup=\"dialog\"\n            aria-expanded={open}\n            onclick={handleToggle}\n        >\n            {triggerLabel}\n        </button>\n        <div lwc:if={open} class=\"ui-popover__panel\" role=\"dialog\">\n            <header lwc:if={header} class=\"ui-popover__header\">\n                <span class=\"ui-popover__title\">{header}</span>\n                <button\n                    class=\"ui-popover__close\"\n                    type=\"button\"\n                    title=\"閉じる\"\n                    onclick={handleClose}\n                >\n                    &times;\n                </button>\n            </header>\n            <div class=\"ui-popover__body\">\n                <slot></slot>\n            </div>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiPopover — 汎用ポップオーバー。\n * トリガーボタンのクリックで、ヘッダ付きの吹き出し（default スロット）を\n * 開閉する。外側へフォーカスが外れると自動で閉じる。\n */\nexport default class UiPopover extends LightningElement {\n    /** トリガーのラベル */\n    @api triggerLabel = '詳細';\n    /** ポップオーバーの見出し（任意） */\n    @api header;\n\n    @track open = false;\n\n    handleToggle() {\n        this.open = !this.open;\n    }\n\n    handleClose() {\n        this.open = false;\n    }\n\n    handleFocusOut(event) {\n        if (\n            this.open &&\n            (!event.relatedTarget ||\n                !event.currentTarget.contains(event.relatedTarget))\n        ) {\n            this.open = false;\n        }\n    }\n}\n",
+        "css": ".ui-popover {\n    position: relative;\n    display: inline-block;\n}\n\n.ui-popover__trigger {\n    height: 32px;\n    padding: 0 14px;\n    border: 1px solid #0176d3;\n    border-radius: 6px;\n    background: #ffffff;\n    color: #0176d3;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-popover__trigger:hover {\n    background: #eef4ff;\n}\n\n.ui-popover__panel {\n    position: absolute;\n    top: calc(100% + 8px);\n    left: 0;\n    width: 260px;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 10px;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);\n    z-index: 30;\n}\n\n.ui-popover__panel::before {\n    content: '';\n    position: absolute;\n    top: -6px;\n    left: 18px;\n    width: 12px;\n    height: 12px;\n    background: #ffffff;\n    border-left: 1px solid #e5e5e5;\n    border-top: 1px solid #e5e5e5;\n    transform: rotate(45deg);\n}\n\n.ui-popover__header {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 10px 14px;\n    border-bottom: 1px solid #ececec;\n}\n\n.ui-popover__title {\n    font-size: 0.85rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-popover__close {\n    border: none;\n    background: transparent;\n    font-size: 1.1rem;\n    line-height: 1;\n    color: #706e6b;\n    cursor: pointer;\n}\n.ui-popover__close:hover {\n    color: #181818;\n}\n\n.ui-popover__body {\n    padding: 14px;\n    font-size: 0.82rem;\n    line-height: 1.6;\n    color: #444444;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Popover</masterLabel>\n    <description>汎用ポップオーバー。トリガーで吹き出しを開閉、外側クリックで閉じる。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiSkeleton",
+      "title": "UI Skeleton",
+      "icon": "⬜",
+      "category": "フィードバック",
+      "demo": "skeleton",
+      "description": "読み込み中のプレースホルダ。シマーアニメーションの行を表示し、avatar で円形も表示。",
+      "props": [
+        {
+          "name": "lines",
+          "type": "Number",
+          "def": "3",
+          "desc": "行数"
+        },
+        {
+          "name": "avatar",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で円形アバターを表示"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-skeleton lines=\"3\" avatar></c-ui-skeleton>",
+      "ja": "スケルトン",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-skeleton\">\n        <div lwc:if={avatar} class=\"ui-skeleton__avatar\"></div>\n        <div class=\"ui-skeleton__lines\">\n            <template for:each={lineList} for:item=\"item\">\n                <div\n                    key={item.key}\n                    class=\"ui-skeleton__line\"\n                    style={item.style}\n                ></div>\n            </template>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst WIDTHS = ['100%', '92%', '78%', '85%', '65%'];\n\n/**\n * uiSkeleton — 汎用スケルトン（読み込みプレースホルダ）。\n * lines 本のシマーアニメーションのプレースホルダ行を表示する。\n * avatar=true で先頭に円形のプレースホルダも表示する。\n */\nexport default class UiSkeleton extends LightningElement {\n    /** 行数 */\n    @api lines = 3;\n    /** true で円形アバターのプレースホルダを表示 */\n    @api avatar = false;\n\n    get lineList() {\n        const n = Math.max(1, Number(this.lines) || 1);\n        const list = [];\n        for (let i = 0; i < n; i += 1) {\n            const width = WIDTHS[i % WIDTHS.length];\n            list.push({\n                key: i,\n                style: `width:${width}`\n            });\n        }\n        return list;\n    }\n}\n",
+        "css": ".ui-skeleton {\n    display: flex;\n    align-items: flex-start;\n    gap: 12px;\n    width: 100%;\n}\n\n.ui-skeleton__avatar {\n    width: 44px;\n    height: 44px;\n    border-radius: 50%;\n    flex-shrink: 0;\n    background: #e8e8e8;\n    overflow: hidden;\n    position: relative;\n}\n\n.ui-skeleton__lines {\n    flex: 1;\n    display: flex;\n    flex-direction: column;\n    gap: 10px;\n    padding-top: 4px;\n}\n\n.ui-skeleton__line {\n    height: 12px;\n    border-radius: 6px;\n    background: #e8e8e8;\n    overflow: hidden;\n    position: relative;\n}\n\n.ui-skeleton__avatar::after,\n.ui-skeleton__line::after {\n    content: '';\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background: linear-gradient(\n        90deg,\n        rgba(255, 255, 255, 0) 0%,\n        rgba(255, 255, 255, 0.6) 50%,\n        rgba(255, 255, 255, 0) 100%\n    );\n    transform: translateX(-100%);\n    animation: ui-skeleton-shimmer 1.4s ease-in-out infinite;\n}\n\n@keyframes ui-skeleton-shimmer {\n    100% {\n        transform: translateX(100%);\n    }\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Skeleton</masterLabel>\n    <description>汎用スケルトン。読み込み中のプレースホルダをシマー表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiList",
+      "title": "UI List",
+      "icon": "📋",
+      "category": "表示",
+      "demo": "list",
+      "description": "items 配列 ([{ title, meta, icon }]) をクリック可能な行で表示。行クリックで select イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "items",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ title, meta, icon }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "行クリック時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-list items={items} onselect={handleSelect}></c-ui-list>",
+      "ja": "リスト",
+      "files": {
+        "html": "<template>\n    <ul class=\"ui-list\">\n        <template for:each={computedItems} for:item=\"item\">\n            <li key={item.key} class=\"ui-list__item\">\n                <button\n                    class=\"ui-list__button\"\n                    type=\"button\"\n                    data-value={item.value}\n                    onclick={handleSelect}\n                >\n                    <span lwc:if={item.hasIcon} class=\"ui-list__icon\"\n                        >{item.icon}</span\n                    >\n                    <span class=\"ui-list__title\">{item.title}</span>\n                    <span lwc:if={item.hasMeta} class=\"ui-list__meta\"\n                        >{item.meta}</span\n                    >\n                </button>\n            </li>\n        </template>\n    </ul>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiList — 汎用リスト。\n * items 配列 ([{ title, meta, icon }]) をクリック可能な行として表示し、\n * 行クリック時に select イベント (detail.value) を発火する。\n */\nexport default class UiList extends LightningElement {\n    _items = [];\n\n    /** [{ title, meta, icon }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    get computedItems() {\n        return this._items.map((item, index) => ({\n            key: index,\n            title: item.title,\n            meta: item.meta,\n            icon: item.icon,\n            hasIcon: !!item.icon,\n            hasMeta: !!item.meta,\n            value: item.title !== undefined ? item.title : index\n        }));\n    }\n\n    handleSelect(event) {\n        const value = event.currentTarget.dataset.value;\n        this.dispatchEvent(new CustomEvent('select', { detail: { value } }));\n    }\n}\n",
+        "css": ".ui-list {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    overflow: hidden;\n    width: 100%;\n}\n\n.ui-list__item + .ui-list__item .ui-list__button {\n    border-top: 1px solid #ececec;\n}\n\n.ui-list__button {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    width: 100%;\n    padding: 10px 14px;\n    border: none;\n    background: #ffffff;\n    text-align: left;\n    cursor: pointer;\n    font-family: inherit;\n    font-size: 0.85rem;\n    color: #181818;\n}\n.ui-list__button:hover {\n    background: #f4f8ff;\n}\n\n.ui-list__icon {\n    font-size: 1.05rem;\n    line-height: 1;\n    flex-shrink: 0;\n}\n\n.ui-list__title {\n    flex: 1;\n}\n\n.ui-list__meta {\n    font-size: 0.78rem;\n    color: #706e6b;\n    flex-shrink: 0;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI List</masterLabel>\n    <description>汎用リスト。items をクリック可能な行で表示し select イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiVerticalNav",
+      "title": "UI Vertical Nav",
+      "icon": "🧱",
+      "category": "ナビゲーション",
+      "demo": "verticalnav",
+      "description": "items 配列を縦並びで表示し active を強調する縦型ナビ。選択時に select イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "items",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value, icon }] の配列"
+        },
+        {
+          "name": "active",
+          "type": "String",
+          "def": "—",
+          "desc": "選択中の value"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-vertical-nav items={items} active=\"home\" onselect={handleSelect}></c-ui-vertical-nav>",
+      "ja": "縦ナビ",
+      "files": {
+        "html": "<template>\n    <nav class=\"ui-vnav\">\n        <template for:each={computedItems} for:item=\"item\">\n            <button\n                key={item.key}\n                class={item.itemClass}\n                type=\"button\"\n                data-value={item.value}\n                onclick={handleSelect}\n            >\n                <span lwc:if={item.hasIcon} class=\"ui-vnav__icon\"\n                    >{item.icon}</span\n                >\n                <span class=\"ui-vnav__label\">{item.label}</span>\n            </button>\n        </template>\n    </nav>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiVerticalNav — 汎用縦型ナビゲーション。\n * items 配列 ([{ label, value, icon }]) を縦並びのボタンで表示し、\n * active と一致する項目を強調する。クリック時に select イベント\n * (detail.value) を発火する。\n */\nexport default class UiVerticalNav extends LightningElement {\n    _items = [];\n\n    /** [{ label, value, icon }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    /** 選択中の value */\n    @api active;\n\n    get computedItems() {\n        return this._items.map((item, index) => {\n            const isActive = item.value === this.active;\n            return {\n                key: index,\n                label: item.label,\n                value: item.value,\n                icon: item.icon,\n                hasIcon: !!item.icon,\n                itemClass: `ui-vnav__item${\n                    isActive ? ' ui-vnav__item_active' : ''\n                }`\n            };\n        });\n    }\n\n    handleSelect(event) {\n        const value = event.currentTarget.dataset.value;\n        this.dispatchEvent(new CustomEvent('select', { detail: { value } }));\n    }\n}\n",
+        "css": ".ui-vnav {\n    display: flex;\n    flex-direction: column;\n    gap: 2px;\n    width: 100%;\n    max-width: 220px;\n}\n\n.ui-vnav__item {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    width: 100%;\n    padding: 9px 14px;\n    border: none;\n    border-left: 3px solid transparent;\n    background: transparent;\n    text-align: left;\n    cursor: pointer;\n    font-family: inherit;\n    font-size: 0.85rem;\n    color: #444444;\n    border-radius: 0 6px 6px 0;\n}\n.ui-vnav__item:hover {\n    background: #f4f8ff;\n    color: #181818;\n}\n\n.ui-vnav__item_active {\n    border-left-color: #0176d3;\n    background: #eef4ff;\n    color: #0176d3;\n    font-weight: 600;\n}\n\n.ui-vnav__icon {\n    font-size: 1.05rem;\n    line-height: 1;\n    flex-shrink: 0;\n}\n\n.ui-vnav__label {\n    flex: 1;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Vertical Nav</masterLabel>\n    <description>汎用縦型ナビゲーション。項目を縦並びで表示し select イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiBanner",
+      "title": "UI Banner",
+      "icon": "📣",
+      "category": "フィードバック",
+      "demo": "banner",
+      "description": "variant に応じた色・アイコンで横長の通知を表示。default スロットにアクションを差し込め、closable で閉じられる。",
+      "props": [
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'info'",
+          "desc": "info | success | warning | error"
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "def": "—",
+          "desc": "メッセージ本文"
+        },
+        {
+          "name": "closable",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で閉じるボタンを表示"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "アクション（ボタン等）"
+        }
+      ],
+      "events": [
+        {
+          "name": "close",
+          "desc": "閉じる操作時に発火"
+        }
+      ],
+      "usage": "<c-ui-banner variant=\"warning\" message=\"メンテナンス予定があります\" closable></c-ui-banner>",
+      "ja": "バナー",
+      "files": {
+        "html": "<template>\n    <div lwc:if={isVisible} class={bannerClass} role=\"status\">\n        <span class=\"ui-banner__icon\">{iconChar}</span>\n        <span class=\"ui-banner__message\">{message}</span>\n        <span class=\"ui-banner__action\">\n            <slot></slot>\n        </span>\n        <button\n            lwc:if={closable}\n            class=\"ui-banner__close\"\n            type=\"button\"\n            title=\"閉じる\"\n            onclick={handleClose}\n        >\n            &times;\n        </button>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\nconst ICONS = {\n    info: 'ℹ',\n    success: '✓',\n    warning: '!',\n    error: '✕'\n};\n\n/**\n * uiBanner — 汎用バナー（横長の通知）。\n * variant に応じた色・アイコンでメッセージを横長に表示する。\n * closable=true で閉じるボタンを表示し、閉じると close イベントを発火する。\n * default スロットにアクション（ボタン等）を差し込める。\n */\nexport default class UiBanner extends LightningElement {\n    /** info | success | warning | error */\n    @api variant = 'info';\n    /** メッセージ本文 */\n    @api message;\n    /** true で閉じるボタンを表示 */\n    @api closable = false;\n\n    @track closed = false;\n\n    get isVisible() {\n        return !this.closed;\n    }\n\n    get iconChar() {\n        return ICONS[this.variant] || ICONS.info;\n    }\n\n    get bannerClass() {\n        return `ui-banner ui-banner_${this.variant}`;\n    }\n\n    handleClose() {\n        this.closed = true;\n        this.dispatchEvent(new CustomEvent('close'));\n    }\n}\n",
+        "css": ".ui-banner {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    width: 100%;\n    padding: 10px 14px;\n    border-radius: 8px;\n    border-left: 4px solid #0176d3;\n    background: #eef4ff;\n    color: #181818;\n    font-size: 0.85rem;\n}\n\n.ui-banner_info {\n    border-left-color: #0176d3;\n    background: #eef4ff;\n}\n.ui-banner_success {\n    border-left-color: #2e844a;\n    background: #ebf7ee;\n}\n.ui-banner_warning {\n    border-left-color: #dd7a01;\n    background: #fff4e5;\n}\n.ui-banner_error {\n    border-left-color: #ba0517;\n    background: #fdeceb;\n}\n\n.ui-banner__icon {\n    flex-shrink: 0;\n    width: 20px;\n    height: 20px;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    border-radius: 50%;\n    font-size: 0.78rem;\n    font-weight: 700;\n    color: #ffffff;\n    background: #0176d3;\n}\n.ui-banner_success .ui-banner__icon {\n    background: #2e844a;\n}\n.ui-banner_warning .ui-banner__icon {\n    background: #dd7a01;\n}\n.ui-banner_error .ui-banner__icon {\n    background: #ba0517;\n}\n\n.ui-banner__message {\n    flex: 1;\n    line-height: 1.4;\n}\n\n.ui-banner__action {\n    flex-shrink: 0;\n    display: inline-flex;\n    align-items: center;\n}\n\n.ui-banner__close {\n    flex-shrink: 0;\n    border: none;\n    background: transparent;\n    font-size: 1.1rem;\n    line-height: 1;\n    color: #706e6b;\n    cursor: pointer;\n}\n.ui-banner__close:hover {\n    color: #181818;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Banner</masterLabel>\n    <description>variant に応じた色・アイコンで横長に通知を表示するバナー。closable で閉じるボタンを表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiMeter",
+      "title": "UI Meter",
+      "icon": "🌡️",
+      "category": "表示",
+      "demo": "meter",
+      "description": "value / max の割合をバーで表示。割合に応じて低（赤）/中（橙）/高（緑）に色が変わる。",
+      "props": [
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "0",
+          "desc": "現在値"
+        },
+        {
+          "name": "max",
+          "type": "Number",
+          "def": "100",
+          "desc": "最大値"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-meter label=\"ディスク使用量\" value=\"82\" max=\"100\"></c-ui-meter>",
+      "ja": "メーター",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-meter\">\n        <div class=\"ui-meter__head\">\n            <span lwc:if={label} class=\"ui-meter__label\">{label}</span>\n            <span class=\"ui-meter__value\">{valueText}</span>\n        </div>\n        <div class=\"ui-meter__track\">\n            <div class={fillClass} style={fillStyle}></div>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiMeter — 汎用メーター。\n * value / max の割合を色付きバーで表示する。割合に応じて\n * 低（赤）/中（橙）/高（緑）に色が変わる。\n */\nexport default class UiMeter extends LightningElement {\n    /** 現在値 */\n    @api value = 0;\n    /** 最大値 */\n    @api max = 100;\n    /** ラベル */\n    @api label;\n\n    get ratio() {\n        const max = Number(this.max) || 1;\n        const v = Number(this.value) || 0;\n        return Math.min(1, Math.max(0, v / max));\n    }\n\n    get fillClass() {\n        const r = this.ratio;\n        let level = 'high';\n        if (r < 0.34) {\n            level = 'low';\n        } else if (r < 0.67) {\n            level = 'mid';\n        }\n        return `ui-meter__fill ui-meter__fill_${level}`;\n    }\n\n    get fillStyle() {\n        return `width: ${Math.round(this.ratio * 100)}%`;\n    }\n\n    get valueText() {\n        return `${this.value} / ${this.max}`;\n    }\n}\n",
+        "css": ".ui-meter {\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    gap: 5px;\n}\n\n.ui-meter__head {\n    display: flex;\n    justify-content: space-between;\n    align-items: baseline;\n    font-size: 0.78rem;\n}\n\n.ui-meter__label {\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-meter__value {\n    color: #706e6b;\n    font-variant-numeric: tabular-nums;\n}\n\n.ui-meter__track {\n    width: 100%;\n    height: 8px;\n    background: #e5e5e5;\n    border-radius: 4px;\n    overflow: hidden;\n}\n\n.ui-meter__fill {\n    height: 100%;\n    border-radius: 4px;\n    transition: width 0.3s ease, background 0.3s ease;\n}\n\n.ui-meter__fill_low {\n    background: #ba0517;\n}\n.ui-meter__fill_mid {\n    background: #dd7a01;\n}\n.ui-meter__fill_high {\n    background: #2e844a;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Meter</masterLabel>\n    <description>汎用メーター。value/max の割合を低中高で色分け表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCountBadge",
+      "title": "UI Count Badge",
+      "icon": "🔴",
+      "category": "表示",
+      "demo": "countbadge",
+      "description": "default スロットの要素の右上に件数バッジを重ねて表示。max 超過で「max+」、dot で点のみ表示。",
+      "props": [
+        {
+          "name": "count",
+          "type": "Number",
+          "def": "0",
+          "desc": "件数"
+        },
+        {
+          "name": "max",
+          "type": "Number",
+          "def": "99",
+          "desc": "表示上限（超過で max+）"
+        },
+        {
+          "name": "dot",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で数字なしのドット表示"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "バッジを重ねる要素"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-count-badge count=\"5\">\n    <span>🔔</span>\n</c-ui-count-badge>",
+      "ja": "カウントバッジ",
+      "files": {
+        "html": "<template>\n    <span class=\"ui-countbadge\">\n        <slot></slot>\n        <span lwc:if={show} class={badgeClass}>\n            <span lwc:if={isDot}></span>\n            <span lwc:else>{display}</span>\n        </span>\n    </span>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiCountBadge — 汎用カウントバッジ。\n * default スロットの要素（アイコン等）の右上に件数バッジを重ねて表示する。\n * count が max を超えると「max+」と表示。dot=true で数字なしの点のみ表示する。\n */\nexport default class UiCountBadge extends LightningElement {\n    /** 件数 */\n    @api count = 0;\n    /** 表示上限（超過時は max+ 表示） */\n    @api max = 99;\n    /** true で数字なしのドット表示 */\n    @api dot = false;\n\n    get isDot() {\n        return this.dot;\n    }\n\n    get show() {\n        return this.dot || Number(this.count) > 0;\n    }\n\n    get display() {\n        const n = Number(this.count) || 0;\n        const max = Number(this.max) || 99;\n        return n > max ? `${max}+` : `${n}`;\n    }\n\n    get badgeClass() {\n        return this.dot\n            ? 'ui-countbadge__badge ui-countbadge__badge_dot'\n            : 'ui-countbadge__badge';\n    }\n}\n",
+        "css": ".ui-countbadge {\n    position: relative;\n    display: inline-flex;\n}\n\n.ui-countbadge__badge {\n    position: absolute;\n    top: -6px;\n    right: -8px;\n    min-width: 18px;\n    height: 18px;\n    padding: 0 5px;\n    border-radius: 9px;\n    background: #ba0517;\n    color: #ffffff;\n    font-size: 0.68rem;\n    font-weight: 700;\n    line-height: 18px;\n    text-align: center;\n    box-shadow: 0 0 0 2px #ffffff;\n    box-sizing: border-box;\n}\n\n.ui-countbadge__badge_dot {\n    min-width: 10px;\n    width: 10px;\n    height: 10px;\n    padding: 0;\n    border-radius: 50%;\n    top: -2px;\n    right: -2px;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Count Badge</masterLabel>\n    <description>汎用カウントバッジ。スロット要素の右上に件数/ドットを重ねて表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

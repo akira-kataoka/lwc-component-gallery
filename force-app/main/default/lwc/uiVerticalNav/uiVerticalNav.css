@@ -1,0 +1,45 @@
+.ui-vnav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    max-width: 220px;
+}
+
+.ui-vnav__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 14px;
+    border: none;
+    border-left: 3px solid transparent;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: #444444;
+    border-radius: 0 6px 6px 0;
+}
+.ui-vnav__item:hover {
+    background: #f4f8ff;
+    color: #181818;
+}
+
+.ui-vnav__item_active {
+    border-left-color: #0176d3;
+    background: #eef4ff;
+    color: #0176d3;
+    font-weight: 600;
+}
+
+.ui-vnav__icon {
+    font-size: 1.05rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.ui-vnav__label {
+    flex: 1;
+}
