@@ -1,0 +1,29 @@
+.ui-datefield {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.ui-datefield__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+.ui-datefield__input {
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #181818;
+    background: #ffffff;
+    font-family: inherit;
+}
+.ui-datefield__input:focus {
+    outline: none;
+    border-color: #0176d3;
+    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);
+}
+.ui-datefield__input:disabled {
+    background: #f3f3f3;
+    color: #969492;
+}

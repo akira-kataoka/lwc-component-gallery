@@ -1,0 +1,31 @@
+.ui-ribbon-wrap {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+.ui-ribbon {
+    position: absolute;
+    top: 12px;
+    right: -34px;
+    width: 130px;
+    transform: rotate(45deg);
+    text-align: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 3px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+}
+.ui-ribbon_brand {
+    background: #0176d3;
+}
+.ui-ribbon_success {
+    background: #2e844a;
+}
+.ui-ribbon_warning {
+    background: #dd7a01;
+}
+.ui-ribbon_error {
+    background: #ba0517;
+}

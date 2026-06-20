@@ -1108,6 +1108,163 @@ const COMPONENTS = [
         slots: [{ name: '(default)', desc: 'バッジを重ねる要素' }],
         events: [],
         usage: `<c-ui-count-badge count="5">\n    <span>🔔</span>\n</c-ui-count-badge>`
+    },
+    {
+        id: 'uiTag',
+        title: 'UI Tag',
+        icon: '🏷️',
+        category: '表示',
+        demo: 'tag',
+        description:
+            'color に応じた淡い背景色でラベルを表示するタグ。6色のバリアントに対応。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: '表示テキスト' },
+            {
+                name: 'color',
+                type: 'String',
+                def: "'neutral'",
+                desc: 'neutral | blue | green | red | orange | purple'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-tag label="新着" color="blue"></c-ui-tag>`
+    },
+    {
+        id: 'uiIconButton',
+        title: 'UI Icon Button',
+        icon: '🔣',
+        category: 'アクション',
+        demo: 'iconbutton',
+        description:
+            'アイコンのみの正方形ボタン。click イベントを発火し、3 バリアントに対応。',
+        props: [
+            { name: 'icon', type: 'String', def: '—', desc: 'アイコン文字（絵文字可）' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'neutral'",
+                desc: 'neutral | brand | ghost'
+            },
+            { name: 'title', type: 'String', def: '—', desc: 'ツールチップ／代替名' },
+            { name: 'disabled', type: 'Boolean', def: 'false', desc: 'true で無効化' }
+        ],
+        events: [{ name: 'click', desc: 'ボタン押下時に発火' }],
+        usage: `<c-ui-icon-button icon="✏️" title="編集" onclick={handleEdit}></c-ui-icon-button>`
+    },
+    {
+        id: 'uiKbd',
+        title: 'UI Kbd',
+        icon: '⌨️',
+        category: '表示',
+        demo: 'kbd',
+        description:
+            'keys 配列をキー風の見た目で表示。ショートカット表記に使う（例: Ctrl + S）。',
+        props: [
+            {
+                name: 'keys',
+                type: 'Array',
+                def: '[]',
+                desc: "キー文字列の配列（例: ['Ctrl', 'S']）"
+            }
+        ],
+        events: [],
+        usage: `<c-ui-kbd keys={shortcut}></c-ui-kbd>`
+    },
+    {
+        id: 'uiCopyButton',
+        title: 'UI Copy Button',
+        icon: '📋',
+        category: 'アクション',
+        demo: 'copybutton',
+        description:
+            'value をクリップボードにコピーし、一時的に「コピー済み」表示へ切替える。copy イベントを発火。',
+        props: [
+            { name: 'value', type: 'String', def: "''", desc: 'コピーするテキスト' },
+            { name: 'label', type: 'String', def: "'コピー'", desc: 'ボタンラベル' }
+        ],
+        events: [{ name: 'copy', desc: 'コピー時に発火（detail.value）' }],
+        usage: `<c-ui-copy-button value="ABC-123" oncopy={handleCopy}></c-ui-copy-button>`
+    },
+    {
+        id: 'uiSplitButton',
+        title: 'UI Split Button',
+        icon: '🎛️',
+        category: 'アクション',
+        demo: 'splitbutton',
+        description:
+            '主ボタン（click）と付随メニュー（items から生成、select）を持つ分割ボタン。外側クリックで閉じる。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: '主ボタンのラベル' },
+            {
+                name: 'items',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            }
+        ],
+        events: [
+            { name: 'click', desc: '主ボタン押下時に発火' },
+            { name: 'select', desc: 'メニュー選択時に発火（detail.value）' }
+        ],
+        usage: `<c-ui-split-button label="保存" items={menu} onclick={handleSave} onselect={handleMenu}></c-ui-split-button>`
+    },
+    {
+        id: 'uiRibbon',
+        title: 'UI Ribbon',
+        icon: '🎀',
+        category: '表示',
+        demo: 'ribbon',
+        description:
+            'default スロットの要素の右上隅に斜めのリボンラベルを重ねる。4 色に対応。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'リボンのテキスト' },
+            {
+                name: 'color',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | success | warning | error'
+            }
+        ],
+        slots: [{ name: '(default)', desc: 'リボンを重ねる要素' }],
+        events: [],
+        usage: `<c-ui-ribbon label="NEW">\n    <c-ui-card title="商品">...</c-ui-card>\n</c-ui-ribbon>`
+    },
+    {
+        id: 'uiDateField',
+        title: 'UI Date Field',
+        icon: '📆',
+        category: 'フォーム',
+        demo: 'datefield',
+        description:
+            'ラベル付きの日付入力。変更時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'String', def: "''", desc: '値（YYYY-MM-DD）' },
+            { name: 'disabled', type: 'Boolean', def: 'false', desc: 'true で無効化' }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.value）' }],
+        usage: `<c-ui-date-field label="締切日" onchange={handleChange}></c-ui-date-field>`
+    },
+    {
+        id: 'uiSegmentedProgress',
+        title: 'UI Segmented Progress',
+        icon: '🔲',
+        category: 'フィードバック',
+        demo: 'segmentedprogress',
+        description:
+            'total 個のセグメントのうち current 個を塗りつぶす段階的な進捗インジケータ。',
+        props: [
+            { name: 'total', type: 'Number', def: '5', desc: 'セグメント総数' },
+            { name: 'current', type: 'Number', def: '0', desc: '塗りつぶす数' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | success | warning | error'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-segmented-progress total="5" current="3"></c-ui-segmented-progress>`
     }
 ];
 
@@ -1158,7 +1315,15 @@ const JA_NAMES = {
     uiVerticalNav: '縦ナビ',
     uiBanner: 'バナー',
     uiMeter: 'メーター',
-    uiCountBadge: 'カウントバッジ'
+    uiCountBadge: 'カウントバッジ',
+    uiTag: 'タグ',
+    uiIconButton: 'アイコンボタン',
+    uiKbd: 'キーボードキー',
+    uiCopyButton: 'コピーボタン',
+    uiSplitButton: '分割ボタン',
+    uiRibbon: 'リボン',
+    uiDateField: '日付フィールド',
+    uiSegmentedProgress: 'セグメント進捗'
 };
 
 const FILE_KEYS = [

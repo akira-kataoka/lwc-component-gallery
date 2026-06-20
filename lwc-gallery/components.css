@@ -2317,3 +2317,315 @@
     top: -2px;
     right: -2px;
 }
+
+
+/* ===== uiTag ===== */
+.ui-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
+    border-radius: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.ui-tag_neutral {
+    background: #ecebea;
+    color: #444444;
+}
+.ui-tag_blue {
+    background: #eef4ff;
+    color: #0b5cab;
+}
+.ui-tag_green {
+    background: #e6f4ea;
+    color: #1d7a3f;
+}
+.ui-tag_red {
+    background: #fdecea;
+    color: #b3261e;
+}
+.ui-tag_orange {
+    background: #fef0e2;
+    color: #a8540b;
+}
+.ui-tag_purple {
+    background: #f3edff;
+    color: #6b3fc0;
+}
+
+
+/* ===== uiIconButton ===== */
+.ui-iconbtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 7px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: background 0.12s ease;
+}
+
+.ui-iconbtn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.ui-iconbtn_neutral {
+    background: #ffffff;
+    border-color: #c9c9c9;
+    color: #444444;
+}
+.ui-iconbtn_neutral:not(:disabled):hover {
+    background: #f3f3f3;
+}
+
+.ui-iconbtn_brand {
+    background: #0176d3;
+    color: #ffffff;
+}
+.ui-iconbtn_brand:not(:disabled):hover {
+    background: #014486;
+}
+
+.ui-iconbtn_ghost {
+    background: transparent;
+    color: #514f4d;
+}
+.ui-iconbtn_ghost:not(:disabled):hover {
+    background: #f0f0f0;
+}
+
+
+/* ===== uiKbd ===== */
+.ui-kbd {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ui-kbd__group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ui-kbd__key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border: 1px solid #c9c9c9;
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    background: #fafaf9;
+    color: #444444;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.ui-kbd__plus {
+    color: #969492;
+    font-size: 0.72rem;
+}
+
+
+/* ===== uiCopyButton ===== */
+.ui-copybtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 12px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #444444;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+.ui-copybtn:hover {
+    background: #f3f3f3;
+}
+.ui-copybtn_done {
+    border-color: #2e844a;
+    color: #1d7a3f;
+    background: #e6f4ea;
+}
+.ui-copybtn__icon {
+    font-size: 0.85rem;
+}
+
+
+/* ===== uiSplitButton ===== */
+.ui-splitbtn {
+    position: relative;
+    display: inline-flex;
+}
+.ui-splitbtn__main {
+    height: 32px;
+    padding: 0 14px;
+    border: 1px solid #0176d3;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    background: #0176d3;
+    color: #ffffff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-splitbtn__main:hover {
+    background: #014486;
+}
+.ui-splitbtn__toggle {
+    width: 30px;
+    height: 32px;
+    border: 1px solid #0176d3;
+    border-radius: 0 6px 6px 0;
+    background: #0176d3;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 0.7rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+}
+.ui-splitbtn__toggle:hover {
+    background: #014486;
+}
+.ui-splitbtn__menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    min-width: 170px;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    z-index: 20;
+}
+.ui-splitbtn__item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: transparent;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    color: #181818;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-splitbtn__item:hover {
+    background: #f3f9ff;
+    color: #0176d3;
+}
+
+
+/* ===== uiRibbon ===== */
+.ui-ribbon-wrap {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+.ui-ribbon {
+    position: absolute;
+    top: 12px;
+    right: -34px;
+    width: 130px;
+    transform: rotate(45deg);
+    text-align: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 3px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+}
+.ui-ribbon_brand {
+    background: #0176d3;
+}
+.ui-ribbon_success {
+    background: #2e844a;
+}
+.ui-ribbon_warning {
+    background: #dd7a01;
+}
+.ui-ribbon_error {
+    background: #ba0517;
+}
+
+
+/* ===== uiDateField ===== */
+.ui-datefield {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.ui-datefield__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+.ui-datefield__input {
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #181818;
+    background: #ffffff;
+    font-family: inherit;
+}
+.ui-datefield__input:focus {
+    outline: none;
+    border-color: #0176d3;
+    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);
+}
+.ui-datefield__input:disabled {
+    background: #f3f3f3;
+    color: #969492;
+}
+
+
+/* ===== uiSegmentedProgress ===== */
+.ui-segprog {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+}
+.ui-segprog__seg {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: #e5e5e5;
+    transition: background 0.2s ease;
+}
+.ui-segprog__seg_brand {
+    background: #0176d3;
+}
+.ui-segprog__seg_success {
+    background: #2e844a;
+}
+.ui-segprog__seg_warning {
+    background: #dd7a01;
+}
+.ui-segprog__seg_error {
+    background: #ba0517;
+}

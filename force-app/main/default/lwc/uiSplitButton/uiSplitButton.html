@@ -1,0 +1,31 @@
+<template>
+    <div class="ui-splitbtn" onfocusout={handleFocusOut}>
+        <button class="ui-splitbtn__main" type="button" onclick={handleMain}>
+            {label}
+        </button>
+        <button
+            class="ui-splitbtn__toggle"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded={open}
+            onclick={handleToggle}
+        >
+            ▾
+        </button>
+        <ul lwc:if={open} class="ui-splitbtn__menu" role="menu">
+            <template for:each={items} for:item="item">
+                <li key={item.value} role="none">
+                    <button
+                        class="ui-splitbtn__item"
+                        type="button"
+                        role="menuitem"
+                        data-value={item.value}
+                        onclick={handleSelect}
+                    >
+                        {item.label}
+                    </button>
+                </li>
+            </template>
+        </ul>
+    </div>
+</template>

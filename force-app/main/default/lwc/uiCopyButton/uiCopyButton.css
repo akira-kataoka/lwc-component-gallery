@@ -1,0 +1,27 @@
+.ui-copybtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 12px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #444444;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+.ui-copybtn:hover {
+    background: #f3f3f3;
+}
+.ui-copybtn_done {
+    border-color: #2e844a;
+    color: #1d7a3f;
+    background: #e6f4ea;
+}
+.ui-copybtn__icon {
+    font-size: 0.85rem;
+}

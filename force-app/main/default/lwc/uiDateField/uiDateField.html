@@ -1,0 +1,12 @@
+<template>
+    <div class="ui-datefield">
+        <label lwc:if={label} class="ui-datefield__label">{label}</label>
+        <input
+            type="date"
+            class="ui-datefield__input"
+            value={value}
+            disabled={disabled}
+            onchange={handleChange}
+        />
+    </div>
+</template>

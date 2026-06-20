@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T06:28:59.886Z",
+  "generatedAt": "2026-06-20T06:52:19.614Z",
   "components": [
     {
       "id": "uiBadge",
@@ -1796,6 +1796,302 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiCountBadge — 汎用カウントバッジ。\n * default スロットの要素（アイコン等）の右上に件数バッジを重ねて表示する。\n * count が max を超えると「max+」と表示。dot=true で数字なしの点のみ表示する。\n */\nexport default class UiCountBadge extends LightningElement {\n    /** 件数 */\n    @api count = 0;\n    /** 表示上限（超過時は max+ 表示） */\n    @api max = 99;\n    /** true で数字なしのドット表示 */\n    @api dot = false;\n\n    get isDot() {\n        return this.dot;\n    }\n\n    get show() {\n        return this.dot || Number(this.count) > 0;\n    }\n\n    get display() {\n        const n = Number(this.count) || 0;\n        const max = Number(this.max) || 99;\n        return n > max ? `${max}+` : `${n}`;\n    }\n\n    get badgeClass() {\n        return this.dot\n            ? 'ui-countbadge__badge ui-countbadge__badge_dot'\n            : 'ui-countbadge__badge';\n    }\n}\n",
         "css": ".ui-countbadge {\n    position: relative;\n    display: inline-flex;\n}\n\n.ui-countbadge__badge {\n    position: absolute;\n    top: -6px;\n    right: -8px;\n    min-width: 18px;\n    height: 18px;\n    padding: 0 5px;\n    border-radius: 9px;\n    background: #ba0517;\n    color: #ffffff;\n    font-size: 0.68rem;\n    font-weight: 700;\n    line-height: 18px;\n    text-align: center;\n    box-shadow: 0 0 0 2px #ffffff;\n    box-sizing: border-box;\n}\n\n.ui-countbadge__badge_dot {\n    min-width: 10px;\n    width: 10px;\n    height: 10px;\n    padding: 0;\n    border-radius: 50%;\n    top: -2px;\n    right: -2px;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Count Badge</masterLabel>\n    <description>汎用カウントバッジ。スロット要素の右上に件数/ドットを重ねて表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiTag",
+      "title": "UI Tag",
+      "icon": "🏷️",
+      "category": "表示",
+      "demo": "tag",
+      "description": "color に応じた淡い背景色でラベルを表示するタグ。6色のバリアントに対応。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "表示テキスト"
+        },
+        {
+          "name": "color",
+          "type": "String",
+          "def": "'neutral'",
+          "desc": "neutral | blue | green | red | orange | purple"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-tag label=\"新着\" color=\"blue\"></c-ui-tag>",
+      "ja": "タグ",
+      "files": {
+        "html": "<template>\n    <span class={tagClass}>{label}</span>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst COLORS = ['neutral', 'blue', 'green', 'red', 'orange', 'purple'];\n\n/**\n * uiTag — 汎用タグ（色ラベル）。\n * color に応じた淡い背景色でラベルを表示する純粋な表示コンポーネント。\n */\nexport default class UiTag extends LightningElement {\n    /** 表示テキスト */\n    @api label;\n    /** 色: neutral | blue | green | red | orange | purple */\n    @api color = 'neutral';\n\n    get tagClass() {\n        const color = COLORS.includes(this.color) ? this.color : 'neutral';\n        return `ui-tag ui-tag_${color}`;\n    }\n}\n",
+        "css": ".ui-tag {\n    display: inline-flex;\n    align-items: center;\n    padding: 2px 9px;\n    border-radius: 5px;\n    font-size: 0.72rem;\n    font-weight: 600;\n    line-height: 1.5;\n    white-space: nowrap;\n}\n\n.ui-tag_neutral {\n    background: #ecebea;\n    color: #444444;\n}\n.ui-tag_blue {\n    background: #eef4ff;\n    color: #0b5cab;\n}\n.ui-tag_green {\n    background: #e6f4ea;\n    color: #1d7a3f;\n}\n.ui-tag_red {\n    background: #fdecea;\n    color: #b3261e;\n}\n.ui-tag_orange {\n    background: #fef0e2;\n    color: #a8540b;\n}\n.ui-tag_purple {\n    background: #f3edff;\n    color: #6b3fc0;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Tag</masterLabel>\n    <description>汎用タグ。6色の淡い背景でラベルを表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiIconButton",
+      "title": "UI Icon Button",
+      "icon": "🔣",
+      "category": "アクション",
+      "demo": "iconbutton",
+      "description": "アイコンのみの正方形ボタン。click イベントを発火し、3 バリアントに対応。",
+      "props": [
+        {
+          "name": "icon",
+          "type": "String",
+          "def": "—",
+          "desc": "アイコン文字（絵文字可）"
+        },
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'neutral'",
+          "desc": "neutral | brand | ghost"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "ツールチップ／代替名"
+        },
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で無効化"
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "desc": "ボタン押下時に発火"
+        }
+      ],
+      "usage": "<c-ui-icon-button icon=\"✏️\" title=\"編集\" onclick={handleEdit}></c-ui-icon-button>",
+      "ja": "アイコンボタン",
+      "files": {
+        "html": "<template>\n    <button\n        class={buttonClass}\n        type=\"button\"\n        title={title}\n        aria-label={title}\n        disabled={disabled}\n        onclick={handleClick}\n    >\n        <span class=\"ui-iconbtn__icon\">{icon}</span>\n    </button>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['neutral', 'brand', 'ghost'];\n\n/**\n * uiIconButton — 汎用アイコンボタン。\n * アイコン（絵文字や文字）のみの正方形ボタン。click イベントを発火する。\n */\nexport default class UiIconButton extends LightningElement {\n    /** アイコン文字（絵文字可） */\n    @api icon;\n    /** バリアント: neutral | brand | ghost */\n    @api variant = 'neutral';\n    /** ツールチップ／アクセシブル名 */\n    @api title;\n    /** true で無効化 */\n    @api disabled = false;\n\n    get buttonClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'neutral';\n        return `ui-iconbtn ui-iconbtn_${variant}`;\n    }\n\n    handleClick() {\n        this.dispatchEvent(new CustomEvent('click'));\n    }\n}\n",
+        "css": ".ui-iconbtn {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 34px;\n    height: 34px;\n    border-radius: 7px;\n    border: 1px solid transparent;\n    cursor: pointer;\n    font-size: 1rem;\n    line-height: 1;\n    transition: background 0.12s ease;\n}\n\n.ui-iconbtn:disabled {\n    opacity: 0.45;\n    cursor: not-allowed;\n}\n\n.ui-iconbtn_neutral {\n    background: #ffffff;\n    border-color: #c9c9c9;\n    color: #444444;\n}\n.ui-iconbtn_neutral:not(:disabled):hover {\n    background: #f3f3f3;\n}\n\n.ui-iconbtn_brand {\n    background: #0176d3;\n    color: #ffffff;\n}\n.ui-iconbtn_brand:not(:disabled):hover {\n    background: #014486;\n}\n\n.ui-iconbtn_ghost {\n    background: transparent;\n    color: #514f4d;\n}\n.ui-iconbtn_ghost:not(:disabled):hover {\n    background: #f0f0f0;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Icon Button</masterLabel>\n    <description>汎用アイコンボタン。アイコンのみの正方形ボタンで click を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiKbd",
+      "title": "UI Kbd",
+      "icon": "⌨️",
+      "category": "表示",
+      "demo": "kbd",
+      "description": "keys 配列をキー風の見た目で表示。ショートカット表記に使う（例: Ctrl + S）。",
+      "props": [
+        {
+          "name": "keys",
+          "type": "Array",
+          "def": "[]",
+          "desc": "キー文字列の配列（例: ['Ctrl', 'S']）"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-kbd keys={shortcut}></c-ui-kbd>",
+      "ja": "キーボードキー",
+      "files": {
+        "html": "<template>\n    <span class=\"ui-kbd\">\n        <template for:each={computedKeys} for:item=\"k\">\n            <span key={k.idx} class=\"ui-kbd__group\">\n                <kbd class=\"ui-kbd__key\">{k.key}</kbd>\n                <span lwc:if={k.showPlus} class=\"ui-kbd__plus\">+</span>\n            </span>\n        </template>\n    </span>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiKbd — 汎用キーボードキー表示。\n * keys 配列（例: ['Ctrl', 'S']）を「Ctrl + S」のようにキー風の見た目で表示する。\n */\nexport default class UiKbd extends LightningElement {\n    /** キー文字列の配列 */\n    @api keys = [];\n\n    get computedKeys() {\n        const arr = Array.isArray(this.keys) ? this.keys : [];\n        return arr.map((k, i) => ({\n            idx: i,\n            key: k,\n            showPlus: i < arr.length - 1\n        }));\n    }\n}\n",
+        "css": ".ui-kbd {\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n}\n\n.ui-kbd__group {\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n}\n\n.ui-kbd__key {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    min-width: 22px;\n    height: 22px;\n    padding: 0 6px;\n    border: 1px solid #c9c9c9;\n    border-bottom-width: 2px;\n    border-radius: 5px;\n    background: #fafaf9;\n    color: #444444;\n    font-family: 'SFMono-Regular', Consolas, monospace;\n    font-size: 0.72rem;\n    font-weight: 600;\n    line-height: 1;\n}\n\n.ui-kbd__plus {\n    color: #969492;\n    font-size: 0.72rem;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Kbd</masterLabel>\n    <description>汎用キーボードキー表示。ショートカットをキー風に表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCopyButton",
+      "title": "UI Copy Button",
+      "icon": "📋",
+      "category": "アクション",
+      "demo": "copybutton",
+      "description": "value をクリップボードにコピーし、一時的に「コピー済み」表示へ切替える。copy イベントを発火。",
+      "props": [
+        {
+          "name": "value",
+          "type": "String",
+          "def": "''",
+          "desc": "コピーするテキスト"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "def": "'コピー'",
+          "desc": "ボタンラベル"
+        }
+      ],
+      "events": [
+        {
+          "name": "copy",
+          "desc": "コピー時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-copy-button value=\"ABC-123\" oncopy={handleCopy}></c-ui-copy-button>",
+      "ja": "コピーボタン",
+      "files": {
+        "html": "<template>\n    <button class={buttonClass} type=\"button\" onclick={handleCopy}>\n        <span class=\"ui-copybtn__icon\">{iconChar}</span>\n        <span class=\"ui-copybtn__label\">{displayLabel}</span>\n    </button>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiCopyButton — 汎用コピーボタン。\n * value のテキストをクリップボードにコピーし、一時的に「コピー済み」表示に切替える。\n * コピー時に copy イベント (detail.value) を発火する。\n */\nexport default class UiCopyButton extends LightningElement {\n    /** コピーするテキスト */\n    @api value = '';\n    /** ボタンラベル */\n    @api label = 'コピー';\n\n    @track copied = false;\n    _timer;\n\n    get displayLabel() {\n        return this.copied ? 'コピー済み' : this.label;\n    }\n\n    get iconChar() {\n        return this.copied ? '✓' : '📋';\n    }\n\n    get buttonClass() {\n        return this.copied ? 'ui-copybtn ui-copybtn_done' : 'ui-copybtn';\n    }\n\n    handleCopy() {\n        const text = this.value || '';\n        const done = () => {\n            this.copied = true;\n            this.dispatchEvent(\n                new CustomEvent('copy', { detail: { value: text } })\n            );\n            if (this._timer) {\n                clearTimeout(this._timer);\n            }\n            // eslint-disable-next-line @lwc/lwc/no-async-operation\n            this._timer = setTimeout(() => {\n                this.copied = false;\n            }, 1500);\n        };\n        if (navigator.clipboard && navigator.clipboard.writeText) {\n            navigator.clipboard.writeText(text).then(done, done);\n        } else {\n            done();\n        }\n    }\n}\n",
+        "css": ".ui-copybtn {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n    height: 30px;\n    padding: 0 12px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    background: #ffffff;\n    color: #444444;\n    font-size: 0.8rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;\n}\n.ui-copybtn:hover {\n    background: #f3f3f3;\n}\n.ui-copybtn_done {\n    border-color: #2e844a;\n    color: #1d7a3f;\n    background: #e6f4ea;\n}\n.ui-copybtn__icon {\n    font-size: 0.85rem;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Copy Button</masterLabel>\n    <description>汎用コピーボタン。クリップボードへコピーし copy イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiSplitButton",
+      "title": "UI Split Button",
+      "icon": "🎛️",
+      "category": "アクション",
+      "demo": "splitbutton",
+      "description": "主ボタン（click）と付随メニュー（items から生成、select）を持つ分割ボタン。外側クリックで閉じる。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "主ボタンのラベル"
+        },
+        {
+          "name": "items",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "desc": "主ボタン押下時に発火"
+        },
+        {
+          "name": "select",
+          "desc": "メニュー選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-split-button label=\"保存\" items={menu} onclick={handleSave} onselect={handleMenu}></c-ui-split-button>",
+      "ja": "分割ボタン",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-splitbtn\" onfocusout={handleFocusOut}>\n        <button class=\"ui-splitbtn__main\" type=\"button\" onclick={handleMain}>\n            {label}\n        </button>\n        <button\n            class=\"ui-splitbtn__toggle\"\n            type=\"button\"\n            aria-haspopup=\"true\"\n            aria-expanded={open}\n            onclick={handleToggle}\n        >\n            ▾\n        </button>\n        <ul lwc:if={open} class=\"ui-splitbtn__menu\" role=\"menu\">\n            <template for:each={items} for:item=\"item\">\n                <li key={item.value} role=\"none\">\n                    <button\n                        class=\"ui-splitbtn__item\"\n                        type=\"button\"\n                        role=\"menuitem\"\n                        data-value={item.value}\n                        onclick={handleSelect}\n                    >\n                        {item.label}\n                    </button>\n                </li>\n            </template>\n        </ul>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiSplitButton — 汎用分割ボタン。\n * 主ボタン（click イベント）と付随メニュー（items から生成、select イベント）を持つ。\n * 外側へフォーカスが外れるとメニューを閉じる。\n */\nexport default class UiSplitButton extends LightningElement {\n    _items = [];\n\n    /** 主ボタンのラベル */\n    @api label;\n    /** [{ label, value }] の配列 */\n    @api\n    get items() {\n        return this._items;\n    }\n    set items(value) {\n        this._items = Array.isArray(value) ? value : [];\n    }\n\n    @track open = false;\n\n    handleMain() {\n        this.dispatchEvent(new CustomEvent('click'));\n    }\n\n    handleToggle() {\n        this.open = !this.open;\n    }\n\n    handleSelect(event) {\n        const value = event.currentTarget.dataset.value;\n        this.open = false;\n        this.dispatchEvent(new CustomEvent('select', { detail: { value } }));\n    }\n\n    handleFocusOut(event) {\n        if (\n            this.open &&\n            (!event.relatedTarget ||\n                !event.currentTarget.contains(event.relatedTarget))\n        ) {\n            this.open = false;\n        }\n    }\n}\n",
+        "css": ".ui-splitbtn {\n    position: relative;\n    display: inline-flex;\n}\n.ui-splitbtn__main {\n    height: 32px;\n    padding: 0 14px;\n    border: 1px solid #0176d3;\n    border-right: none;\n    border-radius: 6px 0 0 6px;\n    background: #0176d3;\n    color: #ffffff;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-splitbtn__main:hover {\n    background: #014486;\n}\n.ui-splitbtn__toggle {\n    width: 30px;\n    height: 32px;\n    border: 1px solid #0176d3;\n    border-radius: 0 6px 6px 0;\n    background: #0176d3;\n    color: #ffffff;\n    cursor: pointer;\n    font-size: 0.7rem;\n    border-left: 1px solid rgba(255, 255, 255, 0.4);\n}\n.ui-splitbtn__toggle:hover {\n    background: #014486;\n}\n.ui-splitbtn__menu {\n    position: absolute;\n    top: calc(100% + 4px);\n    right: 0;\n    min-width: 170px;\n    margin: 0;\n    padding: 4px;\n    list-style: none;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);\n    z-index: 20;\n}\n.ui-splitbtn__item {\n    display: block;\n    width: 100%;\n    text-align: left;\n    border: none;\n    background: transparent;\n    padding: 8px 12px;\n    font-size: 0.82rem;\n    color: #181818;\n    border-radius: 6px;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-splitbtn__item:hover {\n    background: #f3f9ff;\n    color: #0176d3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Split Button</masterLabel>\n    <description>汎用分割ボタン。主アクション click と付随メニュー select を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiRibbon",
+      "title": "UI Ribbon",
+      "icon": "🎀",
+      "category": "表示",
+      "demo": "ribbon",
+      "description": "default スロットの要素の右上隅に斜めのリボンラベルを重ねる。4 色に対応。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "リボンのテキスト"
+        },
+        {
+          "name": "color",
+          "type": "String",
+          "def": "'brand'",
+          "desc": "brand | success | warning | error"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "リボンを重ねる要素"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-ribbon label=\"NEW\">\n    <c-ui-card title=\"商品\">...</c-ui-card>\n</c-ui-ribbon>",
+      "ja": "リボン",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-ribbon-wrap\">\n        <span class={ribbonClass}>{label}</span>\n        <slot></slot>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst COLORS = ['brand', 'success', 'warning', 'error'];\n\n/**\n * uiRibbon — 汎用コーナーリボン。\n * default スロットの要素（カード等）の右上隅に斜めのリボンラベルを重ねる。\n */\nexport default class UiRibbon extends LightningElement {\n    /** リボンに表示するテキスト */\n    @api label;\n    /** 色: brand | success | warning | error */\n    @api color = 'brand';\n\n    get ribbonClass() {\n        const color = COLORS.includes(this.color) ? this.color : 'brand';\n        return `ui-ribbon ui-ribbon_${color}`;\n    }\n}\n",
+        "css": ".ui-ribbon-wrap {\n    position: relative;\n    overflow: hidden;\n    display: inline-block;\n}\n.ui-ribbon {\n    position: absolute;\n    top: 12px;\n    right: -34px;\n    width: 130px;\n    transform: rotate(45deg);\n    text-align: center;\n    font-size: 0.68rem;\n    font-weight: 700;\n    color: #ffffff;\n    padding: 3px 0;\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);\n    z-index: 2;\n}\n.ui-ribbon_brand {\n    background: #0176d3;\n}\n.ui-ribbon_success {\n    background: #2e844a;\n}\n.ui-ribbon_warning {\n    background: #dd7a01;\n}\n.ui-ribbon_error {\n    background: #ba0517;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Ribbon</masterLabel>\n    <description>汎用コーナーリボン。スロット要素の隅に斜めラベルを重ねる。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiDateField",
+      "title": "UI Date Field",
+      "icon": "📆",
+      "category": "フォーム",
+      "demo": "datefield",
+      "description": "ラベル付きの日付入力。変更時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "''",
+          "desc": "値（YYYY-MM-DD）"
+        },
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で無効化"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-date-field label=\"締切日\" onchange={handleChange}></c-ui-date-field>",
+      "ja": "日付フィールド",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-datefield\">\n        <label lwc:if={label} class=\"ui-datefield__label\">{label}</label>\n        <input\n            type=\"date\"\n            class=\"ui-datefield__input\"\n            value={value}\n            disabled={disabled}\n            onchange={handleChange}\n        />\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiDateField — 汎用日付フィールド。\n * ラベル付きの日付入力。変更時に change イベント (detail.value) を発火する。\n */\nexport default class UiDateField extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 値（YYYY-MM-DD） */\n    @api value = '';\n    /** true で無効化 */\n    @api disabled = false;\n\n    handleChange(event) {\n        this.value = event.target.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-datefield {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n.ui-datefield__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n.ui-datefield__input {\n    height: 34px;\n    padding: 0 12px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    font-size: 0.875rem;\n    color: #181818;\n    background: #ffffff;\n    font-family: inherit;\n}\n.ui-datefield__input:focus {\n    outline: none;\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n.ui-datefield__input:disabled {\n    background: #f3f3f3;\n    color: #969492;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Date Field</masterLabel>\n    <description>汎用日付フィールド。ラベル付き日付入力で change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiSegmentedProgress",
+      "title": "UI Segmented Progress",
+      "icon": "🔲",
+      "category": "フィードバック",
+      "demo": "segmentedprogress",
+      "description": "total 個のセグメントのうち current 個を塗りつぶす段階的な進捗インジケータ。",
+      "props": [
+        {
+          "name": "total",
+          "type": "Number",
+          "def": "5",
+          "desc": "セグメント総数"
+        },
+        {
+          "name": "current",
+          "type": "Number",
+          "def": "0",
+          "desc": "塗りつぶす数"
+        },
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'brand'",
+          "desc": "brand | success | warning | error"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-segmented-progress total=\"5\" current=\"3\"></c-ui-segmented-progress>",
+      "ja": "セグメント進捗",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-segprog\">\n        <template for:each={segments} for:item=\"seg\">\n            <span key={seg.key} class={seg.cssClass}></span>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['brand', 'success', 'warning', 'error'];\n\n/**\n * uiSegmentedProgress — 汎用セグメント進捗。\n * total 個のセグメントのうち current 個を塗りつぶして段階的な進捗を表す。\n */\nexport default class UiSegmentedProgress extends LightningElement {\n    /** セグメント総数 */\n    @api total = 5;\n    /** 塗りつぶす数 */\n    @api current = 0;\n    /** 色: brand | success | warning | error */\n    @api variant = 'brand';\n\n    get segments() {\n        const total = Math.max(1, Number(this.total) || 1);\n        const cur = Math.max(0, Number(this.current) || 0);\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        const list = [];\n        for (let i = 0; i < total; i += 1) {\n            const filled = i < cur;\n            list.push({\n                key: i,\n                cssClass: filled\n                    ? `ui-segprog__seg ui-segprog__seg_filled ui-segprog__seg_${variant}`\n                    : 'ui-segprog__seg'\n            });\n        }\n        return list;\n    }\n}\n",
+        "css": ".ui-segprog {\n    display: flex;\n    gap: 5px;\n    width: 100%;\n}\n.ui-segprog__seg {\n    flex: 1;\n    height: 8px;\n    border-radius: 4px;\n    background: #e5e5e5;\n    transition: background 0.2s ease;\n}\n.ui-segprog__seg_brand {\n    background: #0176d3;\n}\n.ui-segprog__seg_success {\n    background: #2e844a;\n}\n.ui-segprog__seg_warning {\n    background: #dd7a01;\n}\n.ui-segprog__seg_error {\n    background: #ba0517;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Segmented Progress</masterLabel>\n    <description>汎用セグメント進捗。total中current個を塗りつぶし段階を表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

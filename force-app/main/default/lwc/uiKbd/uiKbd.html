@@ -1,0 +1,10 @@
+<template>
+    <span class="ui-kbd">
+        <template for:each={computedKeys} for:item="k">
+            <span key={k.idx} class="ui-kbd__group">
+                <kbd class="ui-kbd__key">{k.key}</kbd>
+                <span lwc:if={k.showPlus} class="ui-kbd__plus">+</span>
+            </span>
+        </template>
+    </span>
+</template>

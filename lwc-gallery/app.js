@@ -1451,6 +1451,173 @@
             box.appendChild(wrap);
             controls.appendChild(dec);
             controls.appendChild(inc);
+        },
+
+        tag(box) {
+            [['提案', 'blue'], ['承認', 'green'], ['至急', 'red'], ['保留', 'orange'], ['VIP', 'purple'], ['下書き', 'neutral']].forEach((t) => {
+                box.appendChild(el('span', { class: 'ui-tag ui-tag_' + t[1], text: t[0] }));
+            });
+        },
+
+        iconbutton(box, controls) {
+            let n = 0;
+            const out = el('span', { class: 'demo__out', text: 'クリック: 0' });
+            [['✏️', 'neutral', '編集'], ['＋', 'brand', '追加'], ['🗑️', 'ghost', '削除'], ['⚙️', 'neutral', '設定']].forEach((b) => {
+                const btn = el('button', { class: 'ui-iconbtn ui-iconbtn_' + b[1], type: 'button', title: b[2] }, [
+                    el('span', { class: 'ui-iconbtn__icon', text: b[0] })
+                ]);
+                btn.addEventListener('click', () => {
+                    n += 1;
+                    out.textContent = 'クリック: ' + n;
+                });
+                box.appendChild(btn);
+            });
+            controls.appendChild(out);
+        },
+
+        kbd(box) {
+            [['Ctrl', 'S'], ['Ctrl', 'K'], ['Shift', 'Enter']].forEach((keys) => {
+                const wrap = el('span', { class: 'ui-kbd' });
+                keys.forEach((k, i) => {
+                    const g = el('span', { class: 'ui-kbd__group' }, [el('kbd', { class: 'ui-kbd__key', text: k })]);
+                    if (i < keys.length - 1) {
+                        g.appendChild(el('span', { class: 'ui-kbd__plus', text: '+' }));
+                    }
+                    wrap.appendChild(g);
+                });
+                box.appendChild(wrap);
+            });
+        },
+
+        copybutton(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '未コピー' });
+            const value = 'ABC-12345';
+            let timer;
+            const icon = el('span', { class: 'ui-copybtn__icon', text: '📋' });
+            const label = el('span', { class: 'ui-copybtn__label', text: 'コピー' });
+            const btn = el('button', { class: 'ui-copybtn', type: 'button' }, [icon, label]);
+            btn.addEventListener('click', () => {
+                const done = () => {
+                    btn.className = 'ui-copybtn ui-copybtn_done';
+                    icon.textContent = '✓';
+                    label.textContent = 'コピー済み';
+                    out.textContent = 'コピー: ' + value;
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        btn.className = 'ui-copybtn';
+                        icon.textContent = '📋';
+                        label.textContent = 'コピー';
+                    }, 1500);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(value).then(done, done);
+                } else {
+                    done();
+                }
+            });
+            box.appendChild(btn);
+            controls.appendChild(out);
+            controls.appendChild(el('span', { text: '（値: ' + value + '）', style: 'color:#706e6b' }));
+        },
+
+        splitbutton(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '操作なし' });
+            const items = [['名前を付けて保存', 'saveas'], ['コピーを保存', 'copy'], ['テンプレート保存', 'template']];
+            let open = false;
+            const menu = el('ul', { class: 'ui-splitbtn__menu', role: 'menu', style: 'display:none' });
+            items.forEach((it) => {
+                const b = el('button', { class: 'ui-splitbtn__item', type: 'button', role: 'menuitem', text: it[0] });
+                b.addEventListener('click', () => {
+                    open = false;
+                    menu.style.display = 'none';
+                    out.textContent = '選択: ' + it[0];
+                });
+                menu.appendChild(el('li', { role: 'none' }, [b]));
+            });
+            const main = el('button', { class: 'ui-splitbtn__main', type: 'button', text: '保存' });
+            main.addEventListener('click', () => {
+                out.textContent = '保存を実行';
+            });
+            const toggle = el('button', { class: 'ui-splitbtn__toggle', type: 'button', text: '▾' });
+            const wrap = el('div', { class: 'ui-splitbtn' }, [main, toggle, menu]);
+            toggle.addEventListener('click', () => {
+                open = !open;
+                menu.style.display = open ? '' : 'none';
+            });
+            wrap.addEventListener('focusout', (e) => {
+                if (open && (!e.relatedTarget || !wrap.contains(e.relatedTarget))) {
+                    open = false;
+                    menu.style.display = 'none';
+                }
+            });
+            box.appendChild(wrap);
+            controls.appendChild(out);
+        },
+
+        ribbon(box) {
+            const card = el('div', {
+                style: 'width:220px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,0.06)'
+            }, [
+                el('div', { style: 'font-weight:700;margin-bottom:6px', text: 'プレミアムプラン' }),
+                el('div', { style: 'color:#706e6b;font-size:0.82rem', text: '月額 ¥1,980 / すべての機能が使えます。' })
+            ]);
+            box.appendChild(
+                el('div', { class: 'ui-ribbon-wrap' }, [
+                    el('span', { class: 'ui-ribbon ui-ribbon_error', text: 'NEW' }),
+                    card
+                ])
+            );
+        },
+
+        datefield(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '未選択' });
+            const input = el('input', { type: 'date', class: 'ui-datefield__input' });
+            input.addEventListener('change', () => {
+                out.textContent = '選択: ' + (input.value || '未選択');
+            });
+            box.appendChild(
+                el('div', { class: 'ui-datefield', style: 'max-width:220px' }, [
+                    el('label', { class: 'ui-datefield__label', text: '締切日' }),
+                    input
+                ])
+            );
+            controls.appendChild(out);
+        },
+
+        segmentedprogress(box, controls) {
+            const total = 5;
+            let current = 3;
+            const out = el('span', { class: 'demo__out', text: '3 / 5' });
+            const wrap = el('div', { class: 'ui-segprog', style: 'max-width:320px' });
+            function render() {
+                wrap.innerHTML = '';
+                for (let i = 0; i < total; i += 1) {
+                    wrap.appendChild(
+                        el('span', {
+                            class: 'ui-segprog__seg' + (i < current ? ' ui-segprog__seg_filled ui-segprog__seg_brand' : '')
+                        })
+                    );
+                }
+                out.textContent = current + ' / ' + total;
+            }
+            render();
+            box.appendChild(wrap);
+            const dec = el('button', { class: 'ui-button ui-button_neutral' }, [
+                el('span', { class: 'ui-button__label', text: '−' })
+            ]);
+            const inc = el('button', { class: 'ui-button ui-button_neutral' }, [
+                el('span', { class: 'ui-button__label', text: '+' })
+            ]);
+            dec.addEventListener('click', () => {
+                current = Math.max(0, current - 1);
+                render();
+            });
+            inc.addEventListener('click', () => {
+                current = Math.min(total, current + 1);
+                render();
+            });
+            controls.appendChild(dec);
+            controls.appendChild(inc);
         }
     };
 

@@ -1,0 +1,34 @@
+.ui-kbd {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ui-kbd__group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ui-kbd__key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border: 1px solid #c9c9c9;
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    background: #fafaf9;
+    color: #444444;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.ui-kbd__plus {
+    color: #969492;
+    font-size: 0.72rem;
+}

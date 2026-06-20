@@ -1,0 +1,7 @@
+<template>
+    <div class="ui-segprog">
+        <template for:each={segments} for:item="seg">
+            <span key={seg.key} class={seg.cssClass}></span>
+        </template>
+    </div>
+</template>

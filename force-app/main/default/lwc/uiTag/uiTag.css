@@ -1,0 +1,35 @@
+.ui-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
+    border-radius: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.ui-tag_neutral {
+    background: #ecebea;
+    color: #444444;
+}
+.ui-tag_blue {
+    background: #eef4ff;
+    color: #0b5cab;
+}
+.ui-tag_green {
+    background: #e6f4ea;
+    color: #1d7a3f;
+}
+.ui-tag_red {
+    background: #fdecea;
+    color: #b3261e;
+}
+.ui-tag_orange {
+    background: #fef0e2;
+    color: #a8540b;
+}
+.ui-tag_purple {
+    background: #f3edff;
+    color: #6b3fc0;
+}
