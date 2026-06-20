@@ -3442,6 +3442,112 @@
                 el('span', { class: 'ui-marquee__item', text: text })
             ]);
             box.appendChild(el('div', { class: 'ui-marquee ui-marquee_pause', style: 'width:100%;max-width:460px' }, [track]));
+        },
+
+        clock(box) {
+            const pad = (n) => String(n).padStart(2, '0');
+            const wd = ['日', '月', '火', '水', '木', '金', '土'];
+            const time = el('span', { class: 'ui-clock__time' });
+            const date = el('span', { class: 'ui-clock__date' });
+            function tick() {
+                const d = new Date();
+                time.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+                date.textContent = d.getFullYear() + '/' + pad(d.getMonth() + 1) + '/' + pad(d.getDate()) + ' (' + wd[d.getDay()] + ')';
+            }
+            tick();
+            setInterval(tick, 1000);
+            box.appendChild(el('div', { class: 'ui-clock' }, [time, date]));
+        },
+
+        timeago(box) {
+            function ago(ms) {
+                const sec = Math.floor(ms / 1000);
+                if (sec < 60) return 'たった今';
+                const m = Math.floor(sec / 60);
+                if (m < 60) return m + '分前';
+                const h = Math.floor(m / 60);
+                if (h < 24) return h + '時間前';
+                const day = Math.floor(h / 24);
+                if (day < 7) return day + '日前';
+                const d = new Date(Date.now() - ms);
+                const pad = (n) => String(n).padStart(2, '0');
+                return d.getFullYear() + '/' + pad(d.getMonth() + 1) + '/' + pad(d.getDate());
+            }
+            const samples = [['30秒前', 30 * 1000], ['5分前', 5 * 60 * 1000], ['3時間前', 3 * 60 * 60 * 1000], ['2日前', 2 * 24 * 60 * 60 * 1000], ['10日前', 10 * 24 * 60 * 60 * 1000]];
+            const col = el('div', { style: 'display:flex;flex-direction:column;gap:6px' });
+            samples.forEach((s) => {
+                col.appendChild(el('div', { style: 'display:flex;gap:12px;align-items:baseline' }, [
+                    el('span', { style: 'font-size:0.72rem;color:#969492;width:80px', text: s[0] }),
+                    el('span', { class: 'ui-timeago', style: 'font-weight:600', text: ago(s[1]) })
+                ]));
+            });
+            box.appendChild(col);
+        },
+
+        copyfield(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'コピーボタンを押してください' });
+            const value = 'https://example.com/share/AbC123XyZ';
+            const input = el('input', { class: 'ui-copyfield__input', type: 'text', value: value, readonly: 'true' });
+            const btn = el('button', { class: 'ui-copyfield__btn', type: 'button', text: '📋' });
+            let timer;
+            btn.addEventListener('click', () => {
+                const done = () => {
+                    btn.className = 'ui-copyfield__btn ui-copyfield__btn_done';
+                    btn.textContent = '✓';
+                    out.textContent = 'コピーしました';
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        btn.className = 'ui-copyfield__btn';
+                        btn.textContent = '📋';
+                    }, 1500);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(value).then(done, done);
+                } else {
+                    done();
+                }
+            });
+            box.appendChild(el('div', { class: 'ui-copyfield', style: 'max-width:320px' }, [
+                el('label', { class: 'ui-copyfield__label', text: '共有リンク' }),
+                el('div', { class: 'ui-copyfield__row' }, [input, btn])
+            ]));
+            controls.appendChild(out);
+        },
+
+        speeddial(box, controls) {
+            const out = el('span', { class: 'demo__out', text: 'FABを押してください' });
+            const actions = [['新規作成', '📝', 'new'], ['アップロード', '📤', 'upload'], ['共有', '🔗', 'share']];
+            let open = false;
+            const actionsWrap = el('div', { class: 'ui-speeddial__actions', style: 'display:none' });
+            const fab = el('button', { class: 'ui-speeddial__fab', type: 'button', text: '＋' });
+            actions.forEach((a) => {
+                const b = el('button', { class: 'ui-speeddial__action', type: 'button', title: a[0] }, [
+                    el('span', { class: 'ui-speeddial__action-label', text: a[0] }),
+                    el('span', { class: 'ui-speeddial__action-icon', text: a[1] })
+                ]);
+                b.addEventListener('click', () => {
+                    out.textContent = '選択: ' + a[0];
+                    open = false;
+                    actionsWrap.style.display = 'none';
+                    fab.textContent = '＋';
+                });
+                actionsWrap.appendChild(b);
+            });
+            const wrap = el('div', { class: 'ui-speeddial' }, [actionsWrap, fab]);
+            fab.addEventListener('click', () => {
+                open = !open;
+                actionsWrap.style.display = open ? '' : 'none';
+                fab.textContent = open ? '✕' : '＋';
+            });
+            wrap.addEventListener('focusout', (e) => {
+                if (open && (!e.relatedTarget || !wrap.contains(e.relatedTarget))) {
+                    open = false;
+                    actionsWrap.style.display = 'none';
+                    fab.textContent = '＋';
+                }
+            });
+            box.appendChild(wrap);
+            controls.appendChild(out);
         }
     };
 

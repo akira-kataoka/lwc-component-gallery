@@ -6107,3 +6107,170 @@
         transform: translateX(-50%);
     }
 }
+
+
+/* ===== uiClock ===== */
+.ui-clock {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 12px 18px;
+    background: #16191e;
+    border-radius: 10px;
+}
+
+.ui-clock__time {
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+}
+
+.ui-clock__date {
+    font-size: 0.75rem;
+    color: #9aa3ad;
+}
+
+
+/* ===== uiTimeAgo ===== */
+.ui-timeago {
+    color: #706e6b;
+    font-size: 0.8rem;
+}
+
+
+/* ===== uiCopyField ===== */
+.ui-copyfield {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ui-copyfield__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-copyfield__row {
+    display: flex;
+    align-items: stretch;
+}
+
+.ui-copyfield__input {
+    flex: 1;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #c9c9c9;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    font-size: 0.85rem;
+    color: #181818;
+    background: #fafaf9;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+.ui-copyfield__input:focus {
+    outline: none;
+}
+
+.ui-copyfield__btn {
+    width: 42px;
+    border: 1px solid #c9c9c9;
+    border-radius: 0 6px 6px 0;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #514f4d;
+}
+.ui-copyfield__btn:hover {
+    background: #f3f3f3;
+}
+.ui-copyfield__btn_done {
+    background: #e6f4ea;
+    border-color: #2e844a;
+    color: #1d7a3f;
+}
+
+
+/* ===== uiSpeedDial ===== */
+.ui-speeddial {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.ui-speeddial__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+    animation: ui-speeddial-in 0.16s ease;
+}
+
+@keyframes ui-speeddial-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ui-speeddial__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+}
+
+.ui-speeddial__action-label {
+    background: #16191e;
+    color: #ffffff;
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 4px 9px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+.ui-speeddial__action-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    font-size: 1.05rem;
+}
+.ui-speeddial__action:hover .ui-speeddial__action-icon {
+    background: #eef4ff;
+    border-color: #0176d3;
+}
+
+.ui-speeddial__fab {
+    width: 52px;
+    height: 52px;
+    border: none;
+    border-radius: 50%;
+    background: #0176d3;
+    color: #ffffff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+.ui-speeddial__fab:hover {
+    background: #014486;
+}

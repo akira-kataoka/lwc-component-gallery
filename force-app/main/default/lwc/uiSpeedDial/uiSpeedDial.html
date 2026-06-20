@@ -1,0 +1,27 @@
+<template>
+    <div class="ui-speeddial" onfocusout={handleFocusOut}>
+        <div lwc:if={open} class="ui-speeddial__actions">
+            <template for:each={actions} for:item="a">
+                <button
+                    key={a.value}
+                    class="ui-speeddial__action"
+                    type="button"
+                    title={a.label}
+                    data-value={a.value}
+                    onclick={handleAction}
+                >
+                    <span class="ui-speeddial__action-label">{a.label}</span>
+                    <span class="ui-speeddial__action-icon">{a.icon}</span>
+                </button>
+            </template>
+        </div>
+        <button
+            class="ui-speeddial__fab"
+            type="button"
+            aria-expanded={open}
+            onclick={handleToggle}
+        >
+            {fabIcon}
+        </button>
+    </div>
+</template>

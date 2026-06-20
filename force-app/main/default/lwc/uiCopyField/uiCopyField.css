@@ -1,0 +1,50 @@
+.ui-copyfield {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ui-copyfield__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-copyfield__row {
+    display: flex;
+    align-items: stretch;
+}
+
+.ui-copyfield__input {
+    flex: 1;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #c9c9c9;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    font-size: 0.85rem;
+    color: #181818;
+    background: #fafaf9;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+.ui-copyfield__input:focus {
+    outline: none;
+}
+
+.ui-copyfield__btn {
+    width: 42px;
+    border: 1px solid #c9c9c9;
+    border-radius: 0 6px 6px 0;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #514f4d;
+}
+.ui-copyfield__btn:hover {
+    background: #f3f3f3;
+}
+.ui-copyfield__btn_done {
+    background: #e6f4ea;
+    border-color: #2e844a;
+    color: #1d7a3f;
+}

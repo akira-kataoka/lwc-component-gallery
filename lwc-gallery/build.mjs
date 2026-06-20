@@ -2588,6 +2588,70 @@ const COMPONENTS = [
         ],
         events: [],
         usage: `<c-ui-marquee text="本日10時よりメンテナンスを実施します。" pause-on-hover></c-ui-marquee>`
+    },
+    {
+        id: 'uiClock',
+        title: 'UI Clock',
+        icon: '🕐',
+        category: '表示',
+        demo: 'clock',
+        description:
+            '現在時刻を 1 秒ごとに更新して表示するデジタル時計。hide-date / hide-seconds で表示を抑制可能。',
+        props: [
+            { name: 'hide-date', type: 'Boolean', def: 'false', desc: 'true で日付を非表示' },
+            { name: 'hide-seconds', type: 'Boolean', def: 'false', desc: 'true で秒を非表示' }
+        ],
+        events: [],
+        usage: `<c-ui-clock></c-ui-clock>`
+    },
+    {
+        id: 'uiTimeAgo',
+        title: 'UI Time Ago',
+        icon: '⌛',
+        category: '表示',
+        demo: 'timeago',
+        description:
+            'value（ISO 文字列／ミリ秒）と現在時刻の差を「3分前」「2時間前」等に整形。7日以上前は日付表示にフォールバック。',
+        props: [
+            { name: 'value', type: 'String/Number', def: '—', desc: '日時（ISO 文字列または ミリ秒）' }
+        ],
+        events: [],
+        usage: `<c-ui-time-ago value="2026-06-20T09:30:00"></c-ui-time-ago>`
+    },
+    {
+        id: 'uiCopyField',
+        title: 'UI Copy Field',
+        icon: '📋',
+        category: 'フォーム',
+        demo: 'copyfield',
+        description:
+            '読み取り専用テキストとコピーボタンを組み合わせたフィールド。コピー時にチェック表示へ切替え、copy イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'String', def: "''", desc: '表示・コピーする値' }
+        ],
+        events: [{ name: 'copy', desc: 'コピー時に発火（detail.value）' }],
+        usage: `<c-ui-copy-field label="API キー" value="sk-abc123" oncopy={handleCopy}></c-ui-copy-field>`
+    },
+    {
+        id: 'uiSpeedDial',
+        title: 'UI Speed Dial',
+        icon: '➕',
+        category: 'アクション',
+        demo: 'speeddial',
+        description:
+            'メイン FAB を押すと actions が上方向に展開する。アクション選択で select イベント (detail.value) を発火し、外側クリックで閉じる。',
+        props: [
+            {
+                name: 'actions',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, icon, value }] の配列'
+            },
+            { name: 'icon', type: 'String', def: "'＋'", desc: 'メイン FAB のアイコン' }
+        ],
+        events: [{ name: 'select', desc: 'アクション選択で発火（detail.value）' }],
+        usage: `<c-ui-speed-dial actions={actions} onselect={handleSelect}></c-ui-speed-dial>`
     }
 ];
 
@@ -2713,7 +2777,11 @@ const JA_NAMES = {
     uiNumberFormat: '数値フォーマット',
     uiCollapsibleSection: '折りたたみセクション',
     uiDateRangePicker: '日付範囲',
-    uiMarquee: 'マーキー'
+    uiMarquee: 'マーキー',
+    uiClock: '時計',
+    uiTimeAgo: '相対時刻',
+    uiCopyField: 'コピー入力',
+    uiSpeedDial: 'スピードダイヤル'
 };
 
 const FILE_KEYS = [

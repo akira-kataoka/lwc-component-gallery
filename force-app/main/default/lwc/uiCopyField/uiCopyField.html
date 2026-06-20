@@ -1,0 +1,16 @@
+<template>
+    <div class="ui-copyfield">
+        <label lwc:if={label} class="ui-copyfield__label">{label}</label>
+        <div class="ui-copyfield__row">
+            <input
+                class="ui-copyfield__input"
+                type="text"
+                value={value}
+                readonly
+            />
+            <button class={buttonClass} type="button" onclick={handleCopy}>
+                {copyIcon}
+            </button>
+        </div>
+    </div>
+</template>

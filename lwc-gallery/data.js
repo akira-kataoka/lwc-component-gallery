@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T10:06:35.295Z",
+  "generatedAt": "2026-06-20T10:27:10.681Z",
   "components": [
     {
       "id": "uiBadge",
@@ -4708,6 +4708,134 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiMarquee — 汎用マーキー（流れるテキスト）。\n * text を横方向にスクロール表示する。お知らせやティッカーに使う。\n * speed で 1 周の秒数、pause-on-hover でホバー時に一時停止する。\n */\nexport default class UiMarquee extends LightningElement {\n    /** 表示テキスト */\n    @api text;\n    /** 1 周の秒数 */\n    @api speed = 14;\n    /** true でホバー時に一時停止 */\n    @api pauseOnHover = false;\n\n    get rootClass() {\n        return this.pauseOnHover ? 'ui-marquee ui-marquee_pause' : 'ui-marquee';\n    }\n\n    get trackStyle() {\n        return `animation-duration: ${Number(this.speed) || 14}s`;\n    }\n}\n",
         "css": ".ui-marquee {\n    overflow: hidden;\n    white-space: nowrap;\n    width: 100%;\n    background: #eef4ff;\n    border-radius: 6px;\n    padding: 8px 0;\n}\n\n.ui-marquee__track {\n    display: inline-flex;\n    width: max-content;\n    animation-name: ui-marquee-scroll;\n    animation-timing-function: linear;\n    animation-iteration-count: infinite;\n}\n\n.ui-marquee_pause:hover .ui-marquee__track {\n    animation-play-state: paused;\n}\n\n.ui-marquee__item {\n    padding-right: 48px;\n    font-size: 0.85rem;\n    color: #0b5cab;\n    font-weight: 600;\n}\n\n@keyframes ui-marquee-scroll {\n    from {\n        transform: translateX(0);\n    }\n    to {\n        transform: translateX(-50%);\n    }\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Marquee</masterLabel>\n    <description>汎用マーキー。テキストを横スクロール表示、ホバーで一時停止可。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiClock",
+      "title": "UI Clock",
+      "icon": "🕐",
+      "category": "表示",
+      "demo": "clock",
+      "description": "現在時刻を 1 秒ごとに更新して表示するデジタル時計。hide-date / hide-seconds で表示を抑制可能。",
+      "props": [
+        {
+          "name": "hide-date",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で日付を非表示"
+        },
+        {
+          "name": "hide-seconds",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で秒を非表示"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-clock></c-ui-clock>",
+      "ja": "時計",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-clock\">\n        <span class=\"ui-clock__time\">{timeText}</span>\n        <span lwc:if={showDate} class=\"ui-clock__date\">{dateText}</span>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\nconst WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];\n\n/**\n * uiClock — 汎用デジタル時計。\n * 現在時刻を 1 秒ごとに更新して表示する。hide-date / hide-seconds で表示を抑制できる。\n */\nexport default class UiClock extends LightningElement {\n    /** true で日付を非表示 */\n    @api hideDate = false;\n    /** true で秒を非表示 */\n    @api hideSeconds = false;\n\n    @track now = new Date();\n    _timer;\n\n    connectedCallback() {\n        // eslint-disable-next-line @lwc/lwc/no-async-operation\n        this._timer = setInterval(() => {\n            this.now = new Date();\n        }, 1000);\n    }\n\n    disconnectedCallback() {\n        if (this._timer) {\n            clearInterval(this._timer);\n        }\n    }\n\n    get showDate() {\n        return !this.hideDate;\n    }\n\n    pad(n) {\n        return String(n).padStart(2, '0');\n    }\n\n    get timeText() {\n        const d = this.now;\n        const base = `${this.pad(d.getHours())}:${this.pad(d.getMinutes())}`;\n        return this.hideSeconds ? base : `${base}:${this.pad(d.getSeconds())}`;\n    }\n\n    get dateText() {\n        const d = this.now;\n        return `${d.getFullYear()}/${this.pad(d.getMonth() + 1)}/${this.pad(d.getDate())} (${WEEKDAYS[d.getDay()]})`;\n    }\n}\n",
+        "css": ".ui-clock {\n    display: inline-flex;\n    flex-direction: column;\n    align-items: center;\n    gap: 2px;\n    padding: 12px 18px;\n    background: #16191e;\n    border-radius: 10px;\n}\n\n.ui-clock__time {\n    font-family: 'SFMono-Regular', Consolas, monospace;\n    font-size: 1.9rem;\n    font-weight: 700;\n    color: #ffffff;\n    letter-spacing: 0.04em;\n    font-variant-numeric: tabular-nums;\n}\n\n.ui-clock__date {\n    font-size: 0.75rem;\n    color: #9aa3ad;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Clock</masterLabel>\n    <description>汎用デジタル時計。現在時刻を1秒ごとに更新表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiTimeAgo",
+      "title": "UI Time Ago",
+      "icon": "⌛",
+      "category": "表示",
+      "demo": "timeago",
+      "description": "value（ISO 文字列／ミリ秒）と現在時刻の差を「3分前」「2時間前」等に整形。7日以上前は日付表示にフォールバック。",
+      "props": [
+        {
+          "name": "value",
+          "type": "String/Number",
+          "def": "—",
+          "desc": "日時（ISO 文字列または ミリ秒）"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-time-ago value=\"2026-06-20T09:30:00\"></c-ui-time-ago>",
+      "ja": "相対時刻",
+      "files": {
+        "html": "<template>\n    <span class=\"ui-timeago\">{text}</span>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiTimeAgo — 汎用相対時刻表示。\n * value（ISO 文字列 or ミリ秒）と現在時刻の差を「3分前」「2時間前」などに整形する。\n * 7 日以上前は日付表示にフォールバックする。\n */\nexport default class UiTimeAgo extends LightningElement {\n    /** 日時（ISO 文字列または ミリ秒） */\n    @api value;\n\n    get text() {\n        if (this.value === undefined || this.value === null || this.value === '') {\n            return '';\n        }\n        const t = new Date(this.value).getTime();\n        if (Number.isNaN(t)) {\n            return String(this.value);\n        }\n        const diff = Date.now() - t;\n        const sec = Math.floor(diff / 1000);\n        if (sec < 0) {\n            return 'まもなく';\n        }\n        if (sec < 60) {\n            return 'たった今';\n        }\n        const min = Math.floor(sec / 60);\n        if (min < 60) {\n            return `${min}分前`;\n        }\n        const hr = Math.floor(min / 60);\n        if (hr < 24) {\n            return `${hr}時間前`;\n        }\n        const day = Math.floor(hr / 24);\n        if (day < 7) {\n            return `${day}日前`;\n        }\n        const d = new Date(t);\n        const pad = (n) => String(n).padStart(2, '0');\n        return `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())}`;\n    }\n}\n",
+        "css": ".ui-timeago {\n    color: #706e6b;\n    font-size: 0.8rem;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Time Ago</masterLabel>\n    <description>汎用相対時刻表示。「3分前」等に整形し7日以上前は日付表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiCopyField",
+      "title": "UI Copy Field",
+      "icon": "📋",
+      "category": "フォーム",
+      "demo": "copyfield",
+      "description": "読み取り専用テキストとコピーボタンを組み合わせたフィールド。コピー時にチェック表示へ切替え、copy イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "''",
+          "desc": "表示・コピーする値"
+        }
+      ],
+      "events": [
+        {
+          "name": "copy",
+          "desc": "コピー時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-copy-field label=\"API キー\" value=\"sk-abc123\" oncopy={handleCopy}></c-ui-copy-field>",
+      "ja": "コピー入力",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-copyfield\">\n        <label lwc:if={label} class=\"ui-copyfield__label\">{label}</label>\n        <div class=\"ui-copyfield__row\">\n            <input\n                class=\"ui-copyfield__input\"\n                type=\"text\"\n                value={value}\n                readonly\n            />\n            <button class={buttonClass} type=\"button\" onclick={handleCopy}>\n                {copyIcon}\n            </button>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiCopyField — 汎用コピー入力。\n * 読み取り専用のテキストとコピーボタンを組み合わせたフィールド。\n * コピー時に一時的にチェック表示へ切替え、copy イベント (detail.value) を発火する。\n */\nexport default class UiCopyField extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 表示・コピーする値 */\n    @api value = '';\n\n    @track copied = false;\n    _timer;\n\n    get copyIcon() {\n        return this.copied ? '✓' : '📋';\n    }\n\n    get buttonClass() {\n        return this.copied\n            ? 'ui-copyfield__btn ui-copyfield__btn_done'\n            : 'ui-copyfield__btn';\n    }\n\n    handleCopy() {\n        const text = this.value || '';\n        const done = () => {\n            this.copied = true;\n            this.dispatchEvent(\n                new CustomEvent('copy', { detail: { value: text } })\n            );\n            if (this._timer) {\n                clearTimeout(this._timer);\n            }\n            // eslint-disable-next-line @lwc/lwc/no-async-operation\n            this._timer = setTimeout(() => {\n                this.copied = false;\n            }, 1500);\n        };\n        if (navigator.clipboard && navigator.clipboard.writeText) {\n            navigator.clipboard.writeText(text).then(done, done);\n        } else {\n            done();\n        }\n    }\n}\n",
+        "css": ".ui-copyfield {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-copyfield__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-copyfield__row {\n    display: flex;\n    align-items: stretch;\n}\n\n.ui-copyfield__input {\n    flex: 1;\n    height: 34px;\n    padding: 0 12px;\n    border: 1px solid #c9c9c9;\n    border-right: none;\n    border-radius: 6px 0 0 6px;\n    font-size: 0.85rem;\n    color: #181818;\n    background: #fafaf9;\n    font-family: 'SFMono-Regular', Consolas, monospace;\n}\n.ui-copyfield__input:focus {\n    outline: none;\n}\n\n.ui-copyfield__btn {\n    width: 42px;\n    border: 1px solid #c9c9c9;\n    border-radius: 0 6px 6px 0;\n    background: #ffffff;\n    cursor: pointer;\n    font-size: 0.95rem;\n    color: #514f4d;\n}\n.ui-copyfield__btn:hover {\n    background: #f3f3f3;\n}\n.ui-copyfield__btn_done {\n    background: #e6f4ea;\n    border-color: #2e844a;\n    color: #1d7a3f;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Copy Field</masterLabel>\n    <description>汎用コピー入力。読み取り専用テキスト＋コピーボタンで copy を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiSpeedDial",
+      "title": "UI Speed Dial",
+      "icon": "➕",
+      "category": "アクション",
+      "demo": "speeddial",
+      "description": "メイン FAB を押すと actions が上方向に展開する。アクション選択で select イベント (detail.value) を発火し、外側クリックで閉じる。",
+      "props": [
+        {
+          "name": "actions",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, icon, value }] の配列"
+        },
+        {
+          "name": "icon",
+          "type": "String",
+          "def": "'＋'",
+          "desc": "メイン FAB のアイコン"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "アクション選択で発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-speed-dial actions={actions} onselect={handleSelect}></c-ui-speed-dial>",
+      "ja": "スピードダイヤル",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-speeddial\" onfocusout={handleFocusOut}>\n        <div lwc:if={open} class=\"ui-speeddial__actions\">\n            <template for:each={actions} for:item=\"a\">\n                <button\n                    key={a.value}\n                    class=\"ui-speeddial__action\"\n                    type=\"button\"\n                    title={a.label}\n                    data-value={a.value}\n                    onclick={handleAction}\n                >\n                    <span class=\"ui-speeddial__action-label\">{a.label}</span>\n                    <span class=\"ui-speeddial__action-icon\">{a.icon}</span>\n                </button>\n            </template>\n        </div>\n        <button\n            class=\"ui-speeddial__fab\"\n            type=\"button\"\n            aria-expanded={open}\n            onclick={handleToggle}\n        >\n            {fabIcon}\n        </button>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiSpeedDial — 汎用スピードダイヤル。\n * メイン FAB を押すと actions（[{ label, icon, value }]）が上方向に展開する。\n * アクション選択で select イベント (detail.value) を発火し、外側クリックで閉じる。\n */\nexport default class UiSpeedDial extends LightningElement {\n    _actions = [];\n\n    /** [{ label, icon, value }] の配列 */\n    @api\n    get actions() {\n        return this._actions;\n    }\n    set actions(value) {\n        this._actions = Array.isArray(value) ? value : [];\n    }\n\n    /** メイン FAB のアイコン */\n    @api icon = '＋';\n\n    @track open = false;\n\n    get fabIcon() {\n        return this.open ? '✕' : this.icon;\n    }\n\n    handleToggle() {\n        this.open = !this.open;\n    }\n\n    handleAction(event) {\n        const value = event.currentTarget.dataset.value;\n        this.open = false;\n        this.dispatchEvent(new CustomEvent('select', { detail: { value } }));\n    }\n\n    handleFocusOut(event) {\n        if (\n            this.open &&\n            (!event.relatedTarget ||\n                !event.currentTarget.contains(event.relatedTarget))\n        ) {\n            this.open = false;\n        }\n    }\n}\n",
+        "css": ".ui-speeddial {\n    display: inline-flex;\n    flex-direction: column;\n    align-items: flex-end;\n    gap: 10px;\n}\n\n.ui-speeddial__actions {\n    display: flex;\n    flex-direction: column;\n    gap: 8px;\n    align-items: flex-end;\n    animation: ui-speeddial-in 0.16s ease;\n}\n\n@keyframes ui-speeddial-in {\n    from {\n        opacity: 0;\n        transform: translateY(6px);\n    }\n    to {\n        opacity: 1;\n        transform: translateY(0);\n    }\n}\n\n.ui-speeddial__action {\n    display: inline-flex;\n    align-items: center;\n    gap: 8px;\n    border: none;\n    background: transparent;\n    cursor: pointer;\n    padding: 0;\n    font-family: inherit;\n}\n\n.ui-speeddial__action-label {\n    background: #16191e;\n    color: #ffffff;\n    font-size: 0.74rem;\n    font-weight: 600;\n    padding: 4px 9px;\n    border-radius: 5px;\n    white-space: nowrap;\n}\n\n.ui-speeddial__action-icon {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 38px;\n    height: 38px;\n    border-radius: 50%;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);\n    font-size: 1.05rem;\n}\n.ui-speeddial__action:hover .ui-speeddial__action-icon {\n    background: #eef4ff;\n    border-color: #0176d3;\n}\n\n.ui-speeddial__fab {\n    width: 52px;\n    height: 52px;\n    border: none;\n    border-radius: 50%;\n    background: #0176d3;\n    color: #ffffff;\n    font-size: 1.4rem;\n    cursor: pointer;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);\n}\n.ui-speeddial__fab:hover {\n    background: #014486;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Speed Dial</masterLabel>\n    <description>汎用スピードダイヤル。FABから複数アクションを展開し select を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]
