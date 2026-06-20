@@ -1,0 +1,16 @@
+<template>
+    <div class="ui-tagcloud">
+        <template for:each={computedTags} for:item="tag">
+            <button
+                key={tag.key}
+                class="ui-tagcloud__tag"
+                type="button"
+                style={tag.style}
+                data-label={tag.label}
+                onclick={handleClick}
+            >
+                {tag.label}
+            </button>
+        </template>
+    </div>
+</template>

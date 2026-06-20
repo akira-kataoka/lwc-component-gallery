@@ -2554,6 +2554,87 @@
                 document.body.appendChild(overlay);
             });
             controls.appendChild(out);
+        },
+
+        expandabletext(box) {
+            const text = 'Lightning Web Components（LWC）は、Web標準に基づくSalesforceのモダンなUIフレームワークです。再利用可能なコンポーネントを作成でき、軽量で高速、テストもしやすいのが特徴です。この説明文は省略表示され、「もっと見る」で全文が開きます。';
+            let expanded = false;
+            const body = el('div', { class: 'ui-exptext__body ui-exptext__body_clamped', style: '-webkit-line-clamp:2', text: text });
+            const toggle = el('button', { class: 'ui-exptext__toggle', type: 'button', text: 'もっと見る' });
+            toggle.addEventListener('click', () => {
+                expanded = !expanded;
+                if (expanded) {
+                    body.className = 'ui-exptext__body';
+                    body.setAttribute('style', '');
+                    toggle.textContent = '閉じる';
+                } else {
+                    body.className = 'ui-exptext__body ui-exptext__body_clamped';
+                    body.setAttribute('style', '-webkit-line-clamp:2');
+                    toggle.textContent = 'もっと見る';
+                }
+            });
+            box.appendChild(el('div', { class: 'ui-exptext', style: 'max-width:360px' }, [body, toggle]));
+        },
+
+        grid(box, controls) {
+            const wrap = el('div', { class: 'ui-grid', style: 'grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;width:100%' });
+            ['📊 売上', '👥 顧客', '📦 在庫', '💰 利益', '⭐ 評価', '🚚 配送'].forEach((t) => {
+                wrap.appendChild(el('div', {
+                    style: 'background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:14px;text-align:center;font-size:0.82rem;color:#444',
+                    text: t
+                }));
+            });
+            box.appendChild(wrap);
+            controls.appendChild(el('span', { class: 'demo__out', text: '端末幅を変えると段組みが自動調整されます' }));
+        },
+
+        pilltogglegroup(box, controls) {
+            const opts = [['React', 'react'], ['Vue', 'vue'], ['Angular', 'angular'], ['LWC', 'lwc'], ['Svelte', 'svelte']];
+            let values = ['lwc'];
+            const out = el('span', { class: 'demo__out', text: '選択: LWC' });
+            const wrap = el('div', { class: 'ui-pilltoggle-group' });
+            function render() {
+                wrap.innerHTML = '';
+                opts.forEach((o) => {
+                    const on = values.includes(o[1]);
+                    const b = el('button', { class: 'ui-pilltoggle' + (on ? ' ui-pilltoggle_on' : ''), type: 'button', text: o[0] });
+                    b.addEventListener('click', () => {
+                        values = on ? values.filter((v) => v !== o[1]) : [...values, o[1]];
+                        const labels = opts.filter((x) => values.includes(x[1])).map((x) => x[0]);
+                        out.textContent = '選択: ' + (labels.join(', ') || '（なし）');
+                        render();
+                    });
+                    wrap.appendChild(b);
+                });
+            }
+            render();
+            box.appendChild(wrap);
+            controls.appendChild(out);
+        },
+
+        tagcloud(box, controls) {
+            const tags = [['Salesforce', 10], ['LWC', 9], ['Apex', 7], ['SOQL', 5], ['Flow', 6], ['Trigger', 4], ['Aura', 3], ['SLDS', 8], ['API', 5], ['Test', 4]];
+            const ws = tags.map((t) => t[1]);
+            const max = Math.max(...ws);
+            const min = Math.min(...ws);
+            const range = max - min || 1;
+            const out = el('span', { class: 'demo__out', text: 'クリックで選択' });
+            const wrap = el('div', { class: 'ui-tagcloud', style: 'max-width:380px' });
+            tags.forEach((t) => {
+                const ratio = (t[1] - min) / range;
+                const b = el('button', {
+                    class: 'ui-tagcloud__tag',
+                    type: 'button',
+                    style: 'font-size:' + (0.75 + ratio * 0.95).toFixed(2) + 'rem;opacity:' + (0.55 + ratio * 0.45).toFixed(2),
+                    text: t[0]
+                });
+                b.addEventListener('click', () => {
+                    out.textContent = '選択: ' + t[0];
+                });
+                wrap.appendChild(b);
+            });
+            box.appendChild(wrap);
+            controls.appendChild(out);
         }
     };
 

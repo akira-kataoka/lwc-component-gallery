@@ -1870,6 +1870,81 @@ const COMPONENTS = [
             { name: 'cancel', desc: '取消・背景・Esc で発火' }
         ],
         usage: `<c-ui-confirm-dialog open={isOpen} message="削除しますか？" variant="destructive" onconfirm={handleOk} oncancel={handleCancel}></c-ui-confirm-dialog>`
+    },
+    {
+        id: 'uiExpandableText',
+        title: 'UI Expandable Text',
+        icon: '📄',
+        category: '表示',
+        demo: 'expandabletext',
+        description:
+            '長文を指定行数で省略表示し、「もっと見る／閉じる」で全文を開閉する。',
+        props: [
+            { name: 'text', type: 'String', def: '—', desc: '本文' },
+            { name: 'lines', type: 'Number', def: '2', desc: '省略時の表示行数' }
+        ],
+        events: [],
+        usage: `<c-ui-expandable-text text={longText} lines="3"></c-ui-expandable-text>`
+    },
+    {
+        id: 'uiGrid',
+        title: 'UI Grid',
+        icon: '🔳',
+        category: 'レイアウト',
+        demo: 'grid',
+        description:
+            'default スロットの子要素を auto-fill のグリッドで並べるレスポンシブ段組み。min-width 未満で自動的に段が減る。',
+        props: [
+            { name: 'min-width', type: 'Number', def: '160', desc: '各セルの最小幅(px)' },
+            { name: 'gap', type: 'Number', def: '12', desc: 'セル間の余白(px)' }
+        ],
+        slots: [{ name: '(default)', desc: 'グリッドに並べる子要素' }],
+        events: [],
+        usage: `<c-ui-grid min-width="180">\n    <c-ui-card>...</c-ui-card>\n</c-ui-grid>`
+    },
+    {
+        id: 'uiPillToggleGroup',
+        title: 'UI Pill Toggle Group',
+        icon: '🟦',
+        category: 'フォーム',
+        demo: 'pilltogglegroup',
+        description:
+            'options 配列からピル状の複数選択 UI を生成。変更時に change イベント (detail.values) を発火。',
+        props: [
+            {
+                name: 'options',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            },
+            {
+                name: 'values',
+                type: 'Array',
+                def: '[]',
+                desc: '選択中の value 配列'
+            }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.values）' }],
+        usage: `<c-ui-pill-toggle-group options={tags} onchange={handleChange}></c-ui-pill-toggle-group>`
+    },
+    {
+        id: 'uiTagCloud',
+        title: 'UI Tag Cloud',
+        icon: '☁️',
+        category: '表示',
+        demo: 'tagcloud',
+        description:
+            'tags 配列 ([{ label, weight }]) を重みに応じた文字サイズ・濃さで表示。クリックで select イベント (detail.label) を発火。',
+        props: [
+            {
+                name: 'tags',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, weight }] の配列'
+            }
+        ],
+        events: [{ name: 'select', desc: 'タグクリックで発火（detail.label）' }],
+        usage: `<c-ui-tag-cloud tags={keywords} onselect={handleSelect}></c-ui-tag-cloud>`
     }
 ];
 
@@ -1959,7 +2034,11 @@ const JA_NAMES = {
     uiPasswordInput: 'パスワード入力',
     uiComboBox: 'コンボボックス',
     uiThermometer: 'サーモメーター',
-    uiConfirmDialog: '確認ダイアログ'
+    uiConfirmDialog: '確認ダイアログ',
+    uiExpandableText: '開閉テキスト',
+    uiGrid: 'グリッド',
+    uiPillToggleGroup: 'ピル複数選択',
+    uiTagCloud: 'タグクラウド'
 };
 
 const FILE_KEYS = [

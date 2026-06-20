@@ -1,0 +1,16 @@
+<template>
+    <div class="ui-pilltoggle-group" role="group">
+        <template for:each={computedPills} for:item="pill">
+            <button
+                key={pill.value}
+                class={pill.cssClass}
+                type="button"
+                aria-pressed={pill.selected}
+                data-value={pill.value}
+                onclick={handleToggle}
+            >
+                {pill.label}
+            </button>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,22 @@
+.ui-tagcloud {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    line-height: 1.4;
+}
+
+.ui-tagcloud__tag {
+    border: none;
+    background: transparent;
+    color: #0176d3;
+    cursor: pointer;
+    padding: 2px 2px;
+    font-family: inherit;
+    font-weight: 600;
+    transition: color 0.12s ease;
+}
+.ui-tagcloud__tag:hover {
+    color: #014486;
+    text-decoration: underline;
+}

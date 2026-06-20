@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T07:59:00.395Z",
+  "generatedAt": "2026-06-20T08:23:21.095Z",
   "components": [
     {
       "id": "uiBadge",
@@ -3269,6 +3269,140 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiConfirmDialog — 汎用確認ダイアログ。\n * open で表示制御し、確定／取消ボタンを持つ小型モーダル。\n * 確定で confirm、取消・背景・Esc で cancel イベントを発火する。\n */\nexport default class UiConfirmDialog extends LightningElement {\n    /** ヘッダ */\n    @api header = '確認';\n    /** メッセージ本文 */\n    @api message;\n    /** true で表示 */\n    @api open = false;\n    /** 確定ボタンの種別: brand | destructive */\n    @api variant = 'brand';\n    /** 確定ボタンのラベル */\n    @api confirmLabel = 'OK';\n    /** 取消ボタンのラベル */\n    @api cancelLabel = 'キャンセル';\n\n    get confirmClass() {\n        const v = this.variant === 'destructive' ? 'destructive' : 'brand';\n        return `ui-confirm__btn ui-confirm__btn_${v}`;\n    }\n\n    handleConfirm() {\n        this.dispatchEvent(new CustomEvent('confirm'));\n    }\n\n    handleCancel() {\n        this.dispatchEvent(new CustomEvent('cancel'));\n    }\n\n    handleKeydown(event) {\n        if (event.key === 'Escape') {\n            this.handleCancel();\n        }\n    }\n\n    stopPropagation(event) {\n        event.stopPropagation();\n    }\n}\n",
         "css": ".ui-confirm-backdrop {\n    position: fixed;\n    inset: 0;\n    background: rgba(8, 7, 7, 0.5);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    padding: 16px;\n    z-index: 9200;\n}\n\n.ui-confirm {\n    width: 100%;\n    max-width: 380px;\n    background: #ffffff;\n    border-radius: 10px;\n    padding: 22px;\n    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);\n}\n\n.ui-confirm__header {\n    margin: 0 0 8px;\n    font-size: 1.05rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-confirm__message {\n    margin: 0 0 18px;\n    font-size: 0.875rem;\n    color: #514f4d;\n    line-height: 1.6;\n}\n\n.ui-confirm__footer {\n    display: flex;\n    justify-content: flex-end;\n    gap: 8px;\n}\n\n.ui-confirm__btn {\n    height: 32px;\n    padding: 0 16px;\n    border-radius: 6px;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n    border: 1px solid transparent;\n}\n\n.ui-confirm__btn_cancel {\n    background: #ffffff;\n    border-color: #c9c9c9;\n    color: #514f4d;\n}\n.ui-confirm__btn_cancel:hover {\n    background: #f3f3f3;\n}\n\n.ui-confirm__btn_brand {\n    background: #0176d3;\n    color: #ffffff;\n}\n.ui-confirm__btn_brand:hover {\n    background: #014486;\n}\n\n.ui-confirm__btn_destructive {\n    background: #ba0517;\n    color: #ffffff;\n}\n.ui-confirm__btn_destructive:hover {\n    background: #8e030f;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Confirm Dialog</masterLabel>\n    <description>汎用確認ダイアログ。確定でconfirm、取消/背景/Escでcancelを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiExpandableText",
+      "title": "UI Expandable Text",
+      "icon": "📄",
+      "category": "表示",
+      "demo": "expandabletext",
+      "description": "長文を指定行数で省略表示し、「もっと見る／閉じる」で全文を開閉する。",
+      "props": [
+        {
+          "name": "text",
+          "type": "String",
+          "def": "—",
+          "desc": "本文"
+        },
+        {
+          "name": "lines",
+          "type": "Number",
+          "def": "2",
+          "desc": "省略時の表示行数"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-expandable-text text={longText} lines=\"3\"></c-ui-expandable-text>",
+      "ja": "開閉テキスト",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-exptext\">\n        <div class={textClass} style={clampStyle}>{text}</div>\n        <button class=\"ui-exptext__toggle\" type=\"button\" onclick={toggle}>\n            {toggleLabel}\n        </button>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiExpandableText — 汎用開閉テキスト。\n * 長文を指定行数で省略表示し、「もっと見る／閉じる」で全文を開閉する。\n */\nexport default class UiExpandableText extends LightningElement {\n    /** 本文 */\n    @api text;\n    /** 省略時の表示行数 */\n    @api lines = 2;\n\n    @track expanded = false;\n\n    get textClass() {\n        return this.expanded\n            ? 'ui-exptext__body'\n            : 'ui-exptext__body ui-exptext__body_clamped';\n    }\n\n    get clampStyle() {\n        return this.expanded ? '' : `-webkit-line-clamp: ${this.lines}`;\n    }\n\n    get toggleLabel() {\n        return this.expanded ? '閉じる' : 'もっと見る';\n    }\n\n    toggle() {\n        this.expanded = !this.expanded;\n    }\n}\n",
+        "css": ".ui-exptext {\n    font-size: 0.85rem;\n    line-height: 1.6;\n    color: #444444;\n}\n\n.ui-exptext__body_clamped {\n    display: -webkit-box;\n    -webkit-box-orient: vertical;\n    overflow: hidden;\n}\n\n.ui-exptext__toggle {\n    margin-top: 4px;\n    border: none;\n    background: transparent;\n    color: #0176d3;\n    font-size: 0.8rem;\n    font-weight: 600;\n    cursor: pointer;\n    padding: 0;\n    font-family: inherit;\n}\n.ui-exptext__toggle:hover {\n    text-decoration: underline;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Expandable Text</masterLabel>\n    <description>汎用開閉テキスト。指定行数で省略し、もっと見る/閉じるで開閉。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiGrid",
+      "title": "UI Grid",
+      "icon": "🔳",
+      "category": "レイアウト",
+      "demo": "grid",
+      "description": "default スロットの子要素を auto-fill のグリッドで並べるレスポンシブ段組み。min-width 未満で自動的に段が減る。",
+      "props": [
+        {
+          "name": "min-width",
+          "type": "Number",
+          "def": "160",
+          "desc": "各セルの最小幅(px)"
+        },
+        {
+          "name": "gap",
+          "type": "Number",
+          "def": "12",
+          "desc": "セル間の余白(px)"
+        }
+      ],
+      "slots": [
+        {
+          "name": "(default)",
+          "desc": "グリッドに並べる子要素"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-grid min-width=\"180\">\n    <c-ui-card>...</c-ui-card>\n</c-ui-grid>",
+      "ja": "グリッド",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-grid\" style={gridStyle}>\n        <slot></slot>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiGrid — 汎用レスポンシブグリッド。\n * default スロットの子要素を auto-fill のグリッドで並べる。\n * min-width 未満になると自動で段組みが減り、スマホでも崩れない。\n */\nexport default class UiGrid extends LightningElement {\n    /** 各セルの最小幅(px) */\n    @api minWidth = 160;\n    /** セル間の余白(px) */\n    @api gap = 12;\n\n    get gridStyle() {\n        const min = Number(this.minWidth) || 160;\n        const gap = Number(this.gap) || 12;\n        return `grid-template-columns: repeat(auto-fill, minmax(${min}px, 1fr)); gap: ${gap}px;`;\n    }\n}\n",
+        "css": ".ui-grid {\n    display: grid;\n    width: 100%;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Grid</masterLabel>\n    <description>汎用レスポンシブグリッド。min-width基準でauto-fill段組み。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiPillToggleGroup",
+      "title": "UI Pill Toggle Group",
+      "icon": "🟦",
+      "category": "フォーム",
+      "demo": "pilltogglegroup",
+      "description": "options 配列からピル状の複数選択 UI を生成。変更時に change イベント (detail.values) を発火。",
+      "props": [
+        {
+          "name": "options",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        },
+        {
+          "name": "values",
+          "type": "Array",
+          "def": "[]",
+          "desc": "選択中の value 配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.values）"
+        }
+      ],
+      "usage": "<c-ui-pill-toggle-group options={tags} onchange={handleChange}></c-ui-pill-toggle-group>",
+      "ja": "ピル複数選択",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-pilltoggle-group\" role=\"group\">\n        <template for:each={computedPills} for:item=\"pill\">\n            <button\n                key={pill.value}\n                class={pill.cssClass}\n                type=\"button\"\n                aria-pressed={pill.selected}\n                data-value={pill.value}\n                onclick={handleToggle}\n            >\n                {pill.label}\n            </button>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiPillToggleGroup — 汎用ピル複数選択。\n * options 配列 ([{ label, value }]) からピル状の複数選択 UI を生成し、\n * 変更時に change イベント (detail.values) を発火する。\n */\nexport default class UiPillToggleGroup extends LightningElement {\n    _options = [];\n    @track _values = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get options() {\n        return this._options;\n    }\n    set options(value) {\n        this._options = Array.isArray(value) ? value : [];\n    }\n\n    /** 選択中の value 配列 */\n    @api\n    get values() {\n        return this._values;\n    }\n    set values(value) {\n        this._values = Array.isArray(value) ? [...value] : [];\n    }\n\n    get computedPills() {\n        return this._options.map((o) => ({\n            label: o.label,\n            value: o.value,\n            cssClass: this._values.includes(o.value)\n                ? 'ui-pilltoggle ui-pilltoggle_on'\n                : 'ui-pilltoggle'\n        }));\n    }\n\n    handleToggle(event) {\n        const value = event.currentTarget.dataset.value;\n        this._values = this._values.includes(value)\n            ? this._values.filter((v) => v !== value)\n            : [...this._values, value];\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { values: [...this._values] } })\n        );\n    }\n}\n",
+        "css": ".ui-pilltoggle-group {\n    display: inline-flex;\n    flex-wrap: wrap;\n    gap: 8px;\n}\n\n.ui-pilltoggle {\n    border: 1px solid #c9c9c9;\n    background: #ffffff;\n    color: #444444;\n    padding: 5px 14px;\n    border-radius: 16px;\n    font-size: 0.8rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;\n}\n.ui-pilltoggle:hover {\n    border-color: #0176d3;\n    color: #0176d3;\n}\n\n.ui-pilltoggle_on {\n    background: #eef4ff;\n    border-color: #0176d3;\n    color: #0b5cab;\n    box-shadow: inset 0 0 0 1px #0176d3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Pill Toggle Group</masterLabel>\n    <description>汎用ピル複数選択。ピル状の複数選択で change イベント(values)を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiTagCloud",
+      "title": "UI Tag Cloud",
+      "icon": "☁️",
+      "category": "表示",
+      "demo": "tagcloud",
+      "description": "tags 配列 ([{ label, weight }]) を重みに応じた文字サイズ・濃さで表示。クリックで select イベント (detail.label) を発火。",
+      "props": [
+        {
+          "name": "tags",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, weight }] の配列"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "タグクリックで発火（detail.label）"
+        }
+      ],
+      "usage": "<c-ui-tag-cloud tags={keywords} onselect={handleSelect}></c-ui-tag-cloud>",
+      "ja": "タグクラウド",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-tagcloud\">\n        <template for:each={computedTags} for:item=\"tag\">\n            <button\n                key={tag.key}\n                class=\"ui-tagcloud__tag\"\n                type=\"button\"\n                style={tag.style}\n                data-label={tag.label}\n                onclick={handleClick}\n            >\n                {tag.label}\n            </button>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiTagCloud — 汎用タグクラウド。\n * tags 配列 ([{ label, weight }]) を重みに応じた文字サイズ・濃さで表示する。\n * タグクリックで select イベント (detail.label) を発火する。\n */\nexport default class UiTagCloud extends LightningElement {\n    _tags = [];\n\n    /** [{ label, weight }] の配列 */\n    @api\n    get tags() {\n        return this._tags;\n    }\n    set tags(value) {\n        this._tags = Array.isArray(value) ? value : [];\n    }\n\n    get computedTags() {\n        const weights = this._tags.map((t) => Number(t.weight) || 1);\n        const max = Math.max(1, ...weights);\n        const min = Math.min(...weights, max);\n        const range = max - min || 1;\n        return this._tags.map((t, i) => {\n            const w = Number(t.weight) || 1;\n            const ratio = (w - min) / range;\n            const size = (0.75 + ratio * 0.95).toFixed(2);\n            const opacity = (0.55 + ratio * 0.45).toFixed(2);\n            return {\n                key: i,\n                label: t.label,\n                style: `font-size: ${size}rem; opacity: ${opacity};`\n            };\n        });\n    }\n\n    handleClick(event) {\n        const label = event.currentTarget.dataset.label;\n        this.dispatchEvent(new CustomEvent('select', { detail: { label } }));\n    }\n}\n",
+        "css": ".ui-tagcloud {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 6px 12px;\n    line-height: 1.4;\n}\n\n.ui-tagcloud__tag {\n    border: none;\n    background: transparent;\n    color: #0176d3;\n    cursor: pointer;\n    padding: 2px 2px;\n    font-family: inherit;\n    font-weight: 600;\n    transition: color 0.12s ease;\n}\n.ui-tagcloud__tag:hover {\n    color: #014486;\n    text-decoration: underline;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Tag Cloud</masterLabel>\n    <description>汎用タグクラウド。重みに応じた文字サイズで表示し select を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]
