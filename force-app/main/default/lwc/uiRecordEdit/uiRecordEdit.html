@@ -1,0 +1,27 @@
+<template>
+    <div class="ui-recedit">
+        <header lwc:if={title} class="ui-recedit__header">{title}</header>
+        <lightning-record-edit-form
+            record-id={recordId}
+            object-api-name={objectApiName}
+            onsuccess={handleSuccess}
+        >
+            <lightning-messages></lightning-messages>
+            <div class="ui-recedit__grid">
+                <template for:each={fieldList} for:item="f">
+                    <lightning-input-field
+                        key={f}
+                        field-name={f}
+                    ></lightning-input-field>
+                </template>
+            </div>
+            <div class="ui-recedit__actions">
+                <lightning-button
+                    variant="brand"
+                    type="submit"
+                    label="保存"
+                ></lightning-button>
+            </div>
+        </lightning-record-edit-form>
+    </div>
+</template>

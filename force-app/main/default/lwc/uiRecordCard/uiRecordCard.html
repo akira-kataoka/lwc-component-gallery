@@ -1,0 +1,25 @@
+<template>
+    <article class="ui-reccard">
+        <header class="ui-reccard__header">
+            <lightning-icon
+                icon-name={iconName}
+                size="small"
+                class="ui-reccard__icon"
+            ></lightning-icon>
+            <h2 class="ui-reccard__title">{title}</h2>
+        </header>
+        <div class="ui-reccard__body">
+            <template lwc:if={hasData}>
+                <template for:each={rows} for:item="row">
+                    <div key={row.key} class="ui-reccard__row">
+                        <span class="ui-reccard__label">{row.label}</span>
+                        <span class="ui-reccard__value">{row.value}</span>
+                    </div>
+                </template>
+            </template>
+            <template lwc:else>
+                <div class="ui-reccard__empty">レコードを読み込み中…</div>
+            </template>
+        </div>
+    </article>
+</template>

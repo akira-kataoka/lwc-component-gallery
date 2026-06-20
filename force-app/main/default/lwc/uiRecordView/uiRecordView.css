@@ -1,0 +1,34 @@
+.ui-recview {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 14px 16px;
+}
+
+.ui-recview__header {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #181818;
+    margin-bottom: 10px;
+}
+
+.ui-recview__grid {
+    display: grid;
+    gap: 12px 20px;
+}
+
+/* ギャラリーのモック表示用 */
+.ui-recview__field {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+.ui-recview__flabel {
+    font-size: 0.72rem;
+    color: #706e6b;
+    font-weight: 600;
+}
+.ui-recview__fvalue {
+    font-size: 0.875rem;
+    color: #181818;
+}

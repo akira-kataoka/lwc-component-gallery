@@ -1,0 +1,14 @@
+<template>
+    <ol class="ui-path">
+        <template for:each={computedSteps} for:item="step">
+            <li
+                key={step.key}
+                class={step.cssClass}
+                data-step={step.label}
+                onclick={handleSelect}
+            >
+                <span class="ui-path__label">{step.label}</span>
+            </li>
+        </template>
+    </ol>
+</template>

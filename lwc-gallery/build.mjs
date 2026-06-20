@@ -2023,6 +2023,94 @@ const COMPONENTS = [
         ],
         events: [],
         usage: `<c-ui-goal-progress label="月間目標" current="820000" target="1000000"></c-ui-goal-progress>`
+    },
+    {
+        id: 'uiRecordCard',
+        title: 'UI Record Card',
+        icon: '🪪',
+        category: 'レコード',
+        demo: 'recordcard',
+        description:
+            'recordId・objectApiName・fields から getRecord ワイヤでレコードを取得し、アイコン付きカードにフィールドを並べる。Record ページ向け。（プレビューはサンプル値）',
+        props: [
+            { name: 'record-id', type: 'String', def: '—', desc: 'レコード Id' },
+            { name: 'object-api-name', type: 'String', def: '—', desc: 'オブジェクト API 名' },
+            {
+                name: 'fields',
+                type: 'String',
+                def: "''",
+                desc: 'カンマ区切りの修飾フィールド名（例: Account.Name,Account.Phone）'
+            },
+            { name: 'icon-name', type: 'String', def: "'standard:record'", desc: 'ヘッダアイコン' },
+            { name: 'title', type: 'String', def: '—', desc: 'カードタイトル' }
+        ],
+        events: [],
+        usage: `<c-ui-record-card record-id={recordId} object-api-name="Account" title="取引先" fields="Account.Name,Account.Phone,Account.Industry"></c-ui-record-card>`
+    },
+    {
+        id: 'uiRecordView',
+        title: 'UI Record View',
+        icon: '📑',
+        category: 'レコード',
+        demo: 'recordview',
+        description:
+            'lightning-record-view-form で fields を読み取り専用のラベル付き列組みで表示する。（プレビューはサンプル値）',
+        props: [
+            { name: 'record-id', type: 'String', def: '—', desc: 'レコード Id' },
+            { name: 'object-api-name', type: 'String', def: '—', desc: 'オブジェクト API 名' },
+            {
+                name: 'fields',
+                type: 'String',
+                def: "''",
+                desc: 'カンマ区切りのフィールド API 名（例: Name,Phone,Industry）'
+            },
+            { name: 'title', type: 'String', def: '—', desc: 'ヘッダタイトル' },
+            { name: 'columns', type: 'Number', def: '2', desc: '列数' }
+        ],
+        events: [],
+        usage: `<c-ui-record-view record-id={recordId} object-api-name="Account" fields="Name,Phone,Industry,AnnualRevenue"></c-ui-record-view>`
+    },
+    {
+        id: 'uiRecordEdit',
+        title: 'UI Record Edit',
+        icon: '✍️',
+        category: 'レコード',
+        demo: 'recordedit',
+        description:
+            'lightning-record-edit-form で fields を編集・保存し、成功時に saved イベントとトーストを発火する。（プレビューはサンプル値）',
+        props: [
+            { name: 'record-id', type: 'String', def: '—', desc: 'レコード Id（新規時は省略）' },
+            { name: 'object-api-name', type: 'String', def: '—', desc: 'オブジェクト API 名' },
+            {
+                name: 'fields',
+                type: 'String',
+                def: "''",
+                desc: 'カンマ区切りのフィールド API 名'
+            },
+            { name: 'title', type: 'String', def: '—', desc: 'ヘッダタイトル' }
+        ],
+        events: [{ name: 'saved', desc: '保存成功時に発火（detail.recordId）' }],
+        usage: `<c-ui-record-edit record-id={recordId} object-api-name="Account" fields="Name,Phone,Industry" onsaved={handleSaved}></c-ui-record-edit>`
+    },
+    {
+        id: 'uiRecordPath',
+        title: 'UI Record Path',
+        icon: '🛣️',
+        category: 'レコード',
+        demo: 'recordpath',
+        description:
+            'steps と current から Salesforce Path 風のシェブロン表示を生成する。商談ステージや状況の可視化に。クリックで select イベントを発火。',
+        props: [
+            {
+                name: 'steps',
+                type: 'String',
+                def: "''",
+                desc: 'カンマ区切りのステップ名'
+            },
+            { name: 'current', type: 'String', def: '—', desc: '現在のステップ名' }
+        ],
+        events: [{ name: 'select', desc: 'ステップクリックで発火（detail.step）' }],
+        usage: `<c-ui-record-path steps="見込,提案,交渉,受注" current="提案" onselect={handleSelect}></c-ui-record-path>`
     }
 ];
 
@@ -2120,7 +2208,11 @@ const JA_NAMES = {
     uiMetricCard: '指標カード',
     uiDonutChart: 'ドーナツチャート',
     uiActivityFeed: 'アクティビティフィード',
-    uiGoalProgress: '目標プログレス'
+    uiGoalProgress: '目標プログレス',
+    uiRecordCard: 'レコードカード',
+    uiRecordView: 'レコード表示',
+    uiRecordEdit: 'レコード編集',
+    uiRecordPath: 'レコードパス'
 };
 
 const FILE_KEYS = [

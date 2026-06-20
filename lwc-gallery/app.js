@@ -2730,6 +2730,98 @@
                 );
             });
             box.appendChild(col);
+        },
+
+        recordcard(box, controls) {
+            const rows = [['Name', '株式会社サンプル商事'], ['Phone', '03-1234-5678'], ['Industry', '製造業'], ['AnnualRevenue', '¥1,200,000,000']];
+            const body = el('div', { class: 'ui-reccard__body' });
+            rows.forEach((r) => {
+                body.appendChild(
+                    el('div', { class: 'ui-reccard__row' }, [
+                        el('span', { class: 'ui-reccard__label', text: r[0] }),
+                        el('span', { class: 'ui-reccard__value', text: r[1] })
+                    ])
+                );
+            });
+            box.appendChild(
+                el('article', { class: 'ui-reccard' }, [
+                    el('header', { class: 'ui-reccard__header' }, [
+                        el('span', { style: 'font-size:1.2rem', text: '🏢' }),
+                        el('h2', { class: 'ui-reccard__title', text: '取引先' })
+                    ]),
+                    body
+                ])
+            );
+            controls.appendChild(el('span', { class: 'demo__out', text: '実データは Record ページのレコードから getRecord で取得' }));
+        },
+
+        recordview(box, controls) {
+            const fields = [['取引先名', '株式会社サンプル商事'], ['電話', '03-1234-5678'], ['業種', '製造業'], ['年間売上', '¥1,200,000,000'], ['Webサイト', 'example.co.jp'], ['従業員数', '1,200']];
+            const grid = el('div', { class: 'ui-recview__grid', style: 'grid-template-columns:repeat(2,1fr)' });
+            fields.forEach((f) => {
+                grid.appendChild(
+                    el('div', { class: 'ui-recview__field' }, [
+                        el('span', { class: 'ui-recview__flabel', text: f[0] }),
+                        el('span', { class: 'ui-recview__fvalue', text: f[1] })
+                    ])
+                );
+            });
+            box.appendChild(el('div', { class: 'ui-recview', style: 'max-width:440px' }, [
+                el('header', { class: 'ui-recview__header', text: '取引先の詳細' }),
+                grid
+            ]));
+            controls.appendChild(el('span', { class: 'demo__out', text: '実体は lightning-record-view-form（プレビューはモック）' }));
+        },
+
+        recordedit(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '保存は Record ページで有効' });
+            const fields = [['取引先名', '株式会社サンプル商事'], ['電話', '03-1234-5678'], ['業種', '製造業']];
+            const grid = el('div', { class: 'ui-recedit__grid' });
+            fields.forEach((f) => {
+                const inp = el('input', { class: 'ui-recedit__mockinput', type: 'text', value: f[1] });
+                grid.appendChild(el('div', { class: 'ui-recedit__mockfield' }, [
+                    el('span', { class: 'ui-recedit__mocklabel', text: f[0] }),
+                    inp
+                ]));
+            });
+            const saveBtn = el('button', { class: 'ui-button ui-button_brand' }, [
+                el('span', { class: 'ui-button__label', text: '保存' })
+            ]);
+            saveBtn.addEventListener('click', () => {
+                out.textContent = '保存しました（デモ）';
+            });
+            box.appendChild(el('div', { class: 'ui-recedit', style: 'max-width:360px' }, [
+                el('header', { class: 'ui-recedit__header', text: '取引先を編集' }),
+                grid,
+                el('div', { class: 'ui-recedit__actions' }, [saveBtn])
+            ]));
+            controls.appendChild(out);
+        },
+
+        recordpath(box, controls) {
+            const steps = ['見込', '提案', '交渉', '受注', 'クローズ'];
+            let current = '交渉';
+            const out = el('span', { class: 'demo__out', text: '現在: 交渉' });
+            const ol = el('ol', { class: 'ui-path', style: 'width:100%;max-width:520px' });
+            function render() {
+                ol.innerHTML = '';
+                const ci = steps.indexOf(current);
+                steps.forEach((s, i) => {
+                    const state = i < ci ? 'complete' : i === ci ? 'current' : 'upcoming';
+                    const li = el('li', { class: 'ui-path__step ui-path__step_' + state }, [
+                        el('span', { class: 'ui-path__label', text: s })
+                    ]);
+                    li.addEventListener('click', () => {
+                        current = s;
+                        out.textContent = '現在: ' + s;
+                        render();
+                    });
+                    ol.appendChild(li);
+                });
+            }
+            render();
+            box.appendChild(ol);
+            controls.appendChild(out);
         }
     };
 

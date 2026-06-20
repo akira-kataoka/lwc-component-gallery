@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T08:33:27.497Z",
+  "generatedAt": "2026-06-20T08:43:27.207Z",
   "components": [
     {
       "id": "uiBadge",
@@ -3545,6 +3545,188 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiGoalProgress — 汎用目標プログレス。\n * current / target の達成度をバーと割合で表示するダッシュボード向け部品。\n */\nexport default class UiGoalProgress extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 現在値 */\n    @api current = 0;\n    /** 目標値 */\n    @api target = 100;\n\n    get ratio() {\n        const target = Number(this.target) || 1;\n        const cur = Number(this.current) || 0;\n        return Math.min(1, Math.max(0, cur / target));\n    }\n\n    get pctText() {\n        return `${Math.round(this.ratio * 100)}%`;\n    }\n\n    get barStyle() {\n        return `width: ${Math.round(this.ratio * 100)}%`;\n    }\n\n    get fillClass() {\n        return this.ratio >= 1\n            ? 'ui-goal__fill ui-goal__fill_done'\n            : 'ui-goal__fill';\n    }\n\n    get valueText() {\n        const cur = Number(this.current) || 0;\n        const target = Number(this.target) || 0;\n        return `${cur.toLocaleString('ja-JP')} / ${target.toLocaleString('ja-JP')}`;\n    }\n}\n",
         "css": ".ui-goal {\n    display: flex;\n    flex-direction: column;\n    gap: 6px;\n    width: 100%;\n    max-width: 320px;\n}\n\n.ui-goal__head {\n    display: flex;\n    justify-content: space-between;\n    align-items: baseline;\n}\n\n.ui-goal__label {\n    font-size: 0.82rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-goal__pct {\n    font-size: 1rem;\n    font-weight: 800;\n    color: #0176d3;\n}\n\n.ui-goal__track {\n    height: 10px;\n    background: #ececec;\n    border-radius: 5px;\n    overflow: hidden;\n}\n\n.ui-goal__fill {\n    height: 100%;\n    background: #0176d3;\n    border-radius: 5px;\n    transition: width 0.35s ease;\n}\n.ui-goal__fill_done {\n    background: #2e844a;\n}\n\n.ui-goal__value {\n    font-size: 0.75rem;\n    color: #706e6b;\n    text-align: right;\n    font-variant-numeric: tabular-nums;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Goal Progress</masterLabel>\n    <description>汎用目標プログレス。current/targetの達成度をバーと割合で表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiRecordCard",
+      "title": "UI Record Card",
+      "icon": "🪪",
+      "category": "レコード",
+      "demo": "recordcard",
+      "description": "recordId・objectApiName・fields から getRecord ワイヤでレコードを取得し、アイコン付きカードにフィールドを並べる。Record ページ向け。（プレビューはサンプル値）",
+      "props": [
+        {
+          "name": "record-id",
+          "type": "String",
+          "def": "—",
+          "desc": "レコード Id"
+        },
+        {
+          "name": "object-api-name",
+          "type": "String",
+          "def": "—",
+          "desc": "オブジェクト API 名"
+        },
+        {
+          "name": "fields",
+          "type": "String",
+          "def": "''",
+          "desc": "カンマ区切りの修飾フィールド名（例: Account.Name,Account.Phone）"
+        },
+        {
+          "name": "icon-name",
+          "type": "String",
+          "def": "'standard:record'",
+          "desc": "ヘッダアイコン"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "カードタイトル"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-record-card record-id={recordId} object-api-name=\"Account\" title=\"取引先\" fields=\"Account.Name,Account.Phone,Account.Industry\"></c-ui-record-card>",
+      "ja": "レコードカード",
+      "files": {
+        "html": "<template>\n    <article class=\"ui-reccard\">\n        <header class=\"ui-reccard__header\">\n            <lightning-icon\n                icon-name={iconName}\n                size=\"small\"\n                class=\"ui-reccard__icon\"\n            ></lightning-icon>\n            <h2 class=\"ui-reccard__title\">{title}</h2>\n        </header>\n        <div class=\"ui-reccard__body\">\n            <template lwc:if={hasData}>\n                <template for:each={rows} for:item=\"row\">\n                    <div key={row.key} class=\"ui-reccard__row\">\n                        <span class=\"ui-reccard__label\">{row.label}</span>\n                        <span class=\"ui-reccard__value\">{row.value}</span>\n                    </div>\n                </template>\n            </template>\n            <template lwc:else>\n                <div class=\"ui-reccard__empty\">レコードを読み込み中…</div>\n            </template>\n        </div>\n    </article>\n</template>\n",
+        "js": "import { LightningElement, api, wire } from 'lwc';\nimport { getRecord, getFieldDisplayValue } from 'lightning/uiRecordApi';\n\n/**\n * uiRecordCard — レコードカード。\n * recordId と objectApiName、fields（カンマ区切りの修飾フィールド名）から\n * getRecord ワイヤでレコードを取得し、アイコン付きカードにフィールドを並べる。\n *\n * 例: fields=\"Account.Name,Account.Phone,Account.Industry\"\n */\nexport default class UiRecordCard extends LightningElement {\n    /** レコード Id */\n    @api recordId;\n    /** オブジェクト API 名（例: Account） */\n    @api objectApiName;\n    /** カンマ区切りの修飾フィールド名 */\n    @api fields = '';\n    /** ヘッダアイコン（lightning-icon 名） */\n    @api iconName = 'standard:record';\n    /** カードタイトル */\n    @api title;\n\n    get fieldList() {\n        return this.fields\n            ? this.fields.split(',').map((f) => f.trim()).filter((f) => f)\n            : [];\n    }\n\n    @wire(getRecord, { recordId: '$recordId', fields: '$fieldList' })\n    record;\n\n    get hasData() {\n        return !!(this.record && this.record.data);\n    }\n\n    get rows() {\n        if (!this.hasData) {\n            return [];\n        }\n        return this.fieldList.map((f) => {\n            const apiName = f.split('.').pop();\n            const label = apiName\n                .replace(/__c$/, '')\n                .replace(/_/g, ' ');\n            return {\n                key: f,\n                label,\n                value: getFieldDisplayValue(this.record.data, f)\n            };\n        });\n    }\n}\n",
+        "css": ".ui-reccard {\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    overflow: hidden;\n    min-width: 240px;\n}\n\n.ui-reccard__header {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    padding: 12px 16px;\n    border-bottom: 1px solid #ececec;\n    background: #fafaf9;\n}\n\n.ui-reccard__title {\n    margin: 0;\n    font-size: 0.95rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-reccard__body {\n    padding: 8px 16px 14px;\n}\n\n.ui-reccard__row {\n    display: flex;\n    flex-direction: column;\n    gap: 1px;\n    padding: 7px 0;\n    border-bottom: 1px solid #f3f3f3;\n}\n.ui-reccard__row:last-child {\n    border-bottom: none;\n}\n\n.ui-reccard__label {\n    font-size: 0.72rem;\n    color: #706e6b;\n    font-weight: 600;\n}\n\n.ui-reccard__value {\n    font-size: 0.875rem;\n    color: #181818;\n}\n\n.ui-reccard__empty {\n    padding: 12px 0;\n    font-size: 0.82rem;\n    color: #969492;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Record Card</masterLabel>\n    <description>レコードカード。getRecordワイヤでフィールドを取得しカード表示。</description>\n    <targets>\n        <target>lightning__RecordPage</target>\n        <target>lightning__AppPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiRecordView",
+      "title": "UI Record View",
+      "icon": "📑",
+      "category": "レコード",
+      "demo": "recordview",
+      "description": "lightning-record-view-form で fields を読み取り専用のラベル付き列組みで表示する。（プレビューはサンプル値）",
+      "props": [
+        {
+          "name": "record-id",
+          "type": "String",
+          "def": "—",
+          "desc": "レコード Id"
+        },
+        {
+          "name": "object-api-name",
+          "type": "String",
+          "def": "—",
+          "desc": "オブジェクト API 名"
+        },
+        {
+          "name": "fields",
+          "type": "String",
+          "def": "''",
+          "desc": "カンマ区切りのフィールド API 名（例: Name,Phone,Industry）"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "ヘッダタイトル"
+        },
+        {
+          "name": "columns",
+          "type": "Number",
+          "def": "2",
+          "desc": "列数"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-record-view record-id={recordId} object-api-name=\"Account\" fields=\"Name,Phone,Industry,AnnualRevenue\"></c-ui-record-view>",
+      "ja": "レコード表示",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-recview\">\n        <header lwc:if={title} class=\"ui-recview__header\">{title}</header>\n        <lightning-record-view-form\n            record-id={recordId}\n            object-api-name={objectApiName}\n        >\n            <div class=\"ui-recview__grid\" style={gridStyle}>\n                <template for:each={fieldList} for:item=\"f\">\n                    <lightning-output-field\n                        key={f}\n                        field-name={f}\n                    ></lightning-output-field>\n                </template>\n            </div>\n        </lightning-record-view-form>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiRecordView — レコード表示フォーム。\n * lightning-record-view-form を使い、fields（カンマ区切り API 名）を\n * 読み取り専用のラベル付きで列組み表示する。\n *\n * 例: fields=\"Name,Phone,Industry,AnnualRevenue\"\n */\nexport default class UiRecordView extends LightningElement {\n    /** レコード Id */\n    @api recordId;\n    /** オブジェクト API 名 */\n    @api objectApiName;\n    /** カンマ区切りのフィールド API 名 */\n    @api fields = '';\n    /** ヘッダタイトル（任意） */\n    @api title;\n    /** 列数 */\n    @api columns = 2;\n\n    get fieldList() {\n        return this.fields\n            ? this.fields.split(',').map((f) => f.trim()).filter((f) => f)\n            : [];\n    }\n\n    get gridStyle() {\n        const cols = Number(this.columns) || 2;\n        return `grid-template-columns: repeat(${cols}, 1fr);`;\n    }\n}\n",
+        "css": ".ui-recview {\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    padding: 14px 16px;\n}\n\n.ui-recview__header {\n    font-size: 0.95rem;\n    font-weight: 700;\n    color: #181818;\n    margin-bottom: 10px;\n}\n\n.ui-recview__grid {\n    display: grid;\n    gap: 12px 20px;\n}\n\n/* ギャラリーのモック表示用 */\n.ui-recview__field {\n    display: flex;\n    flex-direction: column;\n    gap: 1px;\n}\n.ui-recview__flabel {\n    font-size: 0.72rem;\n    color: #706e6b;\n    font-weight: 600;\n}\n.ui-recview__fvalue {\n    font-size: 0.875rem;\n    color: #181818;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Record View</masterLabel>\n    <description>レコード表示フォーム。record-view-formでフィールドを読み取り表示。</description>\n    <targets>\n        <target>lightning__RecordPage</target>\n        <target>lightning__AppPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiRecordEdit",
+      "title": "UI Record Edit",
+      "icon": "✍️",
+      "category": "レコード",
+      "demo": "recordedit",
+      "description": "lightning-record-edit-form で fields を編集・保存し、成功時に saved イベントとトーストを発火する。（プレビューはサンプル値）",
+      "props": [
+        {
+          "name": "record-id",
+          "type": "String",
+          "def": "—",
+          "desc": "レコード Id（新規時は省略）"
+        },
+        {
+          "name": "object-api-name",
+          "type": "String",
+          "def": "—",
+          "desc": "オブジェクト API 名"
+        },
+        {
+          "name": "fields",
+          "type": "String",
+          "def": "''",
+          "desc": "カンマ区切りのフィールド API 名"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "def": "—",
+          "desc": "ヘッダタイトル"
+        }
+      ],
+      "events": [
+        {
+          "name": "saved",
+          "desc": "保存成功時に発火（detail.recordId）"
+        }
+      ],
+      "usage": "<c-ui-record-edit record-id={recordId} object-api-name=\"Account\" fields=\"Name,Phone,Industry\" onsaved={handleSaved}></c-ui-record-edit>",
+      "ja": "レコード編集",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-recedit\">\n        <header lwc:if={title} class=\"ui-recedit__header\">{title}</header>\n        <lightning-record-edit-form\n            record-id={recordId}\n            object-api-name={objectApiName}\n            onsuccess={handleSuccess}\n        >\n            <lightning-messages></lightning-messages>\n            <div class=\"ui-recedit__grid\">\n                <template for:each={fieldList} for:item=\"f\">\n                    <lightning-input-field\n                        key={f}\n                        field-name={f}\n                    ></lightning-input-field>\n                </template>\n            </div>\n            <div class=\"ui-recedit__actions\">\n                <lightning-button\n                    variant=\"brand\"\n                    type=\"submit\"\n                    label=\"保存\"\n                ></lightning-button>\n            </div>\n        </lightning-record-edit-form>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\nimport { ShowToastEvent } from 'lightning/platformShowToastEvent';\n\n/**\n * uiRecordEdit — レコード編集フォーム。\n * lightning-record-edit-form で fields（カンマ区切り API 名）を編集し、\n * 保存に成功すると saved イベント (detail.recordId) とトーストを発火する。\n *\n * 例: fields=\"Name,Phone,Industry\"\n */\nexport default class UiRecordEdit extends LightningElement {\n    /** レコード Id（新規作成時は省略） */\n    @api recordId;\n    /** オブジェクト API 名 */\n    @api objectApiName;\n    /** カンマ区切りのフィールド API 名 */\n    @api fields = '';\n    /** ヘッダタイトル（任意） */\n    @api title;\n\n    get fieldList() {\n        return this.fields\n            ? this.fields.split(',').map((f) => f.trim()).filter((f) => f)\n            : [];\n    }\n\n    handleSuccess(event) {\n        const id = event.detail.id;\n        this.dispatchEvent(\n            new ShowToastEvent({\n                title: '保存しました',\n                variant: 'success'\n            })\n        );\n        this.dispatchEvent(\n            new CustomEvent('saved', { detail: { recordId: id } })\n        );\n    }\n}\n",
+        "css": ".ui-recedit {\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    padding: 14px 16px;\n}\n\n.ui-recedit__header {\n    font-size: 0.95rem;\n    font-weight: 700;\n    color: #181818;\n    margin-bottom: 10px;\n}\n\n.ui-recedit__grid {\n    display: flex;\n    flex-direction: column;\n    gap: 8px;\n}\n\n.ui-recedit__actions {\n    display: flex;\n    justify-content: flex-end;\n    margin-top: 14px;\n}\n\n/* ギャラリーのモック表示用 */\n.ui-recedit__mockfield {\n    display: flex;\n    flex-direction: column;\n    gap: 3px;\n}\n.ui-recedit__mocklabel {\n    font-size: 0.72rem;\n    color: #706e6b;\n    font-weight: 600;\n}\n.ui-recedit__mockinput {\n    height: 32px;\n    border: 1px solid #c9c9c9;\n    border-radius: 4px;\n    padding: 0 10px;\n    font-size: 0.85rem;\n    color: #181818;\n    background: #ffffff;\n    font-family: inherit;\n}\n.ui-recedit__mockinput:focus {\n    outline: none;\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Record Edit</masterLabel>\n    <description>レコード編集フォーム。record-edit-formで編集・保存し saved を発火。</description>\n    <targets>\n        <target>lightning__RecordPage</target>\n        <target>lightning__AppPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiRecordPath",
+      "title": "UI Record Path",
+      "icon": "🛣️",
+      "category": "レコード",
+      "demo": "recordpath",
+      "description": "steps と current から Salesforce Path 風のシェブロン表示を生成する。商談ステージや状況の可視化に。クリックで select イベントを発火。",
+      "props": [
+        {
+          "name": "steps",
+          "type": "String",
+          "def": "''",
+          "desc": "カンマ区切りのステップ名"
+        },
+        {
+          "name": "current",
+          "type": "String",
+          "def": "—",
+          "desc": "現在のステップ名"
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "desc": "ステップクリックで発火（detail.step）"
+        }
+      ],
+      "usage": "<c-ui-record-path steps=\"見込,提案,交渉,受注\" current=\"提案\" onselect={handleSelect}></c-ui-record-path>",
+      "ja": "レコードパス",
+      "files": {
+        "html": "<template>\n    <ol class=\"ui-path\">\n        <template for:each={computedSteps} for:item=\"step\">\n            <li\n                key={step.key}\n                class={step.cssClass}\n                data-step={step.label}\n                onclick={handleSelect}\n            >\n                <span class=\"ui-path__label\">{step.label}</span>\n            </li>\n        </template>\n    </ol>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiRecordPath — レコードパス（ステータスパス）。\n * steps（カンマ区切り）と current（現在のステップ名）から、Salesforce Path 風の\n * シェブロン表示を生成する。ステップクリックで select イベント (detail.step) を発火。\n * Record ページの商談ステージや状況の可視化に使う。\n */\nexport default class UiRecordPath extends LightningElement {\n    /** カンマ区切りのステップ名 */\n    @api steps = '';\n    /** 現在のステップ名 */\n    @api current;\n\n    get stepList() {\n        return this.steps\n            ? this.steps.split(',').map((s) => s.trim()).filter((s) => s)\n            : [];\n    }\n\n    get computedSteps() {\n        const list = this.stepList;\n        const curIndex = list.indexOf(this.current);\n        return list.map((label, i) => {\n            let state = 'upcoming';\n            if (curIndex >= 0 && i < curIndex) {\n                state = 'complete';\n            } else if (i === curIndex) {\n                state = 'current';\n            }\n            return {\n                key: label,\n                label,\n                cssClass: `ui-path__step ui-path__step_${state}`\n            };\n        });\n    }\n\n    handleSelect(event) {\n        const step = event.currentTarget.dataset.step;\n        this.dispatchEvent(new CustomEvent('select', { detail: { step } }));\n    }\n}\n",
+        "css": ".ui-path {\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style: none;\n    width: 100%;\n}\n\n.ui-path__step {\n    position: relative;\n    flex: 1;\n    height: 34px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background: #ececec;\n    color: #514f4d;\n    font-size: 0.78rem;\n    font-weight: 600;\n    cursor: pointer;\n    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%, 12px 50%);\n    margin-left: -8px;\n    padding-left: 8px;\n}\n.ui-path__step:first-child {\n    margin-left: 0;\n    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);\n    padding-left: 0;\n}\n\n.ui-path__step:hover {\n    filter: brightness(0.96);\n}\n\n.ui-path__step_complete {\n    background: #c5e0c8;\n    color: #1d7a3f;\n}\n\n.ui-path__step_current {\n    background: #0176d3;\n    color: #ffffff;\n}\n\n.ui-path__label {\n    padding: 0 6px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Record Path</masterLabel>\n    <description>レコードパス。商談ステージ等をSalesforce Path風シェブロンで表示。</description>\n    <targets>\n        <target>lightning__RecordPage</target>\n        <target>lightning__AppPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]
