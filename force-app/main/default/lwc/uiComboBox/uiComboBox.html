@@ -1,0 +1,29 @@
+<template>
+    <div class="ui-combo" onfocusout={handleFocusOut}>
+        <label lwc:if={label} class="ui-combo__label">{label}</label>
+        <input
+            class="ui-combo__input"
+            type="text"
+            value={query}
+            placeholder={placeholder}
+            oninput={handleInput}
+            onfocus={handleFocus}
+        />
+        <ul lwc:if={open} class="ui-combo__menu" role="listbox">
+            <template for:each={filtered} for:item="opt">
+                <li key={opt.value} role="none">
+                    <button
+                        class="ui-combo__item"
+                        type="button"
+                        role="option"
+                        data-value={opt.value}
+                        onclick={handleSelect}
+                    >
+                        {opt.label}
+                    </button>
+                </li>
+            </template>
+            <li lwc:if={isEmpty} class="ui-combo__empty">該当なし</li>
+        </ul>
+    </div>
+</template>

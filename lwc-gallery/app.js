@@ -2414,6 +2414,146 @@
                     ])
                 );
             });
+        },
+
+        passwordinput(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '文字数: 0' });
+            let shown = false;
+            const input = el('input', { class: 'ui-password__input', type: 'password', placeholder: 'パスワード' });
+            const toggle = el('button', { class: 'ui-password__toggle', type: 'button', title: '表示切替', text: '👁️' });
+            toggle.addEventListener('click', () => {
+                shown = !shown;
+                input.type = shown ? 'text' : 'password';
+                toggle.textContent = shown ? '🙈' : '👁️';
+            });
+            input.addEventListener('input', () => {
+                out.textContent = '文字数: ' + input.value.length;
+            });
+            box.appendChild(
+                el('div', { class: 'ui-password', style: 'max-width:240px' }, [
+                    el('label', { class: 'ui-password__label', text: 'パスワード' }),
+                    el('div', { class: 'ui-password__field' }, [input, toggle])
+                ])
+            );
+            controls.appendChild(out);
+        },
+
+        combobox(box, controls) {
+            const opts = ['東京都', '大阪府', '京都府', '北海道', '福岡県', '愛知県', '神奈川県', '千葉県'];
+            const out = el('span', { class: 'demo__out', text: '選択: （なし）' });
+            let open = false;
+            let query = '';
+            const input = el('input', { class: 'ui-combo__input', type: 'text', placeholder: '選択または入力' });
+            const menu = el('ul', { class: 'ui-combo__menu', role: 'listbox', style: 'display:none' });
+            function render() {
+                menu.innerHTML = '';
+                const f = opts.filter((o) => o.toLowerCase().includes(query.toLowerCase()));
+                if (f.length === 0) {
+                    menu.appendChild(el('li', { class: 'ui-combo__empty', text: '該当なし' }));
+                } else {
+                    f.forEach((o) => {
+                        const b = el('button', { class: 'ui-combo__item', type: 'button', text: o });
+                        b.addEventListener('click', () => {
+                            query = o;
+                            input.value = o;
+                            open = false;
+                            menu.style.display = 'none';
+                            out.textContent = '選択: ' + o;
+                        });
+                        menu.appendChild(el('li', {}, [b]));
+                    });
+                }
+                menu.style.display = open ? '' : 'none';
+            }
+            input.addEventListener('input', () => {
+                query = input.value;
+                open = true;
+                render();
+            });
+            input.addEventListener('focus', () => {
+                open = true;
+                render();
+            });
+            const wrap = el('div', { class: 'ui-combo', style: 'max-width:240px;position:relative' }, [input, menu]);
+            wrap.addEventListener('focusout', (e) => {
+                if (open && (!e.relatedTarget || !wrap.contains(e.relatedTarget))) {
+                    open = false;
+                    menu.style.display = 'none';
+                }
+            });
+            render();
+            box.appendChild(wrap);
+            controls.appendChild(out);
+        },
+
+        thermometer(box, controls) {
+            const data = [['brand', 72, 'CPU'], ['warning', 45, 'メモリ'], ['error', 90, 'ディスク']];
+            const fills = [];
+            data.forEach((d) => {
+                const fill = el('div', { class: 'ui-thermo__fill ui-thermo__fill_' + d[0], style: 'height:' + d[1] + '%' });
+                const val = el('span', { class: 'ui-thermo__value', text: d[1] + '%' });
+                box.appendChild(
+                    el('div', { class: 'ui-thermo' }, [
+                        val,
+                        el('div', { class: 'ui-thermo__track' }, [fill]),
+                        el('span', { class: 'ui-thermo__label', text: d[2] })
+                    ])
+                );
+                fills.push({ fill, val });
+            });
+            const range = el('input', { type: 'range', min: '0', max: '100', value: '72' });
+            range.addEventListener('input', () => {
+                const v = Number(range.value);
+                fills[0].fill.style.height = v + '%';
+                fills[0].val.textContent = v + '%';
+            });
+            controls.appendChild(el('span', { text: 'CPU:' }));
+            controls.appendChild(range);
+        },
+
+        confirmdialog(box, controls) {
+            const out = el('span', { class: 'demo__out', text: '結果: —' });
+            const openBtn = el('button', { class: 'ui-button ui-button_destructive' }, [
+                el('span', { class: 'ui-button__label', text: '削除する' })
+            ]);
+            box.appendChild(openBtn);
+            let keyHandler;
+            const close = (ov) => {
+                ov.remove();
+                if (keyHandler) document.removeEventListener('keydown', keyHandler);
+            };
+            openBtn.addEventListener('click', () => {
+                const cancel = el('button', { class: 'ui-confirm__btn ui-confirm__btn_cancel', type: 'button', text: 'キャンセル' });
+                const ok = el('button', { class: 'ui-confirm__btn ui-confirm__btn_destructive', type: 'button', text: '削除' });
+                const dialog = el('section', { class: 'ui-confirm', role: 'alertdialog' }, [
+                    el('h2', { class: 'ui-confirm__header', text: '削除の確認' }),
+                    el('p', { class: 'ui-confirm__message', text: 'このレコードを削除しますか？この操作は元に戻せません。' }),
+                    el('div', { class: 'ui-confirm__footer' }, [cancel, ok])
+                ]);
+                const overlay = el('div', { class: 'ui-confirm-backdrop' }, [dialog]);
+                dialog.addEventListener('click', (e) => e.stopPropagation());
+                overlay.addEventListener('click', () => {
+                    out.textContent = '結果: キャンセル';
+                    close(overlay);
+                });
+                cancel.addEventListener('click', () => {
+                    out.textContent = '結果: キャンセル';
+                    close(overlay);
+                });
+                ok.addEventListener('click', () => {
+                    out.textContent = '結果: 削除を実行';
+                    close(overlay);
+                });
+                keyHandler = (e) => {
+                    if (e.key === 'Escape') {
+                        out.textContent = '結果: キャンセル';
+                        close(overlay);
+                    }
+                };
+                document.addEventListener('keydown', keyHandler);
+                document.body.appendChild(overlay);
+            });
+            controls.appendChild(out);
         }
     };
 

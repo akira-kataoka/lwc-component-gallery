@@ -1,0 +1,9 @@
+<template>
+    <div class="ui-thermo">
+        <span class="ui-thermo__value">{valueText}</span>
+        <div class="ui-thermo__track">
+            <div class={fillClass} style={fillStyle}></div>
+        </div>
+        <span lwc:if={label} class="ui-thermo__label">{label}</span>
+    </div>
+</template>

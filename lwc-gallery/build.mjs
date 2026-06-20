@@ -1779,6 +1779,97 @@ const COMPONENTS = [
         ],
         events: [],
         usage: `<c-ui-loading-dots></c-ui-loading-dots>`
+    },
+    {
+        id: 'uiPasswordInput',
+        title: 'UI Password Input',
+        icon: '🔒',
+        category: 'フォーム',
+        demo: 'passwordinput',
+        description:
+            '目アイコンで表示／非表示を切替えられるパスワード欄。変更時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            { name: 'value', type: 'String', def: "''", desc: '値' },
+            { name: 'placeholder', type: 'String', def: "''", desc: 'プレースホルダ' }
+        ],
+        events: [{ name: 'change', desc: '変更時に発火（detail.value）' }],
+        usage: `<c-ui-password-input label="パスワード" onchange={handleChange}></c-ui-password-input>`
+    },
+    {
+        id: 'uiComboBox',
+        title: 'UI Combo Box',
+        icon: '🔽',
+        category: 'フォーム',
+        demo: 'combobox',
+        description:
+            '入力でリストを絞り込み選択する検索付きセレクト。選択時に change イベント (detail.value) を発火し外側クリックで閉じる。',
+        props: [
+            {
+                name: 'options',
+                type: 'Array',
+                def: '[]',
+                desc: '文字列または { label, value } の配列'
+            },
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            {
+                name: 'placeholder',
+                type: 'String',
+                def: "'選択または入力'",
+                desc: 'プレースホルダ'
+            },
+            { name: 'value', type: 'String', def: '—', desc: '選択値' }
+        ],
+        events: [{ name: 'change', desc: '選択時に発火（detail.value）' }],
+        usage: `<c-ui-combo-box label="都道府県" options={prefs} onchange={handleChange}></c-ui-combo-box>`
+    },
+    {
+        id: 'uiThermometer',
+        title: 'UI Thermometer',
+        icon: '🌡️',
+        category: '表示',
+        demo: 'thermometer',
+        description:
+            '0〜100 の値を下から積み上がる縦バーで表示する縦型メーター。',
+        props: [
+            { name: 'value', type: 'Number', def: '0', desc: '値 0〜100' },
+            { name: 'label', type: 'String', def: '—', desc: 'ラベル' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: 'brand | success | warning | error'
+            }
+        ],
+        events: [],
+        usage: `<c-ui-thermometer value="72" label="達成"></c-ui-thermometer>`
+    },
+    {
+        id: 'uiConfirmDialog',
+        title: 'UI Confirm Dialog',
+        icon: '❓',
+        category: 'オーバーレイ',
+        demo: 'confirmdialog',
+        description:
+            'open で表示する確定／取消つきの小型モーダル。確定で confirm、取消・背景・Esc で cancel を発火。',
+        props: [
+            { name: 'header', type: 'String', def: "'確認'", desc: 'ヘッダ' },
+            { name: 'message', type: 'String', def: '—', desc: 'メッセージ本文' },
+            { name: 'open', type: 'Boolean', def: 'false', desc: 'true で表示' },
+            {
+                name: 'variant',
+                type: 'String',
+                def: "'brand'",
+                desc: '確定ボタン: brand | destructive'
+            },
+            { name: 'confirm-label', type: 'String', def: "'OK'", desc: '確定ラベル' },
+            { name: 'cancel-label', type: 'String', def: "'キャンセル'", desc: '取消ラベル' }
+        ],
+        events: [
+            { name: 'confirm', desc: '確定時に発火' },
+            { name: 'cancel', desc: '取消・背景・Esc で発火' }
+        ],
+        usage: `<c-ui-confirm-dialog open={isOpen} message="削除しますか？" variant="destructive" onconfirm={handleOk} oncancel={handleCancel}></c-ui-confirm-dialog>`
     }
 ];
 
@@ -1864,7 +1955,11 @@ const JA_NAMES = {
     uiGauge: 'ゲージ',
     uiTrendBadge: 'トレンドバッジ',
     uiPagerDots: 'ドットページャー',
-    uiLoadingDots: 'ローディングドット'
+    uiLoadingDots: 'ローディングドット',
+    uiPasswordInput: 'パスワード入力',
+    uiComboBox: 'コンボボックス',
+    uiThermometer: 'サーモメーター',
+    uiConfirmDialog: '確認ダイアログ'
 };
 
 const FILE_KEYS = [

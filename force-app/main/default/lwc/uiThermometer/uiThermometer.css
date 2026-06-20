@@ -1,0 +1,47 @@
+.ui-thermo {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.ui-thermo__value {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-thermo__track {
+    position: relative;
+    width: 18px;
+    height: 120px;
+    background: #ececec;
+    border-radius: 9px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.ui-thermo__fill {
+    width: 100%;
+    border-radius: 9px;
+    transition: height 0.35s ease;
+}
+
+.ui-thermo__fill_brand {
+    background: #0176d3;
+}
+.ui-thermo__fill_success {
+    background: #2e844a;
+}
+.ui-thermo__fill_warning {
+    background: #dd7a01;
+}
+.ui-thermo__fill_error {
+    background: #ba0517;
+}
+
+.ui-thermo__label {
+    font-size: 0.72rem;
+    color: #706e6b;
+}

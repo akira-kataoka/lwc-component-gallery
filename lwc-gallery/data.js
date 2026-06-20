@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T07:49:05.293Z",
+  "generatedAt": "2026-06-20T07:59:00.395Z",
   "components": [
     {
       "id": "uiBadge",
@@ -3078,6 +3078,197 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['brand', 'neutral'];\n\n/**\n * uiLoadingDots — 汎用ローディングドット。\n * 3 つのドットが順に弾むローディング表現。スピナーより控えめな読み込み中表示。\n */\nexport default class UiLoadingDots extends LightningElement {\n    /** 色: brand | neutral */\n    @api variant = 'brand';\n    /** スクリーンリーダー向けテキスト */\n    @api alternativeText = '読み込み中';\n\n    get rootClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        return `ui-dots ui-dots_${variant}`;\n    }\n}\n",
         "css": ".ui-dots {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n}\n\n.ui-dots__dot {\n    width: 9px;\n    height: 9px;\n    border-radius: 50%;\n    background: #0176d3;\n    animation: ui-dots-bounce 1.2s ease-in-out infinite;\n}\n\n.ui-dots_neutral .ui-dots__dot {\n    background: #969492;\n}\n\n.ui-dots__dot:nth-child(2) {\n    animation-delay: 0.18s;\n}\n.ui-dots__dot:nth-child(3) {\n    animation-delay: 0.36s;\n}\n\n.ui-dots__assistive {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    overflow: hidden;\n    clip: rect(0 0 0 0);\n    white-space: nowrap;\n}\n\n@keyframes ui-dots-bounce {\n    0%,\n    80%,\n    100% {\n        transform: translateY(0);\n        opacity: 0.5;\n    }\n    40% {\n        transform: translateY(-7px);\n        opacity: 1;\n    }\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Loading Dots</masterLabel>\n    <description>汎用ローディングドット。3つのドットが順に弾む控えめな読み込み表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiPasswordInput",
+      "title": "UI Password Input",
+      "icon": "🔒",
+      "category": "フォーム",
+      "demo": "passwordinput",
+      "description": "目アイコンで表示／非表示を切替えられるパスワード欄。変更時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "''",
+          "desc": "値"
+        },
+        {
+          "name": "placeholder",
+          "type": "String",
+          "def": "''",
+          "desc": "プレースホルダ"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "変更時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-password-input label=\"パスワード\" onchange={handleChange}></c-ui-password-input>",
+      "ja": "パスワード入力",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-password\">\n        <label lwc:if={label} class=\"ui-password__label\">{label}</label>\n        <div class=\"ui-password__field\">\n            <input\n                class=\"ui-password__input\"\n                type={fieldType}\n                value={value}\n                placeholder={placeholder}\n                oninput={handleInput}\n            />\n            <button\n                class=\"ui-password__toggle\"\n                type=\"button\"\n                title=\"表示切替\"\n                onclick={toggle}\n            >\n                {toggleIcon}\n            </button>\n        </div>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiPasswordInput — 汎用パスワード入力。\n * 目アイコンで表示／非表示を切替えられるパスワード欄。変更時に change イベント\n * (detail.value) を発火する。\n */\nexport default class UiPasswordInput extends LightningElement {\n    /** ラベル */\n    @api label;\n    /** 値 */\n    @api value = '';\n    /** プレースホルダ */\n    @api placeholder = '';\n\n    @track shown = false;\n\n    get fieldType() {\n        return this.shown ? 'text' : 'password';\n    }\n\n    get toggleIcon() {\n        return this.shown ? '🙈' : '👁️';\n    }\n\n    handleInput(event) {\n        this.value = event.target.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n\n    toggle() {\n        this.shown = !this.shown;\n    }\n}\n",
+        "css": ".ui-password {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-password__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-password__field {\n    display: flex;\n    align-items: center;\n    height: 34px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    background: #ffffff;\n    overflow: hidden;\n}\n.ui-password__field:focus-within {\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n\n.ui-password__input {\n    flex: 1;\n    border: none;\n    outline: none;\n    height: 100%;\n    padding: 0 0 0 12px;\n    font-size: 0.875rem;\n    color: #181818;\n    font-family: inherit;\n    letter-spacing: 0.06em;\n}\n\n.ui-password__toggle {\n    border: none;\n    background: transparent;\n    cursor: pointer;\n    font-size: 0.95rem;\n    padding: 0 10px;\n    height: 100%;\n}\n.ui-password__toggle:hover {\n    background: #f3f3f3;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Password Input</masterLabel>\n    <description>汎用パスワード入力。目アイコンで表示/非表示を切替え change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiComboBox",
+      "title": "UI Combo Box",
+      "icon": "🔽",
+      "category": "フォーム",
+      "demo": "combobox",
+      "description": "入力でリストを絞り込み選択する検索付きセレクト。選択時に change イベント (detail.value) を発火し外側クリックで閉じる。",
+      "props": [
+        {
+          "name": "options",
+          "type": "Array",
+          "def": "[]",
+          "desc": "文字列または { label, value } の配列"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "placeholder",
+          "type": "String",
+          "def": "'選択または入力'",
+          "desc": "プレースホルダ"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "—",
+          "desc": "選択値"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-combo-box label=\"都道府県\" options={prefs} onchange={handleChange}></c-ui-combo-box>",
+      "ja": "コンボボックス",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-combo\" onfocusout={handleFocusOut}>\n        <label lwc:if={label} class=\"ui-combo__label\">{label}</label>\n        <input\n            class=\"ui-combo__input\"\n            type=\"text\"\n            value={query}\n            placeholder={placeholder}\n            oninput={handleInput}\n            onfocus={handleFocus}\n        />\n        <ul lwc:if={open} class=\"ui-combo__menu\" role=\"listbox\">\n            <template for:each={filtered} for:item=\"opt\">\n                <li key={opt.value} role=\"none\">\n                    <button\n                        class=\"ui-combo__item\"\n                        type=\"button\"\n                        role=\"option\"\n                        data-value={opt.value}\n                        onclick={handleSelect}\n                    >\n                        {opt.label}\n                    </button>\n                </li>\n            </template>\n            <li lwc:if={isEmpty} class=\"ui-combo__empty\">該当なし</li>\n        </ul>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiComboBox — 汎用コンボボックス（検索付きセレクト）。\n * 入力でリストを絞り込み、選択すると change イベント (detail.value) を発火する。\n * 外側へフォーカスが外れるとリストを閉じる。\n */\nexport default class UiComboBox extends LightningElement {\n    _options = [];\n\n    /** 文字列または { label, value } の配列 */\n    @api\n    get options() {\n        return this._options;\n    }\n    set options(value) {\n        this._options = (Array.isArray(value) ? value : []).map((o) =>\n            typeof o === 'string' ? { label: o, value: o } : o\n        );\n    }\n\n    /** ラベル */\n    @api label;\n    /** プレースホルダ */\n    @api placeholder = '選択または入力';\n    /** 選択値 */\n    @api value;\n\n    @track open = false;\n    @track query = '';\n\n    get filtered() {\n        const q = (this.query || '').toLowerCase();\n        return this._options.filter((o) => o.label.toLowerCase().includes(q));\n    }\n\n    get isEmpty() {\n        return this.filtered.length === 0;\n    }\n\n    handleInput(event) {\n        this.query = event.target.value;\n        this.open = true;\n    }\n\n    handleFocus() {\n        this.open = true;\n    }\n\n    handleSelect(event) {\n        const v = event.currentTarget.dataset.value;\n        const option = this._options.find((o) => String(o.value) === v);\n        this.query = option ? option.label : '';\n        this.value = v;\n        this.open = false;\n        this.dispatchEvent(new CustomEvent('change', { detail: { value: v } }));\n    }\n\n    handleFocusOut(event) {\n        if (\n            this.open &&\n            (!event.relatedTarget ||\n                !event.currentTarget.contains(event.relatedTarget))\n        ) {\n            this.open = false;\n        }\n    }\n}\n",
+        "css": ".ui-combo {\n    position: relative;\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n}\n\n.ui-combo__label {\n    font-size: 0.78rem;\n    font-weight: 600;\n    color: #444444;\n}\n\n.ui-combo__input {\n    height: 34px;\n    padding: 0 12px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    font-size: 0.875rem;\n    color: #181818;\n    background: #ffffff;\n    font-family: inherit;\n}\n.ui-combo__input:focus {\n    outline: none;\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n\n.ui-combo__menu {\n    position: absolute;\n    top: 100%;\n    left: 0;\n    right: 0;\n    margin: 4px 0 0;\n    padding: 4px;\n    list-style: none;\n    background: #ffffff;\n    border: 1px solid #e5e5e5;\n    border-radius: 8px;\n    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);\n    max-height: 200px;\n    overflow-y: auto;\n    z-index: 20;\n}\n\n.ui-combo__item {\n    display: block;\n    width: 100%;\n    text-align: left;\n    border: none;\n    background: transparent;\n    padding: 8px 12px;\n    font-size: 0.82rem;\n    color: #181818;\n    border-radius: 6px;\n    cursor: pointer;\n    font-family: inherit;\n}\n.ui-combo__item:hover {\n    background: #f3f9ff;\n    color: #0176d3;\n}\n\n.ui-combo__empty {\n    padding: 8px 12px;\n    font-size: 0.8rem;\n    color: #969492;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Combo Box</masterLabel>\n    <description>汎用コンボボックス。入力で絞り込み、選択で change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiThermometer",
+      "title": "UI Thermometer",
+      "icon": "🌡️",
+      "category": "表示",
+      "demo": "thermometer",
+      "description": "0〜100 の値を下から積み上がる縦バーで表示する縦型メーター。",
+      "props": [
+        {
+          "name": "value",
+          "type": "Number",
+          "def": "0",
+          "desc": "値 0〜100"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "def": "—",
+          "desc": "ラベル"
+        },
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'brand'",
+          "desc": "brand | success | warning | error"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-thermometer value=\"72\" label=\"達成\"></c-ui-thermometer>",
+      "ja": "サーモメーター",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-thermo\">\n        <span class=\"ui-thermo__value\">{valueText}</span>\n        <div class=\"ui-thermo__track\">\n            <div class={fillClass} style={fillStyle}></div>\n        </div>\n        <span lwc:if={label} class=\"ui-thermo__label\">{label}</span>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\nconst VARIANTS = ['brand', 'success', 'warning', 'error'];\n\n/**\n * uiThermometer — 汎用サーモメーター（縦型メーター）。\n * 0〜100 の値を下から積み上がる縦バーで表示する。\n */\nexport default class UiThermometer extends LightningElement {\n    /** 値 0〜100 */\n    @api value = 0;\n    /** ラベル */\n    @api label;\n    /** 色: brand | success | warning | error */\n    @api variant = 'brand';\n\n    get clamped() {\n        const n = Number(this.value);\n        if (Number.isNaN(n)) {\n            return 0;\n        }\n        return Math.min(100, Math.max(0, n));\n    }\n\n    get fillStyle() {\n        return `height: ${this.clamped}%`;\n    }\n\n    get fillClass() {\n        const variant = VARIANTS.includes(this.variant) ? this.variant : 'brand';\n        return `ui-thermo__fill ui-thermo__fill_${variant}`;\n    }\n\n    get valueText() {\n        return `${Math.round(this.clamped)}%`;\n    }\n}\n",
+        "css": ".ui-thermo {\n    display: inline-flex;\n    flex-direction: column;\n    align-items: center;\n    gap: 6px;\n}\n\n.ui-thermo__value {\n    font-size: 0.8rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-thermo__track {\n    position: relative;\n    width: 18px;\n    height: 120px;\n    background: #ececec;\n    border-radius: 9px;\n    overflow: hidden;\n    display: flex;\n    align-items: flex-end;\n}\n\n.ui-thermo__fill {\n    width: 100%;\n    border-radius: 9px;\n    transition: height 0.35s ease;\n}\n\n.ui-thermo__fill_brand {\n    background: #0176d3;\n}\n.ui-thermo__fill_success {\n    background: #2e844a;\n}\n.ui-thermo__fill_warning {\n    background: #dd7a01;\n}\n.ui-thermo__fill_error {\n    background: #ba0517;\n}\n\n.ui-thermo__label {\n    font-size: 0.72rem;\n    color: #706e6b;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Thermometer</masterLabel>\n    <description>汎用サーモメーター。0〜100を下から積み上がる縦バーで表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiConfirmDialog",
+      "title": "UI Confirm Dialog",
+      "icon": "❓",
+      "category": "オーバーレイ",
+      "demo": "confirmdialog",
+      "description": "open で表示する確定／取消つきの小型モーダル。確定で confirm、取消・背景・Esc で cancel を発火。",
+      "props": [
+        {
+          "name": "header",
+          "type": "String",
+          "def": "'確認'",
+          "desc": "ヘッダ"
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "def": "—",
+          "desc": "メッセージ本文"
+        },
+        {
+          "name": "open",
+          "type": "Boolean",
+          "def": "false",
+          "desc": "true で表示"
+        },
+        {
+          "name": "variant",
+          "type": "String",
+          "def": "'brand'",
+          "desc": "確定ボタン: brand | destructive"
+        },
+        {
+          "name": "confirm-label",
+          "type": "String",
+          "def": "'OK'",
+          "desc": "確定ラベル"
+        },
+        {
+          "name": "cancel-label",
+          "type": "String",
+          "def": "'キャンセル'",
+          "desc": "取消ラベル"
+        }
+      ],
+      "events": [
+        {
+          "name": "confirm",
+          "desc": "確定時に発火"
+        },
+        {
+          "name": "cancel",
+          "desc": "取消・背景・Esc で発火"
+        }
+      ],
+      "usage": "<c-ui-confirm-dialog open={isOpen} message=\"削除しますか？\" variant=\"destructive\" onconfirm={handleOk} oncancel={handleCancel}></c-ui-confirm-dialog>",
+      "ja": "確認ダイアログ",
+      "files": {
+        "html": "<template>\n    <template lwc:if={open}>\n        <div\n            class=\"ui-confirm-backdrop\"\n            onclick={handleCancel}\n            onkeydown={handleKeydown}\n        >\n            <section\n                class=\"ui-confirm\"\n                role=\"alertdialog\"\n                aria-modal=\"true\"\n                aria-label={header}\n                onclick={stopPropagation}\n            >\n                <h2 class=\"ui-confirm__header\">{header}</h2>\n                <p lwc:if={message} class=\"ui-confirm__message\">{message}</p>\n                <div class=\"ui-confirm__footer\">\n                    <button\n                        class=\"ui-confirm__btn ui-confirm__btn_cancel\"\n                        type=\"button\"\n                        onclick={handleCancel}\n                    >\n                        {cancelLabel}\n                    </button>\n                    <button\n                        class={confirmClass}\n                        type=\"button\"\n                        onclick={handleConfirm}\n                    >\n                        {confirmLabel}\n                    </button>\n                </div>\n            </section>\n        </div>\n    </template>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiConfirmDialog — 汎用確認ダイアログ。\n * open で表示制御し、確定／取消ボタンを持つ小型モーダル。\n * 確定で confirm、取消・背景・Esc で cancel イベントを発火する。\n */\nexport default class UiConfirmDialog extends LightningElement {\n    /** ヘッダ */\n    @api header = '確認';\n    /** メッセージ本文 */\n    @api message;\n    /** true で表示 */\n    @api open = false;\n    /** 確定ボタンの種別: brand | destructive */\n    @api variant = 'brand';\n    /** 確定ボタンのラベル */\n    @api confirmLabel = 'OK';\n    /** 取消ボタンのラベル */\n    @api cancelLabel = 'キャンセル';\n\n    get confirmClass() {\n        const v = this.variant === 'destructive' ? 'destructive' : 'brand';\n        return `ui-confirm__btn ui-confirm__btn_${v}`;\n    }\n\n    handleConfirm() {\n        this.dispatchEvent(new CustomEvent('confirm'));\n    }\n\n    handleCancel() {\n        this.dispatchEvent(new CustomEvent('cancel'));\n    }\n\n    handleKeydown(event) {\n        if (event.key === 'Escape') {\n            this.handleCancel();\n        }\n    }\n\n    stopPropagation(event) {\n        event.stopPropagation();\n    }\n}\n",
+        "css": ".ui-confirm-backdrop {\n    position: fixed;\n    inset: 0;\n    background: rgba(8, 7, 7, 0.5);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    padding: 16px;\n    z-index: 9200;\n}\n\n.ui-confirm {\n    width: 100%;\n    max-width: 380px;\n    background: #ffffff;\n    border-radius: 10px;\n    padding: 22px;\n    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);\n}\n\n.ui-confirm__header {\n    margin: 0 0 8px;\n    font-size: 1.05rem;\n    font-weight: 700;\n    color: #181818;\n}\n\n.ui-confirm__message {\n    margin: 0 0 18px;\n    font-size: 0.875rem;\n    color: #514f4d;\n    line-height: 1.6;\n}\n\n.ui-confirm__footer {\n    display: flex;\n    justify-content: flex-end;\n    gap: 8px;\n}\n\n.ui-confirm__btn {\n    height: 32px;\n    padding: 0 16px;\n    border-radius: 6px;\n    font-size: 0.8125rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n    border: 1px solid transparent;\n}\n\n.ui-confirm__btn_cancel {\n    background: #ffffff;\n    border-color: #c9c9c9;\n    color: #514f4d;\n}\n.ui-confirm__btn_cancel:hover {\n    background: #f3f3f3;\n}\n\n.ui-confirm__btn_brand {\n    background: #0176d3;\n    color: #ffffff;\n}\n.ui-confirm__btn_brand:hover {\n    background: #014486;\n}\n\n.ui-confirm__btn_destructive {\n    background: #ba0517;\n    color: #ffffff;\n}\n.ui-confirm__btn_destructive:hover {\n    background: #8e030f;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Confirm Dialog</masterLabel>\n    <description>汎用確認ダイアログ。確定でconfirm、取消/背景/Escでcancelを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

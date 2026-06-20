@@ -1,0 +1,36 @@
+<template>
+    <template lwc:if={open}>
+        <div
+            class="ui-confirm-backdrop"
+            onclick={handleCancel}
+            onkeydown={handleKeydown}
+        >
+            <section
+                class="ui-confirm"
+                role="alertdialog"
+                aria-modal="true"
+                aria-label={header}
+                onclick={stopPropagation}
+            >
+                <h2 class="ui-confirm__header">{header}</h2>
+                <p lwc:if={message} class="ui-confirm__message">{message}</p>
+                <div class="ui-confirm__footer">
+                    <button
+                        class="ui-confirm__btn ui-confirm__btn_cancel"
+                        type="button"
+                        onclick={handleCancel}
+                    >
+                        {cancelLabel}
+                    </button>
+                    <button
+                        class={confirmClass}
+                        type="button"
+                        onclick={handleConfirm}
+                    >
+                        {confirmLabel}
+                    </button>
+                </div>
+            </section>
+        </div>
+    </template>
+</template>

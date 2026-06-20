@@ -3930,3 +3930,255 @@
         opacity: 1;
     }
 }
+
+
+/* ===== uiPasswordInput ===== */
+.ui-password {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ui-password__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-password__field {
+    display: flex;
+    align-items: center;
+    height: 34px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    background: #ffffff;
+    overflow: hidden;
+}
+.ui-password__field:focus-within {
+    border-color: #0176d3;
+    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);
+}
+
+.ui-password__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    height: 100%;
+    padding: 0 0 0 12px;
+    font-size: 0.875rem;
+    color: #181818;
+    font-family: inherit;
+    letter-spacing: 0.06em;
+}
+
+.ui-password__toggle {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0 10px;
+    height: 100%;
+}
+.ui-password__toggle:hover {
+    background: #f3f3f3;
+}
+
+
+/* ===== uiComboBox ===== */
+.ui-combo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ui-combo__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.ui-combo__input {
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #181818;
+    background: #ffffff;
+    font-family: inherit;
+}
+.ui-combo__input:focus {
+    outline: none;
+    border-color: #0176d3;
+    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);
+}
+
+.ui-combo__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 4px 0 0;
+    padding: 4px;
+    list-style: none;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 20;
+}
+
+.ui-combo__item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: transparent;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    color: #181818;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+}
+.ui-combo__item:hover {
+    background: #f3f9ff;
+    color: #0176d3;
+}
+
+.ui-combo__empty {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    color: #969492;
+}
+
+
+/* ===== uiThermometer ===== */
+.ui-thermo {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.ui-thermo__value {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-thermo__track {
+    position: relative;
+    width: 18px;
+    height: 120px;
+    background: #ececec;
+    border-radius: 9px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.ui-thermo__fill {
+    width: 100%;
+    border-radius: 9px;
+    transition: height 0.35s ease;
+}
+
+.ui-thermo__fill_brand {
+    background: #0176d3;
+}
+.ui-thermo__fill_success {
+    background: #2e844a;
+}
+.ui-thermo__fill_warning {
+    background: #dd7a01;
+}
+.ui-thermo__fill_error {
+    background: #ba0517;
+}
+
+.ui-thermo__label {
+    font-size: 0.72rem;
+    color: #706e6b;
+}
+
+
+/* ===== uiConfirmDialog ===== */
+.ui-confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 7, 7, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 9200;
+}
+
+.ui-confirm {
+    width: 100%;
+    max-width: 380px;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 22px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.ui-confirm__header {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.ui-confirm__message {
+    margin: 0 0 18px;
+    font-size: 0.875rem;
+    color: #514f4d;
+    line-height: 1.6;
+}
+
+.ui-confirm__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.ui-confirm__btn {
+    height: 32px;
+    padding: 0 16px;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    border: 1px solid transparent;
+}
+
+.ui-confirm__btn_cancel {
+    background: #ffffff;
+    border-color: #c9c9c9;
+    color: #514f4d;
+}
+.ui-confirm__btn_cancel:hover {
+    background: #f3f3f3;
+}
+
+.ui-confirm__btn_brand {
+    background: #0176d3;
+    color: #ffffff;
+}
+.ui-confirm__btn_brand:hover {
+    background: #014486;
+}
+
+.ui-confirm__btn_destructive {
+    background: #ba0517;
+    color: #ffffff;
+}
+.ui-confirm__btn_destructive:hover {
+    background: #8e030f;
+}
