@@ -1,0 +1,45 @@
+.ui-inlineedit {
+    display: inline-block;
+}
+
+.ui-inlineedit__display {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 5px 8px;
+    border-radius: 6px;
+    cursor: text;
+    font-size: 0.875rem;
+    color: #181818;
+    font-family: inherit;
+}
+.ui-inlineedit__display:hover {
+    background: #f3f3f3;
+    border-color: #e5e5e5;
+}
+
+.ui-inlineedit__text_empty {
+    color: #969492;
+}
+
+.ui-inlineedit__icon {
+    opacity: 0;
+    font-size: 0.8rem;
+    transition: opacity 0.12s ease;
+}
+.ui-inlineedit__display:hover .ui-inlineedit__icon {
+    opacity: 0.6;
+}
+
+.ui-inlineedit__input {
+    padding: 5px 8px;
+    border: 1px solid #0176d3;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #181818;
+    font-family: inherit;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);
+}

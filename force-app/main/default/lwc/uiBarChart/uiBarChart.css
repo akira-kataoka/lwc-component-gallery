@@ -1,0 +1,46 @@
+.ui-barchart {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.ui-barchart__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+}
+
+.ui-barchart__label {
+    width: 84px;
+    flex-shrink: 0;
+    color: #444444;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ui-barchart__track {
+    flex: 1;
+    height: 14px;
+    background: #f0f0f0;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.ui-barchart__bar {
+    height: 100%;
+    border-radius: 7px;
+    transition: width 0.3s ease;
+    min-width: 2px;
+}
+
+.ui-barchart__value {
+    width: 48px;
+    flex-shrink: 0;
+    font-weight: 700;
+    color: #181818;
+    font-variant-numeric: tabular-nums;
+}

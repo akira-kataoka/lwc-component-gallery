@@ -1,6 +1,6 @@
 /* 自動生成ファイル — build.mjs が生成。直接編集しないでください。 */
 window.GALLERY_DATA = {
-  "generatedAt": "2026-06-20T07:05:17.768Z",
+  "generatedAt": "2026-06-20T07:12:30.124Z",
   "components": [
     {
       "id": "uiBadge",
@@ -2328,6 +2328,152 @@ window.GALLERY_DATA = {
         "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiTagInput — 汎用タグ入力。\n * Enter で入力テキストをタグとして追加し、×で削除する。\n * 変更時に change イベント (detail.tags) を発火する。\n */\nexport default class UiTagInput extends LightningElement {\n    @track _tags = [];\n\n    /** タグ文字列の配列 */\n    @api\n    get tags() {\n        return this._tags;\n    }\n    set tags(value) {\n        this._tags = Array.isArray(value) ? [...value] : [];\n    }\n\n    /** プレースホルダ */\n    @api placeholder = 'タグを入力して Enter';\n\n    get computedTags() {\n        return this._tags.map((t, i) => ({ key: i, label: t }));\n    }\n\n    handleKeydown(event) {\n        if (event.key === 'Enter') {\n            event.preventDefault();\n            const value = event.target.value.trim();\n            if (value && !this._tags.includes(value)) {\n                this._tags = [...this._tags, value];\n                this.emit();\n            }\n            event.target.value = '';\n        } else if (\n            event.key === 'Backspace' &&\n            !event.target.value &&\n            this._tags.length\n        ) {\n            this._tags = this._tags.slice(0, -1);\n            this.emit();\n        }\n    }\n\n    handleRemove(event) {\n        const idx = Number(event.currentTarget.dataset.index);\n        this._tags = this._tags.filter((t, i) => i !== idx);\n        this.emit();\n    }\n\n    emit() {\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { tags: [...this._tags] } })\n        );\n    }\n}\n",
         "css": ".ui-taginput {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 6px;\n    padding: 6px 8px;\n    border: 1px solid #c9c9c9;\n    border-radius: 6px;\n    background: #ffffff;\n    min-height: 38px;\n}\n.ui-taginput:focus-within {\n    border-color: #0176d3;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n\n.ui-taginput__tag {\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n    padding: 2px 4px 2px 8px;\n    background: #eef4ff;\n    color: #0b5cab;\n    border-radius: 12px;\n    font-size: 0.78rem;\n    font-weight: 600;\n}\n\n.ui-taginput__remove {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 16px;\n    height: 16px;\n    border: none;\n    border-radius: 50%;\n    background: transparent;\n    color: #0b5cab;\n    font-size: 0.9rem;\n    line-height: 1;\n    cursor: pointer;\n}\n.ui-taginput__remove:hover {\n    background: rgba(1, 92, 171, 0.15);\n}\n\n.ui-taginput__field {\n    flex: 1;\n    min-width: 120px;\n    border: none;\n    outline: none;\n    font-size: 0.85rem;\n    color: #181818;\n    font-family: inherit;\n    padding: 2px;\n}\n",
         "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Tag Input</masterLabel>\n    <description>汎用タグ入力。Enterで追加・×で削除し change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiSparkline",
+      "title": "UI Sparkline",
+      "icon": "📈",
+      "category": "表示",
+      "demo": "sparkline",
+      "description": "values 配列の数値を小さな折れ線グラフ（SVG）で表示。末尾にドットを打つ。",
+      "props": [
+        {
+          "name": "values",
+          "type": "Array",
+          "def": "[]",
+          "desc": "数値の配列"
+        },
+        {
+          "name": "color",
+          "type": "String",
+          "def": "'#0176d3'",
+          "desc": "線の色"
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "def": "120",
+          "desc": "幅(px)"
+        },
+        {
+          "name": "height",
+          "type": "Number",
+          "def": "36",
+          "desc": "高さ(px)"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-sparkline values={trend} color=\"#2e844a\"></c-ui-sparkline>",
+      "ja": "スパークライン",
+      "files": {
+        "html": "<template>\n    <svg class=\"ui-sparkline\" viewBox={viewBox} width={width} height={height}>\n        <polyline\n            class=\"ui-sparkline__line\"\n            points={points}\n            stroke={color}\n            fill=\"none\"\n        ></polyline>\n        <circle\n            class=\"ui-sparkline__dot\"\n            cx={lastX}\n            cy={lastY}\n            r=\"2.5\"\n            fill={color}\n        ></circle>\n    </svg>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiSparkline — 汎用スパークライン。\n * values 配列の数値を小さな折れ線グラフ（SVG）で表示する純粋な表示コンポーネント。\n */\nexport default class UiSparkline extends LightningElement {\n    _values = [];\n\n    /** 数値の配列 */\n    @api\n    get values() {\n        return this._values;\n    }\n    set values(value) {\n        this._values = Array.isArray(value) ? value : [];\n    }\n\n    /** 線の色 */\n    @api color = '#0176d3';\n    /** 幅(px) */\n    @api width = 120;\n    /** 高さ(px) */\n    @api height = 36;\n\n    get coords() {\n        const vals = this._values.map(Number).filter((v) => !Number.isNaN(v));\n        if (!vals.length) {\n            return [];\n        }\n        const max = Math.max(...vals);\n        const min = Math.min(...vals);\n        const range = max - min || 1;\n        const w = Number(this.width) || 120;\n        const h = Number(this.height) || 36;\n        const pad = 3;\n        const denom = Math.max(1, vals.length - 1);\n        const step = (w - pad * 2) / denom;\n        return vals.map((v, i) => ({\n            x: Number((pad + i * step).toFixed(1)),\n            y: Number((pad + (h - pad * 2) * (1 - (v - min) / range)).toFixed(1))\n        }));\n    }\n\n    get points() {\n        return this.coords.map((c) => `${c.x},${c.y}`).join(' ');\n    }\n\n    get last() {\n        const c = this.coords;\n        return c.length ? c[c.length - 1] : { x: 0, y: 0 };\n    }\n\n    get lastX() {\n        return this.last.x;\n    }\n\n    get lastY() {\n        return this.last.y;\n    }\n\n    get viewBox() {\n        return `0 0 ${this.width} ${this.height}`;\n    }\n}\n",
+        "css": ".ui-sparkline {\n    display: inline-block;\n    vertical-align: middle;\n}\n\n.ui-sparkline__line {\n    stroke-width: 2;\n    stroke-linecap: round;\n    stroke-linejoin: round;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Sparkline</masterLabel>\n    <description>汎用スパークライン。数値配列を小さな折れ線グラフで表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiBarChart",
+      "title": "UI Bar Chart",
+      "icon": "📊",
+      "category": "表示",
+      "demo": "barchart",
+      "description": "data 配列 ([{ label, value }]) を最大値基準の横棒グラフで表示する。",
+      "props": [
+        {
+          "name": "data",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        },
+        {
+          "name": "color",
+          "type": "String",
+          "def": "'#0176d3'",
+          "desc": "バーの色"
+        }
+      ],
+      "events": [],
+      "usage": "<c-ui-bar-chart data={sales}></c-ui-bar-chart>",
+      "ja": "棒グラフ",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-barchart\">\n        <template for:each={computedBars} for:item=\"bar\">\n            <div key={bar.key} class=\"ui-barchart__row\">\n                <span class=\"ui-barchart__label\">{bar.label}</span>\n                <div class=\"ui-barchart__track\">\n                    <div class=\"ui-barchart__bar\" style={bar.barStyle}></div>\n                </div>\n                <span class=\"ui-barchart__value\">{bar.value}</span>\n            </div>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiBarChart — 汎用横棒グラフ。\n * data 配列 ([{ label, value }]) を、最大値を基準にした横棒で表示する。\n */\nexport default class UiBarChart extends LightningElement {\n    _data = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get data() {\n        return this._data;\n    }\n    set data(value) {\n        this._data = Array.isArray(value) ? value : [];\n    }\n\n    /** バーの色 */\n    @api color = '#0176d3';\n\n    get computedBars() {\n        const values = this._data.map((d) => Number(d.value) || 0);\n        const max = Math.max(1, ...values);\n        return this._data.map((d, i) => {\n            const value = Number(d.value) || 0;\n            return {\n                key: i,\n                label: d.label,\n                value,\n                barStyle: `width: ${Math.round((value / max) * 100)}%; background: ${this.color};`\n            };\n        });\n    }\n}\n",
+        "css": ".ui-barchart {\n    display: flex;\n    flex-direction: column;\n    gap: 8px;\n    width: 100%;\n}\n\n.ui-barchart__row {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    font-size: 0.8rem;\n}\n\n.ui-barchart__label {\n    width: 84px;\n    flex-shrink: 0;\n    color: #444444;\n    text-align: right;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n\n.ui-barchart__track {\n    flex: 1;\n    height: 14px;\n    background: #f0f0f0;\n    border-radius: 7px;\n    overflow: hidden;\n}\n\n.ui-barchart__bar {\n    height: 100%;\n    border-radius: 7px;\n    transition: width 0.3s ease;\n    min-width: 2px;\n}\n\n.ui-barchart__value {\n    width: 48px;\n    flex-shrink: 0;\n    font-weight: 700;\n    color: #181818;\n    font-variant-numeric: tabular-nums;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Bar Chart</masterLabel>\n    <description>汎用横棒グラフ。data配列を最大値基準の横棒で表示。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiChoiceChips",
+      "title": "UI Choice Chips",
+      "icon": "🔘",
+      "category": "フォーム",
+      "demo": "choicechips",
+      "description": "options 配列からチップ状の単一選択 UI を生成。選択時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "options",
+          "type": "Array",
+          "def": "[]",
+          "desc": "[{ label, value }] の配列"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "def": "—",
+          "desc": "選択値"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "選択時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-choice-chips options={sizes} value=\"m\" onchange={handleChange}></c-ui-choice-chips>",
+      "ja": "選択チップ",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-chips\">\n        <template for:each={computedChips} for:item=\"chip\">\n            <button\n                key={chip.value}\n                class={chip.cssClass}\n                type=\"button\"\n                data-value={chip.value}\n                onclick={handleSelect}\n            >\n                {chip.label}\n            </button>\n        </template>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api } from 'lwc';\n\n/**\n * uiChoiceChips — 汎用選択チップ。\n * options 配列 ([{ label, value }]) からチップ状の単一選択 UI を生成し、\n * 選択時に change イベント (detail.value) を発火する。\n */\nexport default class UiChoiceChips extends LightningElement {\n    _options = [];\n\n    /** [{ label, value }] の配列 */\n    @api\n    get options() {\n        return this._options;\n    }\n    set options(value) {\n        this._options = Array.isArray(value) ? value : [];\n    }\n\n    /** 選択値 */\n    @api value;\n\n    get computedChips() {\n        return this._options.map((o) => ({\n            label: o.label,\n            value: o.value,\n            cssClass:\n                String(o.value) === String(this.value)\n                    ? 'ui-chip ui-chip_selected'\n                    : 'ui-chip'\n        }));\n    }\n\n    handleSelect(event) {\n        this.value = event.currentTarget.dataset.value;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n}\n",
+        "css": ".ui-chips {\n    display: inline-flex;\n    flex-wrap: wrap;\n    gap: 8px;\n}\n\n.ui-chip {\n    border: 1px solid #c9c9c9;\n    background: #ffffff;\n    color: #444444;\n    padding: 5px 14px;\n    border-radius: 16px;\n    font-size: 0.8rem;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;\n}\n.ui-chip:hover {\n    border-color: #0176d3;\n    color: #0176d3;\n}\n\n.ui-chip_selected {\n    background: #0176d3;\n    border-color: #0176d3;\n    color: #ffffff;\n}\n.ui-chip_selected:hover {\n    background: #014486;\n    color: #ffffff;\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Choice Chips</masterLabel>\n    <description>汎用選択チップ。チップ状の単一選択で change イベントを発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
+      }
+    },
+    {
+      "id": "uiInlineEdit",
+      "title": "UI Inline Edit",
+      "icon": "✏️",
+      "category": "フォーム",
+      "demo": "inlineedit",
+      "description": "テキストをクリックすると入力に切替わり、Enter／blur で確定、Esc で取消。確定時に change イベント (detail.value) を発火。",
+      "props": [
+        {
+          "name": "value",
+          "type": "String",
+          "def": "''",
+          "desc": "値"
+        },
+        {
+          "name": "placeholder",
+          "type": "String",
+          "def": "'クリックして編集'",
+          "desc": "未入力時の表示"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "desc": "確定時に発火（detail.value）"
+        }
+      ],
+      "usage": "<c-ui-inline-edit value=\"タイトル\" onchange={handleChange}></c-ui-inline-edit>",
+      "ja": "インライン編集",
+      "files": {
+        "html": "<template>\n    <div class=\"ui-inlineedit\">\n        <input\n            lwc:if={editing}\n            class=\"ui-inlineedit__input\"\n            type=\"text\"\n            value={draft}\n            oninput={handleInput}\n            onkeydown={handleKeydown}\n            onblur={commit}\n        />\n        <button\n            lwc:else\n            class=\"ui-inlineedit__display\"\n            type=\"button\"\n            onclick={startEdit}\n        >\n            <span class={displayClass}>{displayValue}</span>\n            <span class=\"ui-inlineedit__icon\">✏️</span>\n        </button>\n    </div>\n</template>\n",
+        "js": "import { LightningElement, api, track } from 'lwc';\n\n/**\n * uiInlineEdit — 汎用インライン編集。\n * 表示テキストをクリックすると入力に切替わり、Enter／フォーカスアウトで確定、\n * Esc で取消す。確定時に change イベント (detail.value) を発火する。\n */\nexport default class UiInlineEdit extends LightningElement {\n    /** 値 */\n    @api value = '';\n    /** 未入力時のプレースホルダ */\n    @api placeholder = 'クリックして編集';\n\n    @track editing = false;\n    @track draft = '';\n\n    get isEmpty() {\n        return !this.value;\n    }\n\n    get displayValue() {\n        return this.value || this.placeholder;\n    }\n\n    get displayClass() {\n        return this.isEmpty\n            ? 'ui-inlineedit__text ui-inlineedit__text_empty'\n            : 'ui-inlineedit__text';\n    }\n\n    startEdit() {\n        this.draft = this.value;\n        this.editing = true;\n    }\n\n    renderedCallback() {\n        if (this.editing) {\n            const input = this.template.querySelector('input');\n            if (input && document.activeElement !== input) {\n                input.focus();\n                input.select();\n            }\n        }\n    }\n\n    handleInput(event) {\n        this.draft = event.target.value;\n    }\n\n    commit() {\n        if (!this.editing) {\n            return;\n        }\n        this.value = this.draft;\n        this.editing = false;\n        this.dispatchEvent(\n            new CustomEvent('change', { detail: { value: this.value } })\n        );\n    }\n\n    cancel() {\n        this.editing = false;\n    }\n\n    handleKeydown(event) {\n        if (event.key === 'Enter') {\n            this.commit();\n        } else if (event.key === 'Escape') {\n            this.cancel();\n        }\n    }\n}\n",
+        "css": ".ui-inlineedit {\n    display: inline-block;\n}\n\n.ui-inlineedit__display {\n    display: inline-flex;\n    align-items: center;\n    gap: 8px;\n    border: 1px solid transparent;\n    background: transparent;\n    padding: 5px 8px;\n    border-radius: 6px;\n    cursor: text;\n    font-size: 0.875rem;\n    color: #181818;\n    font-family: inherit;\n}\n.ui-inlineedit__display:hover {\n    background: #f3f3f3;\n    border-color: #e5e5e5;\n}\n\n.ui-inlineedit__text_empty {\n    color: #969492;\n}\n\n.ui-inlineedit__icon {\n    opacity: 0;\n    font-size: 0.8rem;\n    transition: opacity 0.12s ease;\n}\n.ui-inlineedit__display:hover .ui-inlineedit__icon {\n    opacity: 0.6;\n}\n\n.ui-inlineedit__input {\n    padding: 5px 8px;\n    border: 1px solid #0176d3;\n    border-radius: 6px;\n    font-size: 0.875rem;\n    color: #181818;\n    font-family: inherit;\n    outline: none;\n    box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.25);\n}\n",
+        "meta": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>59.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>UI Inline Edit</masterLabel>\n    <description>汎用インライン編集。クリックで編集、Enter/blurで確定し change を発火。</description>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>\n"
       }
     }
   ]

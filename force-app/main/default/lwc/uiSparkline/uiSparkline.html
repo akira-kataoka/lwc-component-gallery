@@ -1,0 +1,17 @@
+<template>
+    <svg class="ui-sparkline" viewBox={viewBox} width={width} height={height}>
+        <polyline
+            class="ui-sparkline__line"
+            points={points}
+            stroke={color}
+            fill="none"
+        ></polyline>
+        <circle
+            class="ui-sparkline__dot"
+            cx={lastX}
+            cy={lastY}
+            r="2.5"
+            fill={color}
+        ></circle>
+    </svg>
+</template>

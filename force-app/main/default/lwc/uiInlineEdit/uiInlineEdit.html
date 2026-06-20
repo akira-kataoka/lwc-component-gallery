@@ -1,0 +1,22 @@
+<template>
+    <div class="ui-inlineedit">
+        <input
+            lwc:if={editing}
+            class="ui-inlineedit__input"
+            type="text"
+            value={draft}
+            oninput={handleInput}
+            onkeydown={handleKeydown}
+            onblur={commit}
+        />
+        <button
+            lwc:else
+            class="ui-inlineedit__display"
+            type="button"
+            onclick={startEdit}
+        >
+            <span class={displayClass}>{displayValue}</span>
+            <span class="ui-inlineedit__icon">✏️</span>
+        </button>
+    </div>
+</template>

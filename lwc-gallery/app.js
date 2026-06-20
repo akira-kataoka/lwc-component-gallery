@@ -1909,6 +1909,132 @@
             render();
             box.appendChild(wrap);
             controls.appendChild(out);
+        },
+
+        sparkline(box) {
+            const ns = 'http://www.w3.org/2000/svg';
+            const sets = [
+                { vals: [3, 7, 4, 9, 6, 11, 8, 13], color: '#0176d3' },
+                { vals: [12, 9, 10, 6, 7, 4, 5, 3], color: '#ba0517' },
+                { vals: [5, 5, 6, 6, 7, 8, 9, 12], color: '#2e844a' }
+            ];
+            sets.forEach((s) => {
+                const w = 120;
+                const h = 36;
+                const pad = 3;
+                const max = Math.max(...s.vals);
+                const min = Math.min(...s.vals);
+                const range = max - min || 1;
+                const step = (w - pad * 2) / (s.vals.length - 1);
+                const coords = s.vals.map((v, i) => ({
+                    x: Number((pad + i * step).toFixed(1)),
+                    y: Number((pad + (h - pad * 2) * (1 - (v - min) / range)).toFixed(1))
+                }));
+                const last = coords[coords.length - 1];
+                const svg = document.createElementNS(ns, 'svg');
+                svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+                svg.setAttribute('width', w);
+                svg.setAttribute('height', h);
+                const pl = document.createElementNS(ns, 'polyline');
+                pl.setAttribute('points', coords.map((c) => c.x + ',' + c.y).join(' '));
+                pl.setAttribute('fill', 'none');
+                pl.setAttribute('stroke', s.color);
+                pl.setAttribute('stroke-width', '2');
+                pl.setAttribute('stroke-linecap', 'round');
+                pl.setAttribute('stroke-linejoin', 'round');
+                const dot = document.createElementNS(ns, 'circle');
+                dot.setAttribute('cx', last.x);
+                dot.setAttribute('cy', last.y);
+                dot.setAttribute('r', '2.5');
+                dot.setAttribute('fill', s.color);
+                svg.appendChild(pl);
+                svg.appendChild(dot);
+                box.appendChild(svg);
+            });
+        },
+
+        barchart(box) {
+            const data = [['1月', 120], ['2月', 86], ['3月', 156], ['4月', 98], ['5月', 132]];
+            const max = Math.max(...data.map((d) => d[1]));
+            const wrap = el('div', { class: 'ui-barchart', style: 'width:100%;max-width:380px' });
+            data.forEach((d) => {
+                wrap.appendChild(
+                    el('div', { class: 'ui-barchart__row' }, [
+                        el('span', { class: 'ui-barchart__label', text: d[0] }),
+                        el('div', { class: 'ui-barchart__track' }, [
+                            el('div', { class: 'ui-barchart__bar', style: 'width:' + Math.round((d[1] / max) * 100) + '%;background:#0176d3' })
+                        ]),
+                        el('span', { class: 'ui-barchart__value', text: String(d[1]) })
+                    ])
+                );
+            });
+            box.appendChild(wrap);
+        },
+
+        choicechips(box, controls) {
+            const opts = [['S', 's'], ['M', 'm'], ['L', 'l'], ['XL', 'xl']];
+            let value = 'm';
+            const out = el('span', { class: 'demo__out', text: '選択: M' });
+            const wrap = el('div', { class: 'ui-chips' });
+            function render() {
+                wrap.innerHTML = '';
+                opts.forEach((o) => {
+                    const b = el('button', { class: 'ui-chip' + (o[1] === value ? ' ui-chip_selected' : ''), type: 'button', text: o[0] });
+                    b.addEventListener('click', () => {
+                        value = o[1];
+                        out.textContent = '選択: ' + o[0];
+                        render();
+                    });
+                    wrap.appendChild(b);
+                });
+            }
+            render();
+            box.appendChild(wrap);
+            controls.appendChild(out);
+        },
+
+        inlineedit(box, controls) {
+            let value = 'プロジェクト計画';
+            let editing = false;
+            const out = el('span', { class: 'demo__out', text: '値: ' + value });
+            const host = el('div', { class: 'ui-inlineedit' });
+            function render() {
+                host.innerHTML = '';
+                if (editing) {
+                    const input = el('input', { class: 'ui-inlineedit__input', type: 'text', value: value });
+                    const commit = () => {
+                        value = input.value;
+                        editing = false;
+                        out.textContent = '値: ' + value;
+                        render();
+                    };
+                    input.addEventListener('blur', commit);
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            commit();
+                        } else if (e.key === 'Escape') {
+                            editing = false;
+                            render();
+                        }
+                    });
+                    host.appendChild(input);
+                    input.focus();
+                    input.select();
+                } else {
+                    const btn = el('button', { class: 'ui-inlineedit__display', type: 'button' }, [
+                        el('span', { class: 'ui-inlineedit__text' + (value ? '' : ' ui-inlineedit__text_empty'), text: value || 'クリックして編集' }),
+                        el('span', { class: 'ui-inlineedit__icon', text: '✏️' })
+                    ]);
+                    btn.addEventListener('click', () => {
+                        editing = true;
+                        render();
+                    });
+                    host.appendChild(btn);
+                }
+            }
+            render();
+            box.appendChild(host);
+            controls.appendChild(out);
         }
     };
 

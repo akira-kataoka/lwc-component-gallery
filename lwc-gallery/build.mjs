@@ -1406,6 +1406,83 @@ const COMPONENTS = [
         ],
         events: [{ name: 'change', desc: '追加／削除時に発火（detail.tags）' }],
         usage: `<c-ui-tag-input tags={tags} onchange={handleChange}></c-ui-tag-input>`
+    },
+    {
+        id: 'uiSparkline',
+        title: 'UI Sparkline',
+        icon: '📈',
+        category: '表示',
+        demo: 'sparkline',
+        description:
+            'values 配列の数値を小さな折れ線グラフ（SVG）で表示。末尾にドットを打つ。',
+        props: [
+            { name: 'values', type: 'Array', def: '[]', desc: '数値の配列' },
+            { name: 'color', type: 'String', def: "'#0176d3'", desc: '線の色' },
+            { name: 'width', type: 'Number', def: '120', desc: '幅(px)' },
+            { name: 'height', type: 'Number', def: '36', desc: '高さ(px)' }
+        ],
+        events: [],
+        usage: `<c-ui-sparkline values={trend} color="#2e844a"></c-ui-sparkline>`
+    },
+    {
+        id: 'uiBarChart',
+        title: 'UI Bar Chart',
+        icon: '📊',
+        category: '表示',
+        demo: 'barchart',
+        description:
+            'data 配列 ([{ label, value }]) を最大値基準の横棒グラフで表示する。',
+        props: [
+            {
+                name: 'data',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            },
+            { name: 'color', type: 'String', def: "'#0176d3'", desc: 'バーの色' }
+        ],
+        events: [],
+        usage: `<c-ui-bar-chart data={sales}></c-ui-bar-chart>`
+    },
+    {
+        id: 'uiChoiceChips',
+        title: 'UI Choice Chips',
+        icon: '🔘',
+        category: 'フォーム',
+        demo: 'choicechips',
+        description:
+            'options 配列からチップ状の単一選択 UI を生成。選択時に change イベント (detail.value) を発火。',
+        props: [
+            {
+                name: 'options',
+                type: 'Array',
+                def: '[]',
+                desc: '[{ label, value }] の配列'
+            },
+            { name: 'value', type: 'String', def: '—', desc: '選択値' }
+        ],
+        events: [{ name: 'change', desc: '選択時に発火（detail.value）' }],
+        usage: `<c-ui-choice-chips options={sizes} value="m" onchange={handleChange}></c-ui-choice-chips>`
+    },
+    {
+        id: 'uiInlineEdit',
+        title: 'UI Inline Edit',
+        icon: '✏️',
+        category: 'フォーム',
+        demo: 'inlineedit',
+        description:
+            'テキストをクリックすると入力に切替わり、Enter／blur で確定、Esc で取消。確定時に change イベント (detail.value) を発火。',
+        props: [
+            { name: 'value', type: 'String', def: "''", desc: '値' },
+            {
+                name: 'placeholder',
+                type: 'String',
+                def: "'クリックして編集'",
+                desc: '未入力時の表示'
+            }
+        ],
+        events: [{ name: 'change', desc: '確定時に発火（detail.value）' }],
+        usage: `<c-ui-inline-edit value="タイトル" onchange={handleChange}></c-ui-inline-edit>`
     }
 ];
 
@@ -1471,7 +1548,11 @@ const JA_NAMES = {
     uiAvatarGroup: 'アバターグループ',
     uiCodeBlock: 'コードブロック',
     uiVerticalSteps: '縦ステップ',
-    uiTagInput: 'タグ入力'
+    uiTagInput: 'タグ入力',
+    uiSparkline: 'スパークライン',
+    uiBarChart: '棒グラフ',
+    uiChoiceChips: '選択チップ',
+    uiInlineEdit: 'インライン編集'
 };
 
 const FILE_KEYS = [

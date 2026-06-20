@@ -1,0 +1,15 @@
+<template>
+    <div class="ui-chips">
+        <template for:each={computedChips} for:item="chip">
+            <button
+                key={chip.value}
+                class={chip.cssClass}
+                type="button"
+                data-value={chip.value}
+                onclick={handleSelect}
+            >
+                {chip.label}
+            </button>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,13 @@
+<template>
+    <div class="ui-barchart">
+        <template for:each={computedBars} for:item="bar">
+            <div key={bar.key} class="ui-barchart__row">
+                <span class="ui-barchart__label">{bar.label}</span>
+                <div class="ui-barchart__track">
+                    <div class="ui-barchart__bar" style={bar.barStyle}></div>
+                </div>
+                <span class="ui-barchart__value">{bar.value}</span>
+            </div>
+        </template>
+    </div>
+</template>
